@@ -1,0 +1,195 @@
+energy.o: energy.cpp stdafx.h ../ExCorr/excorr.h ../ExCorr/../Util/util.h \
+ ../ExCorr/../Util/bisection.h ../ExCorr/../Util/fun1D.h \
+ ../ExCorr/../Util/vec.h ../ExCorr/../Util/fun2D.h \
+ ../ExCorr/../Util/fun3D.h ../ExCorr/../Util/helpfun.h \
+ ../ExCorr/../Util/point3D.h ../ExCorr/../Util/lobatto.h \
+ ../ExCorr/../Util/mtx.h ../ExCorr/../Util/shreal.h ../ExCorr/xc.h \
+ ../ExCorr/corrlyp.h ../ExCorr/corrvwn.h ../ExCorr/exchb88.h \
+ ../ExCorr/exchpbe.h ../ExCorr/exchs.h ../ExCorr/exchslater.h \
+ ../Util/util.h ../Integ/integ.h ../Integ/../Util/util.h ../Integ/int1D.h \
+ ../Integ/int1Ddiscret.h ../Integ/int1Dgauss.h ../Integ/int1Dtrap.h \
+ ../Integ/../Util/fun1D.h ../Integ/adapt2D.h ../Integ/eltset.h \
+ ../Integ/priorityqueue.h ../Integ/rec.h ../Integ/pool.h \
+ ../Integ/gauss2D.h ../Integ/adapt3D.h ../Integ/brick.h ../Fem1D/fem1D.h \
+ ../Fem1D/../Integ/integ.h ../Fem1D/../Util/util.h ../Fem1D/../Alg/alg.h \
+ ../Fem1D/../Alg/../Util/util.h ../Fem1D/../Alg/clpmtx.h \
+ ../Fem1D/../Alg/clpmtxband.h ../Fem1D/approx.h ../Fem1D/mesh.h \
+ ../Fem1D/element.h ../Fem1D/bndr.h ../Fem1D/heap.h ../Fem1D/heapelt.h \
+ ../Fem1D/eigprob.h ../Fem1D/prob.h ../Fem1D/eltinfo.h ../Fem1D/odeprob.h \
+ energy.h pot.h paramdb.h stateset.h state.h funener.h
+funener.o: funener.cpp stdafx.h ../ExCorr/excorr.h \
+ ../ExCorr/../Util/util.h ../ExCorr/../Util/bisection.h \
+ ../ExCorr/../Util/fun1D.h ../ExCorr/../Util/vec.h \
+ ../ExCorr/../Util/fun2D.h ../ExCorr/../Util/fun3D.h \
+ ../ExCorr/../Util/helpfun.h ../ExCorr/../Util/point3D.h \
+ ../ExCorr/../Util/lobatto.h ../ExCorr/../Util/mtx.h \
+ ../ExCorr/../Util/shreal.h ../ExCorr/xc.h ../ExCorr/corrlyp.h \
+ ../ExCorr/corrvwn.h ../ExCorr/exchb88.h ../ExCorr/exchpbe.h \
+ ../ExCorr/exchs.h ../ExCorr/exchslater.h ../Util/util.h ../Integ/integ.h \
+ ../Integ/../Util/util.h ../Integ/int1D.h ../Integ/int1Ddiscret.h \
+ ../Integ/int1Dgauss.h ../Integ/int1Dtrap.h ../Integ/../Util/fun1D.h \
+ ../Integ/adapt2D.h ../Integ/eltset.h ../Integ/priorityqueue.h \
+ ../Integ/rec.h ../Integ/pool.h ../Integ/gauss2D.h ../Integ/adapt3D.h \
+ ../Integ/brick.h ../Fem1D/fem1D.h ../Fem1D/../Integ/integ.h \
+ ../Fem1D/../Util/util.h ../Fem1D/../Alg/alg.h \
+ ../Fem1D/../Alg/../Util/util.h ../Fem1D/../Alg/clpmtx.h \
+ ../Fem1D/../Alg/clpmtxband.h ../Fem1D/approx.h ../Fem1D/mesh.h \
+ ../Fem1D/element.h ../Fem1D/bndr.h ../Fem1D/heap.h ../Fem1D/heapelt.h \
+ ../Fem1D/eigprob.h ../Fem1D/prob.h ../Fem1D/eltinfo.h ../Fem1D/odeprob.h \
+ funener.h pot.h paramdb.h
+kohnsham.o: kohnsham.cpp stdafx.h ../ExCorr/excorr.h \
+ ../ExCorr/../Util/util.h ../ExCorr/../Util/bisection.h \
+ ../ExCorr/../Util/fun1D.h ../ExCorr/../Util/vec.h \
+ ../ExCorr/../Util/fun2D.h ../ExCorr/../Util/fun3D.h \
+ ../ExCorr/../Util/helpfun.h ../ExCorr/../Util/point3D.h \
+ ../ExCorr/../Util/lobatto.h ../ExCorr/../Util/mtx.h \
+ ../ExCorr/../Util/shreal.h ../ExCorr/xc.h ../ExCorr/corrlyp.h \
+ ../ExCorr/corrvwn.h ../ExCorr/exchb88.h ../ExCorr/exchpbe.h \
+ ../ExCorr/exchs.h ../ExCorr/exchslater.h ../Util/util.h ../Integ/integ.h \
+ ../Integ/../Util/util.h ../Integ/int1D.h ../Integ/int1Ddiscret.h \
+ ../Integ/int1Dgauss.h ../Integ/int1Dtrap.h ../Integ/../Util/fun1D.h \
+ ../Integ/adapt2D.h ../Integ/eltset.h ../Integ/priorityqueue.h \
+ ../Integ/rec.h ../Integ/pool.h ../Integ/gauss2D.h ../Integ/adapt3D.h \
+ ../Integ/brick.h ../Fem1D/fem1D.h ../Fem1D/../Integ/integ.h \
+ ../Fem1D/../Util/util.h ../Fem1D/../Alg/alg.h \
+ ../Fem1D/../Alg/../Util/util.h ../Fem1D/../Alg/clpmtx.h \
+ ../Fem1D/../Alg/clpmtxband.h ../Fem1D/approx.h ../Fem1D/mesh.h \
+ ../Fem1D/element.h ../Fem1D/bndr.h ../Fem1D/heap.h ../Fem1D/heapelt.h \
+ ../Fem1D/eigprob.h ../Fem1D/prob.h ../Fem1D/eltinfo.h ../Fem1D/odeprob.h \
+ kohnsham.h paramdb.h stateset.h state.h
+main.o: main.cpp stdafx.h ../ExCorr/excorr.h ../ExCorr/../Util/util.h \
+ ../ExCorr/../Util/bisection.h ../ExCorr/../Util/fun1D.h \
+ ../ExCorr/../Util/vec.h ../ExCorr/../Util/fun2D.h \
+ ../ExCorr/../Util/fun3D.h ../ExCorr/../Util/helpfun.h \
+ ../ExCorr/../Util/point3D.h ../ExCorr/../Util/lobatto.h \
+ ../ExCorr/../Util/mtx.h ../ExCorr/../Util/shreal.h ../ExCorr/xc.h \
+ ../ExCorr/corrlyp.h ../ExCorr/corrvwn.h ../ExCorr/exchb88.h \
+ ../ExCorr/exchpbe.h ../ExCorr/exchs.h ../ExCorr/exchslater.h \
+ ../Util/util.h ../Integ/integ.h ../Integ/../Util/util.h ../Integ/int1D.h \
+ ../Integ/int1Ddiscret.h ../Integ/int1Dgauss.h ../Integ/int1Dtrap.h \
+ ../Integ/../Util/fun1D.h ../Integ/adapt2D.h ../Integ/eltset.h \
+ ../Integ/priorityqueue.h ../Integ/rec.h ../Integ/pool.h \
+ ../Integ/gauss2D.h ../Integ/adapt3D.h ../Integ/brick.h ../Fem1D/fem1D.h \
+ ../Fem1D/../Integ/integ.h ../Fem1D/../Util/util.h ../Fem1D/../Alg/alg.h \
+ ../Fem1D/../Alg/../Util/util.h ../Fem1D/../Alg/clpmtx.h \
+ ../Fem1D/../Alg/clpmtxband.h ../Fem1D/approx.h ../Fem1D/mesh.h \
+ ../Fem1D/element.h ../Fem1D/bndr.h ../Fem1D/heap.h ../Fem1D/heapelt.h \
+ ../Fem1D/eigprob.h ../Fem1D/prob.h ../Fem1D/eltinfo.h ../Fem1D/odeprob.h \
+ nonlinks.h paramdb.h rho.h pot.h kohnsham.h stateset.h state.h energy.h
+nonlinks.o: nonlinks.cpp stdafx.h ../ExCorr/excorr.h \
+ ../ExCorr/../Util/util.h ../ExCorr/../Util/bisection.h \
+ ../ExCorr/../Util/fun1D.h ../ExCorr/../Util/vec.h \
+ ../ExCorr/../Util/fun2D.h ../ExCorr/../Util/fun3D.h \
+ ../ExCorr/../Util/helpfun.h ../ExCorr/../Util/point3D.h \
+ ../ExCorr/../Util/lobatto.h ../ExCorr/../Util/mtx.h \
+ ../ExCorr/../Util/shreal.h ../ExCorr/xc.h ../ExCorr/corrlyp.h \
+ ../ExCorr/corrvwn.h ../ExCorr/exchb88.h ../ExCorr/exchpbe.h \
+ ../ExCorr/exchs.h ../ExCorr/exchslater.h ../Util/util.h ../Integ/integ.h \
+ ../Integ/../Util/util.h ../Integ/int1D.h ../Integ/int1Ddiscret.h \
+ ../Integ/int1Dgauss.h ../Integ/int1Dtrap.h ../Integ/../Util/fun1D.h \
+ ../Integ/adapt2D.h ../Integ/eltset.h ../Integ/priorityqueue.h \
+ ../Integ/rec.h ../Integ/pool.h ../Integ/gauss2D.h ../Integ/adapt3D.h \
+ ../Integ/brick.h ../Fem1D/fem1D.h ../Fem1D/../Integ/integ.h \
+ ../Fem1D/../Util/util.h ../Fem1D/../Alg/alg.h \
+ ../Fem1D/../Alg/../Util/util.h ../Fem1D/../Alg/clpmtx.h \
+ ../Fem1D/../Alg/clpmtxband.h ../Fem1D/approx.h ../Fem1D/mesh.h \
+ ../Fem1D/element.h ../Fem1D/bndr.h ../Fem1D/heap.h ../Fem1D/heapelt.h \
+ ../Fem1D/eigprob.h ../Fem1D/prob.h ../Fem1D/eltinfo.h ../Fem1D/odeprob.h \
+ nonlinks.h paramdb.h rho.h pot.h kohnsham.h stateset.h state.h energy.h
+paramdb.o: paramdb.cpp stdafx.h ../ExCorr/excorr.h \
+ ../ExCorr/../Util/util.h ../ExCorr/../Util/bisection.h \
+ ../ExCorr/../Util/fun1D.h ../ExCorr/../Util/vec.h \
+ ../ExCorr/../Util/fun2D.h ../ExCorr/../Util/fun3D.h \
+ ../ExCorr/../Util/helpfun.h ../ExCorr/../Util/point3D.h \
+ ../ExCorr/../Util/lobatto.h ../ExCorr/../Util/mtx.h \
+ ../ExCorr/../Util/shreal.h ../ExCorr/xc.h ../ExCorr/corrlyp.h \
+ ../ExCorr/corrvwn.h ../ExCorr/exchb88.h ../ExCorr/exchpbe.h \
+ ../ExCorr/exchs.h ../ExCorr/exchslater.h ../Util/util.h ../Integ/integ.h \
+ ../Integ/../Util/util.h ../Integ/int1D.h ../Integ/int1Ddiscret.h \
+ ../Integ/int1Dgauss.h ../Integ/int1Dtrap.h ../Integ/../Util/fun1D.h \
+ ../Integ/adapt2D.h ../Integ/eltset.h ../Integ/priorityqueue.h \
+ ../Integ/rec.h ../Integ/pool.h ../Integ/gauss2D.h ../Integ/adapt3D.h \
+ ../Integ/brick.h ../Fem1D/fem1D.h ../Fem1D/../Integ/integ.h \
+ ../Fem1D/../Util/util.h ../Fem1D/../Alg/alg.h \
+ ../Fem1D/../Alg/../Util/util.h ../Fem1D/../Alg/clpmtx.h \
+ ../Fem1D/../Alg/clpmtxband.h ../Fem1D/approx.h ../Fem1D/mesh.h \
+ ../Fem1D/element.h ../Fem1D/bndr.h ../Fem1D/heap.h ../Fem1D/heapelt.h \
+ ../Fem1D/eigprob.h ../Fem1D/prob.h ../Fem1D/eltinfo.h ../Fem1D/odeprob.h \
+ paramdb.h
+pot.o: pot.cpp stdafx.h ../ExCorr/excorr.h ../ExCorr/../Util/util.h \
+ ../ExCorr/../Util/bisection.h ../ExCorr/../Util/fun1D.h \
+ ../ExCorr/../Util/vec.h ../ExCorr/../Util/fun2D.h \
+ ../ExCorr/../Util/fun3D.h ../ExCorr/../Util/helpfun.h \
+ ../ExCorr/../Util/point3D.h ../ExCorr/../Util/lobatto.h \
+ ../ExCorr/../Util/mtx.h ../ExCorr/../Util/shreal.h ../ExCorr/xc.h \
+ ../ExCorr/corrlyp.h ../ExCorr/corrvwn.h ../ExCorr/exchb88.h \
+ ../ExCorr/exchpbe.h ../ExCorr/exchs.h ../ExCorr/exchslater.h \
+ ../Util/util.h ../Integ/integ.h ../Integ/../Util/util.h ../Integ/int1D.h \
+ ../Integ/int1Ddiscret.h ../Integ/int1Dgauss.h ../Integ/int1Dtrap.h \
+ ../Integ/../Util/fun1D.h ../Integ/adapt2D.h ../Integ/eltset.h \
+ ../Integ/priorityqueue.h ../Integ/rec.h ../Integ/pool.h \
+ ../Integ/gauss2D.h ../Integ/adapt3D.h ../Integ/brick.h ../Fem1D/fem1D.h \
+ ../Fem1D/../Integ/integ.h ../Fem1D/../Util/util.h ../Fem1D/../Alg/alg.h \
+ ../Fem1D/../Alg/../Util/util.h ../Fem1D/../Alg/clpmtx.h \
+ ../Fem1D/../Alg/clpmtxband.h ../Fem1D/approx.h ../Fem1D/mesh.h \
+ ../Fem1D/element.h ../Fem1D/bndr.h ../Fem1D/heap.h ../Fem1D/heapelt.h \
+ ../Fem1D/eigprob.h ../Fem1D/prob.h ../Fem1D/eltinfo.h ../Fem1D/odeprob.h \
+ pot.h paramdb.h
+rho.o: rho.cpp stdafx.h ../ExCorr/excorr.h ../ExCorr/../Util/util.h \
+ ../ExCorr/../Util/bisection.h ../ExCorr/../Util/fun1D.h \
+ ../ExCorr/../Util/vec.h ../ExCorr/../Util/fun2D.h \
+ ../ExCorr/../Util/fun3D.h ../ExCorr/../Util/helpfun.h \
+ ../ExCorr/../Util/point3D.h ../ExCorr/../Util/lobatto.h \
+ ../ExCorr/../Util/mtx.h ../ExCorr/../Util/shreal.h ../ExCorr/xc.h \
+ ../ExCorr/corrlyp.h ../ExCorr/corrvwn.h ../ExCorr/exchb88.h \
+ ../ExCorr/exchpbe.h ../ExCorr/exchs.h ../ExCorr/exchslater.h \
+ ../Util/util.h ../Integ/integ.h ../Integ/../Util/util.h ../Integ/int1D.h \
+ ../Integ/int1Ddiscret.h ../Integ/int1Dgauss.h ../Integ/int1Dtrap.h \
+ ../Integ/../Util/fun1D.h ../Integ/adapt2D.h ../Integ/eltset.h \
+ ../Integ/priorityqueue.h ../Integ/rec.h ../Integ/pool.h \
+ ../Integ/gauss2D.h ../Integ/adapt3D.h ../Integ/brick.h ../Fem1D/fem1D.h \
+ ../Fem1D/../Integ/integ.h ../Fem1D/../Util/util.h ../Fem1D/../Alg/alg.h \
+ ../Fem1D/../Alg/../Util/util.h ../Fem1D/../Alg/clpmtx.h \
+ ../Fem1D/../Alg/clpmtxband.h ../Fem1D/approx.h ../Fem1D/mesh.h \
+ ../Fem1D/element.h ../Fem1D/bndr.h ../Fem1D/heap.h ../Fem1D/heapelt.h \
+ ../Fem1D/eigprob.h ../Fem1D/prob.h ../Fem1D/eltinfo.h ../Fem1D/odeprob.h \
+ rho.h paramdb.h
+state.o: state.cpp stdafx.h ../ExCorr/excorr.h ../ExCorr/../Util/util.h \
+ ../ExCorr/../Util/bisection.h ../ExCorr/../Util/fun1D.h \
+ ../ExCorr/../Util/vec.h ../ExCorr/../Util/fun2D.h \
+ ../ExCorr/../Util/fun3D.h ../ExCorr/../Util/helpfun.h \
+ ../ExCorr/../Util/point3D.h ../ExCorr/../Util/lobatto.h \
+ ../ExCorr/../Util/mtx.h ../ExCorr/../Util/shreal.h ../ExCorr/xc.h \
+ ../ExCorr/corrlyp.h ../ExCorr/corrvwn.h ../ExCorr/exchb88.h \
+ ../ExCorr/exchpbe.h ../ExCorr/exchs.h ../ExCorr/exchslater.h \
+ ../Util/util.h ../Integ/integ.h ../Integ/../Util/util.h ../Integ/int1D.h \
+ ../Integ/int1Ddiscret.h ../Integ/int1Dgauss.h ../Integ/int1Dtrap.h \
+ ../Integ/../Util/fun1D.h ../Integ/adapt2D.h ../Integ/eltset.h \
+ ../Integ/priorityqueue.h ../Integ/rec.h ../Integ/pool.h \
+ ../Integ/gauss2D.h ../Integ/adapt3D.h ../Integ/brick.h ../Fem1D/fem1D.h \
+ ../Fem1D/../Integ/integ.h ../Fem1D/../Util/util.h ../Fem1D/../Alg/alg.h \
+ ../Fem1D/../Alg/../Util/util.h ../Fem1D/../Alg/clpmtx.h \
+ ../Fem1D/../Alg/clpmtxband.h ../Fem1D/approx.h ../Fem1D/mesh.h \
+ ../Fem1D/element.h ../Fem1D/bndr.h ../Fem1D/heap.h ../Fem1D/heapelt.h \
+ ../Fem1D/eigprob.h ../Fem1D/prob.h ../Fem1D/eltinfo.h ../Fem1D/odeprob.h \
+ state.h
+stateset.o: stateset.cpp stdafx.h ../ExCorr/excorr.h \
+ ../ExCorr/../Util/util.h ../ExCorr/../Util/bisection.h \
+ ../ExCorr/../Util/fun1D.h ../ExCorr/../Util/vec.h \
+ ../ExCorr/../Util/fun2D.h ../ExCorr/../Util/fun3D.h \
+ ../ExCorr/../Util/helpfun.h ../ExCorr/../Util/point3D.h \
+ ../ExCorr/../Util/lobatto.h ../ExCorr/../Util/mtx.h \
+ ../ExCorr/../Util/shreal.h ../ExCorr/xc.h ../ExCorr/corrlyp.h \
+ ../ExCorr/corrvwn.h ../ExCorr/exchb88.h ../ExCorr/exchpbe.h \
+ ../ExCorr/exchs.h ../ExCorr/exchslater.h ../Util/util.h ../Integ/integ.h \
+ ../Integ/../Util/util.h ../Integ/int1D.h ../Integ/int1Ddiscret.h \
+ ../Integ/int1Dgauss.h ../Integ/int1Dtrap.h ../Integ/../Util/fun1D.h \
+ ../Integ/adapt2D.h ../Integ/eltset.h ../Integ/priorityqueue.h \
+ ../Integ/rec.h ../Integ/pool.h ../Integ/gauss2D.h ../Integ/adapt3D.h \
+ ../Integ/brick.h ../Fem1D/fem1D.h ../Fem1D/../Integ/integ.h \
+ ../Fem1D/../Util/util.h ../Fem1D/../Alg/alg.h \
+ ../Fem1D/../Alg/../Util/util.h ../Fem1D/../Alg/clpmtx.h \
+ ../Fem1D/../Alg/clpmtxband.h ../Fem1D/approx.h ../Fem1D/mesh.h \
+ ../Fem1D/element.h ../Fem1D/bndr.h ../Fem1D/heap.h ../Fem1D/heapelt.h \
+ ../Fem1D/eigprob.h ../Fem1D/prob.h ../Fem1D/eltinfo.h ../Fem1D/odeprob.h \
+ stateset.h state.h paramdb.h

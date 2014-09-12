@@ -1,0 +1,396 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{2F75CF8B-004B-4D5F-9DC8-A7D56FFF6977}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>ratom++</RootNamespace>
+    <ProjectName>ratom++</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>Intel C++ Compiler XE 14.0</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>Intel C++ Compiler XE 14.0</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>Intel C++ Compiler XE 14.0</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>Intel C++ Compiler XE 14.0</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\mylib64\libxc\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\mylib64\libxc\lib\ia32;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <OpenMP>GenerateParallelCode</OpenMP>
+      <AdditionalIncludeDirectories>C:\mylib64\libxc\include;C:\Program Files %28x86%29\Intel\Composer XE 2013 SP1\mkl\include\fftw;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Cpp0xSupport>true</Cpp0xSupport>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>mkl_intel_c_dll.lib;mkl_core_dll.lib;mkl_intel_thread_dll.lib;libxc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\mylib64\libxc\lib\ia32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <OpenMP>GenerateParallelCode</OpenMP>
+      <AdditionalIncludeDirectories>C:\mylib64\libxc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Cpp0xSupport>true</Cpp0xSupport>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>mkl_intel_lp64_dll.lib;mkl_core_dll.lib;mkl_intel_thread_dll.lib;libxc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\mylib64\libxc\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeedHighLevel</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\mylib64\libxc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Cpp0xSupport>true</Cpp0xSupport>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <OmitFramePointers>true</OmitFramePointers>
+      <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
+      <OptimizeForWindowsApplication>true</OptimizeForWindowsApplication>
+      <FlushDenormalResultsToZero>true</FlushDenormalResultsToZero>
+      <LoopUnrolling>4</LoopUnrolling>
+      <Parallelization>true</Parallelization>
+      <OpenMP>GenerateParallelCode</OpenMP>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>mkl_intel_c.lib;mkl_core.lib;mkl_intel_thread.lib;libxc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\mylib64\libxc\lib\ia32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\mylib64\libxc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>mkl_intel_c_dll.lib;mkl_core_dll.lib;mkl_intel_thread_dll.lib;libxc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\mylib64\libxc\lib\ia32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Alg\clpmtx.cpp" />
+    <ClCompile Include="src\Alg\clpmtxband.cpp" />
+    <ClCompile Include="src\ExCorr\corrhf.cpp" />
+    <ClCompile Include="src\ExCorr\corrlyp.cpp" />
+    <ClCompile Include="src\ExCorr\corrpbe.cpp" />
+    <ClCompile Include="src\ExCorr\corrvwn.cpp" />
+    <ClCompile Include="src\ExCorr\exchb88.cpp" />
+    <ClCompile Include="src\ExCorr\exchhf.cpp" />
+    <ClCompile Include="src\ExCorr\exchpbe.cpp" />
+    <ClCompile Include="src\ExCorr\exchpbe0.cpp" />
+    <ClCompile Include="src\ExCorr\exchs.cpp" />
+    <ClCompile Include="src\ExCorr\exchslater.cpp" />
+    <ClCompile Include="src\ExCorr\excorrlda.cpp" />
+    <ClCompile Include="src\ExCorr\xc.cpp" />
+    <ClCompile Include="src\Fem1D\approx.cpp" />
+    <ClCompile Include="src\Fem1D\bndr.cpp" />
+    <ClCompile Include="src\Fem1D\eigprob.cpp" />
+    <ClCompile Include="src\Fem1D\element.cpp" />
+    <ClCompile Include="src\Fem1D\eltinfo.cpp" />
+    <ClCompile Include="src\Fem1D\heapelt.cpp" />
+    <ClCompile Include="src\Fem1D\mesh.cpp" />
+    <ClCompile Include="src\Fem1D\odeprob.cpp" />
+    <ClCompile Include="src\Fem1D\prob.cpp" />
+    <ClCompile Include="src\Integ\adapt2D.cpp" />
+    <ClCompile Include="src\Integ\adapt3D.cpp" />
+    <ClCompile Include="src\Integ\brick.cpp" />
+    <ClCompile Include="src\Integ\gauss2D.cpp" />
+    <ClCompile Include="src\Integ\int1Ddiscret.cpp" />
+    <ClCompile Include="src\Integ\int1Dgauss.cpp" />
+    <ClCompile Include="src\Integ\int1Dtrap.cpp" />
+    <ClCompile Include="src\Integ\rec.cpp" />
+    <ClCompile Include="src\Ks\energy.cpp" />
+    <ClCompile Include="src\Ks\funener.cpp" />
+    <ClCompile Include="src\Ks\kohnsham.cpp" />
+    <ClCompile Include="src\Ks\main.cpp" />
+    <ClCompile Include="src\Ks\nonlinks.cpp" />
+    <ClCompile Include="src\Ks\paramdb.cpp" />
+    <ClCompile Include="src\Ks\pot.cpp" />
+    <ClCompile Include="src\Ks\rho.cpp" />
+    <ClCompile Include="src\Ks\state.cpp" />
+    <ClCompile Include="src\Ks\stateset.cpp" />
+    <ClCompile Include="src\Util\bisection.cpp" />
+    <ClCompile Include="src\Util\helpfun.cpp" />
+    <ClCompile Include="src\Util\lobatto.cpp" />
+    <ClCompile Include="src\Util\mtx.cpp" />
+    <ClCompile Include="src\Util\shreal.cpp" />
+    <ClCompile Include="src\Util\vec.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="exm\01H\atom.h" />
+    <ClInclude Include="exm\02He\atom.h" />
+    <ClInclude Include="exm\03Li\atom.h" />
+    <ClInclude Include="exm\04Be\atom.h" />
+    <ClInclude Include="exm\05B\atom.h" />
+    <ClInclude Include="exm\06C\atom.h" />
+    <ClInclude Include="exm\07N\atom.h" />
+    <ClInclude Include="exm\08O\atom.h" />
+    <ClInclude Include="exm\09F\atom.h" />
+    <ClInclude Include="exm\10Ne\atom.h" />
+    <ClInclude Include="exm\11Na\atom.h" />
+    <ClInclude Include="exm\12Mg\atom.h" />
+    <ClInclude Include="exm\13Al\atom.h" />
+    <ClInclude Include="exm\14Si\atom.h" />
+    <ClInclude Include="exm\15P\atom.h" />
+    <ClInclude Include="exm\16S\atom.h" />
+    <ClInclude Include="exm\17Cl\atom.h" />
+    <ClInclude Include="exm\18Ar\atom.h" />
+    <ClInclude Include="exm\19K\atom.h" />
+    <ClInclude Include="exm\20Ca\atom.h" />
+    <ClInclude Include="exm\21Sc\atom.h" />
+    <ClInclude Include="exm\22Ti\atom.h" />
+    <ClInclude Include="exm\23V\atom.h" />
+    <ClInclude Include="exm\24Cr\atom.h" />
+    <ClInclude Include="exm\25Mn\atom.h" />
+    <ClInclude Include="exm\26Fe\atom.h" />
+    <ClInclude Include="exm\27Co\atom.h" />
+    <ClInclude Include="exm\28Ni\atom.h" />
+    <ClInclude Include="exm\29Cu\atom.h" />
+    <ClInclude Include="exm\30Zn\atom.h" />
+    <ClInclude Include="exm\31Ga\atom.h" />
+    <ClInclude Include="exm\32Ge\atom.h" />
+    <ClInclude Include="exm\33As\atom.h" />
+    <ClInclude Include="exm\34Se\atom.h" />
+    <ClInclude Include="exm\35Br\atom.h" />
+    <ClInclude Include="exm\36Kr\atom.h" />
+    <ClInclude Include="exm\37Rb\atom.h" />
+    <ClInclude Include="exm\38Sr\atom.h" />
+    <ClInclude Include="exm\39Y\atom.h" />
+    <ClInclude Include="exm\40Zr\atom.h" />
+    <ClInclude Include="exm\41Nb\atom.h" />
+    <ClInclude Include="exm\42Mo\atom.h" />
+    <ClInclude Include="exm\43Tc\atom.h" />
+    <ClInclude Include="exm\44Ru\atom.h" />
+    <ClInclude Include="exm\45Rh\atom.h" />
+    <ClInclude Include="exm\46Pd\atom.h" />
+    <ClInclude Include="exm\47Ag\atom.h" />
+    <ClInclude Include="exm\48Cd\atom.h" />
+    <ClInclude Include="exm\49In\atom.h" />
+    <ClInclude Include="exm\50Sn\atom.h" />
+    <ClInclude Include="exm\51Sb\atom.h" />
+    <ClInclude Include="exm\52Te\atom.h" />
+    <ClInclude Include="exm\53I\atom.h" />
+    <ClInclude Include="exm\54Xe\atom.h" />
+    <ClInclude Include="exm\55Cs\atom.h" />
+    <ClInclude Include="exm\56Ba\atom.h" />
+    <ClInclude Include="exm\57La\atom.h" />
+    <ClInclude Include="exm\58Ce\atom.h" />
+    <ClInclude Include="exm\59Pr\atom.h" />
+    <ClInclude Include="exm\60Nd\atom.h" />
+    <ClInclude Include="exm\61Pm\atom.h" />
+    <ClInclude Include="exm\62Sm\atom.h" />
+    <ClInclude Include="exm\63Eu\atom.h" />
+    <ClInclude Include="exm\64Gd\atom.h" />
+    <ClInclude Include="exm\65Tb\atom.h" />
+    <ClInclude Include="exm\66Dy\atom.h" />
+    <ClInclude Include="exm\67Ho\atom.h" />
+    <ClInclude Include="exm\68Er\atom.h" />
+    <ClInclude Include="exm\69Tm\atom.h" />
+    <ClInclude Include="exm\70Yb\atom.h" />
+    <ClInclude Include="exm\71Lu\atom.h" />
+    <ClInclude Include="exm\72Hf\atom.h" />
+    <ClInclude Include="exm\73Ta\atom.h" />
+    <ClInclude Include="exm\74W\atom.h" />
+    <ClInclude Include="exm\75Re\atom.h" />
+    <ClInclude Include="exm\76Os\atom.h" />
+    <ClInclude Include="exm\77Ir\atom.h" />
+    <ClInclude Include="exm\78Pt\atom.h" />
+    <ClInclude Include="exm\79Au\atom.h" />
+    <ClInclude Include="exm\80Hg\atom.h" />
+    <ClInclude Include="exm\81Tl\atom.h" />
+    <ClInclude Include="exm\82Pb\atom.h" />
+    <ClInclude Include="exm\83Bi\atom.h" />
+    <ClInclude Include="exm\84Po\atom.h" />
+    <ClInclude Include="exm\85At\atom.h" />
+    <ClInclude Include="exm\86Rn\atom.h" />
+    <ClInclude Include="exm\87Fr\atom.h" />
+    <ClInclude Include="exm\88Ra\atom.h" />
+    <ClInclude Include="exm\89Ac\atom.h" />
+    <ClInclude Include="exm\90Th\atom.h" />
+    <ClInclude Include="exm\91Pa\atom.h" />
+    <ClInclude Include="exm\92U\atom.h" />
+    <ClInclude Include="src\Alg\alg.h" />
+    <ClInclude Include="src\Alg\clpmtx.h" />
+    <ClInclude Include="src\Alg\clpmtxband.h" />
+    <ClInclude Include="src\Alg\stdafx.h" />
+    <ClInclude Include="src\ExCorr\corrhf.h" />
+    <ClInclude Include="src\ExCorr\corrlyp.h" />
+    <ClInclude Include="src\ExCorr\corrpbe.h" />
+    <ClInclude Include="src\ExCorr\corrvwn.h" />
+    <ClInclude Include="src\ExCorr\exchb88.h" />
+    <ClInclude Include="src\ExCorr\exchhf.h" />
+    <ClInclude Include="src\ExCorr\exchpbe.h" />
+    <ClInclude Include="src\ExCorr\exchpbe0.h" />
+    <ClInclude Include="src\ExCorr\exchs.h" />
+    <ClInclude Include="src\ExCorr\exchslater.h" />
+    <ClInclude Include="src\ExCorr\excorr.h" />
+    <ClInclude Include="src\ExCorr\excorrlda.h" />
+    <ClInclude Include="src\ExCorr\stdafx.h" />
+    <ClInclude Include="src\ExCorr\xc.h" />
+    <ClInclude Include="src\Fem1D\approx.h" />
+    <ClInclude Include="src\Fem1D\bndr.h" />
+    <ClInclude Include="src\Fem1D\eigprob.h" />
+    <ClInclude Include="src\Fem1D\element.h" />
+    <ClInclude Include="src\Fem1D\eltinfo.h" />
+    <ClInclude Include="src\Fem1D\fem1D.h" />
+    <ClInclude Include="src\Fem1D\heap.h" />
+    <ClInclude Include="src\Fem1D\heapelt.h" />
+    <ClInclude Include="src\Fem1D\mesh.h" />
+    <ClInclude Include="src\Fem1D\odeprob.h" />
+    <ClInclude Include="src\Fem1D\prob.h" />
+    <ClInclude Include="src\Fem1D\stdafx.h" />
+    <ClInclude Include="src\Integ\adapt2D.h" />
+    <ClInclude Include="src\Integ\adapt3D.h" />
+    <ClInclude Include="src\Integ\brick.h" />
+    <ClInclude Include="src\Integ\eltset.h" />
+    <ClInclude Include="src\Integ\gauss2D.h" />
+    <ClInclude Include="src\Integ\int1D.h" />
+    <ClInclude Include="src\Integ\int1Ddiscret.h" />
+    <ClInclude Include="src\Integ\int1Dgauss.h" />
+    <ClInclude Include="src\Integ\int1Dtrap.h" />
+    <ClInclude Include="src\Integ\integ.h" />
+    <ClInclude Include="src\Integ\pool.h" />
+    <ClInclude Include="src\Integ\priorityqueue.h" />
+    <ClInclude Include="src\Integ\rec.h" />
+    <ClInclude Include="src\Integ\stdafx.h" />
+    <ClInclude Include="src\Ks\energy.h" />
+    <ClInclude Include="src\Ks\funener.h" />
+    <ClInclude Include="src\Ks\kohnsham.h" />
+    <ClInclude Include="src\Ks\nonlinks.h" />
+    <ClInclude Include="src\Ks\paramdb.h" />
+    <ClInclude Include="src\Ks\pot.h" />
+    <ClInclude Include="src\Ks\rho.h" />
+    <ClInclude Include="src\Ks\state.h" />
+    <ClInclude Include="src\Ks\stateset.h" />
+    <ClInclude Include="src\Ks\stdafx.h" />
+    <ClInclude Include="src\Util\bisection.h" />
+    <ClInclude Include="src\Util\fun1D.h" />
+    <ClInclude Include="src\Util\fun2D.h" />
+    <ClInclude Include="src\Util\fun3D.h" />
+    <ClInclude Include="src\Util\helpfun.h" />
+    <ClInclude Include="src\Util\lobatto.h" />
+    <ClInclude Include="src\Util\mtx.h" />
+    <ClInclude Include="src\Util\point3D.h" />
+    <ClInclude Include="src\Util\shreal.h" />
+    <ClInclude Include="src\Util\isspin.h" />
+    <ClInclude Include="src\Util\stdafx.h" />
+    <ClInclude Include="src\Util\util.h" />
+    <ClInclude Include="src\Util\vec.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\README" />
+    <None Include="doc\Fem1D-Manual-pl.pdf" />
+    <None Include="doc\MolPhys-2009-107-1339.pdf" />
+    <None Include="doc\MSMS-2009-17-045001.pdf" />
+    <None Include="doc\RAtom-Manual-pl.pdf" />
+    <None Include="exm\clean" />
+    <None Include="exm\common.inp" />
+    <None Include="exm\run" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

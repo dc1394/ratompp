@@ -1,0 +1,102 @@
+approx.o: approx.cpp stdafx.h ../Integ/integ.h ../Integ/../Util/util.h \
+ ../Integ/../Util/bisection.h ../Integ/../Util/fun1D.h \
+ ../Integ/../Util/vec.h ../Integ/../Util/fun2D.h ../Integ/../Util/fun3D.h \
+ ../Integ/../Util/helpfun.h ../Integ/../Util/point3D.h \
+ ../Integ/../Util/lobatto.h ../Integ/../Util/mtx.h \
+ ../Integ/../Util/shreal.h ../Integ/int1D.h ../Integ/int1Ddiscret.h \
+ ../Integ/int1Dgauss.h ../Integ/int1Dtrap.h ../Integ/../Util/fun1D.h \
+ ../Integ/adapt2D.h ../Integ/eltset.h ../Integ/priorityqueue.h \
+ ../Integ/rec.h ../Integ/pool.h ../Integ/gauss2D.h ../Integ/adapt3D.h \
+ ../Integ/brick.h ../Util/util.h ../Alg/alg.h ../Alg/../Util/util.h \
+ ../Alg/clpmtx.h ../Alg/clpmtxband.h approx.h mesh.h element.h bndr.h \
+ heap.h heapelt.h
+bndr.o: bndr.cpp stdafx.h ../Integ/integ.h ../Integ/../Util/util.h \
+ ../Integ/../Util/bisection.h ../Integ/../Util/fun1D.h \
+ ../Integ/../Util/vec.h ../Integ/../Util/fun2D.h ../Integ/../Util/fun3D.h \
+ ../Integ/../Util/helpfun.h ../Integ/../Util/point3D.h \
+ ../Integ/../Util/lobatto.h ../Integ/../Util/mtx.h \
+ ../Integ/../Util/shreal.h ../Integ/int1D.h ../Integ/int1Ddiscret.h \
+ ../Integ/int1Dgauss.h ../Integ/int1Dtrap.h ../Integ/../Util/fun1D.h \
+ ../Integ/adapt2D.h ../Integ/eltset.h ../Integ/priorityqueue.h \
+ ../Integ/rec.h ../Integ/pool.h ../Integ/gauss2D.h ../Integ/adapt3D.h \
+ ../Integ/brick.h ../Util/util.h ../Alg/alg.h ../Alg/../Util/util.h \
+ ../Alg/clpmtx.h ../Alg/clpmtxband.h bndr.h
+eigprob.o: eigprob.cpp stdafx.h ../Integ/integ.h ../Integ/../Util/util.h \
+ ../Integ/../Util/bisection.h ../Integ/../Util/fun1D.h \
+ ../Integ/../Util/vec.h ../Integ/../Util/fun2D.h ../Integ/../Util/fun3D.h \
+ ../Integ/../Util/helpfun.h ../Integ/../Util/point3D.h \
+ ../Integ/../Util/lobatto.h ../Integ/../Util/mtx.h \
+ ../Integ/../Util/shreal.h ../Integ/int1D.h ../Integ/int1Ddiscret.h \
+ ../Integ/int1Dgauss.h ../Integ/int1Dtrap.h ../Integ/../Util/fun1D.h \
+ ../Integ/adapt2D.h ../Integ/eltset.h ../Integ/priorityqueue.h \
+ ../Integ/rec.h ../Integ/pool.h ../Integ/gauss2D.h ../Integ/adapt3D.h \
+ ../Integ/brick.h ../Util/util.h ../Alg/alg.h ../Alg/../Util/util.h \
+ ../Alg/clpmtx.h ../Alg/clpmtxband.h eigprob.h prob.h mesh.h element.h \
+ bndr.h eltinfo.h
+element.o: element.cpp stdafx.h ../Integ/integ.h ../Integ/../Util/util.h \
+ ../Integ/../Util/bisection.h ../Integ/../Util/fun1D.h \
+ ../Integ/../Util/vec.h ../Integ/../Util/fun2D.h ../Integ/../Util/fun3D.h \
+ ../Integ/../Util/helpfun.h ../Integ/../Util/point3D.h \
+ ../Integ/../Util/lobatto.h ../Integ/../Util/mtx.h \
+ ../Integ/../Util/shreal.h ../Integ/int1D.h ../Integ/int1Ddiscret.h \
+ ../Integ/int1Dgauss.h ../Integ/int1Dtrap.h ../Integ/../Util/fun1D.h \
+ ../Integ/adapt2D.h ../Integ/eltset.h ../Integ/priorityqueue.h \
+ ../Integ/rec.h ../Integ/pool.h ../Integ/gauss2D.h ../Integ/adapt3D.h \
+ ../Integ/brick.h ../Util/util.h ../Alg/alg.h ../Alg/../Util/util.h \
+ ../Alg/clpmtx.h ../Alg/clpmtxband.h element.h
+eltinfo.o: eltinfo.cpp stdafx.h ../Integ/integ.h ../Integ/../Util/util.h \
+ ../Integ/../Util/bisection.h ../Integ/../Util/fun1D.h \
+ ../Integ/../Util/vec.h ../Integ/../Util/fun2D.h ../Integ/../Util/fun3D.h \
+ ../Integ/../Util/helpfun.h ../Integ/../Util/point3D.h \
+ ../Integ/../Util/lobatto.h ../Integ/../Util/mtx.h \
+ ../Integ/../Util/shreal.h ../Integ/int1D.h ../Integ/int1Ddiscret.h \
+ ../Integ/int1Dgauss.h ../Integ/int1Dtrap.h ../Integ/../Util/fun1D.h \
+ ../Integ/adapt2D.h ../Integ/eltset.h ../Integ/priorityqueue.h \
+ ../Integ/rec.h ../Integ/pool.h ../Integ/gauss2D.h ../Integ/adapt3D.h \
+ ../Integ/brick.h ../Util/util.h ../Alg/alg.h ../Alg/../Util/util.h \
+ ../Alg/clpmtx.h ../Alg/clpmtxband.h eltinfo.h
+heapelt.o: heapelt.cpp stdafx.h ../Integ/integ.h ../Integ/../Util/util.h \
+ ../Integ/../Util/bisection.h ../Integ/../Util/fun1D.h \
+ ../Integ/../Util/vec.h ../Integ/../Util/fun2D.h ../Integ/../Util/fun3D.h \
+ ../Integ/../Util/helpfun.h ../Integ/../Util/point3D.h \
+ ../Integ/../Util/lobatto.h ../Integ/../Util/mtx.h \
+ ../Integ/../Util/shreal.h ../Integ/int1D.h ../Integ/int1Ddiscret.h \
+ ../Integ/int1Dgauss.h ../Integ/int1Dtrap.h ../Integ/../Util/fun1D.h \
+ ../Integ/adapt2D.h ../Integ/eltset.h ../Integ/priorityqueue.h \
+ ../Integ/rec.h ../Integ/pool.h ../Integ/gauss2D.h ../Integ/adapt3D.h \
+ ../Integ/brick.h ../Util/util.h ../Alg/alg.h ../Alg/../Util/util.h \
+ ../Alg/clpmtx.h ../Alg/clpmtxband.h heapelt.h
+mesh.o: mesh.cpp stdafx.h ../Integ/integ.h ../Integ/../Util/util.h \
+ ../Integ/../Util/bisection.h ../Integ/../Util/fun1D.h \
+ ../Integ/../Util/vec.h ../Integ/../Util/fun2D.h ../Integ/../Util/fun3D.h \
+ ../Integ/../Util/helpfun.h ../Integ/../Util/point3D.h \
+ ../Integ/../Util/lobatto.h ../Integ/../Util/mtx.h \
+ ../Integ/../Util/shreal.h ../Integ/int1D.h ../Integ/int1Ddiscret.h \
+ ../Integ/int1Dgauss.h ../Integ/int1Dtrap.h ../Integ/../Util/fun1D.h \
+ ../Integ/adapt2D.h ../Integ/eltset.h ../Integ/priorityqueue.h \
+ ../Integ/rec.h ../Integ/pool.h ../Integ/gauss2D.h ../Integ/adapt3D.h \
+ ../Integ/brick.h ../Util/util.h ../Alg/alg.h ../Alg/../Util/util.h \
+ ../Alg/clpmtx.h ../Alg/clpmtxband.h mesh.h element.h bndr.h
+odeprob.o: odeprob.cpp stdafx.h ../Integ/integ.h ../Integ/../Util/util.h \
+ ../Integ/../Util/bisection.h ../Integ/../Util/fun1D.h \
+ ../Integ/../Util/vec.h ../Integ/../Util/fun2D.h ../Integ/../Util/fun3D.h \
+ ../Integ/../Util/helpfun.h ../Integ/../Util/point3D.h \
+ ../Integ/../Util/lobatto.h ../Integ/../Util/mtx.h \
+ ../Integ/../Util/shreal.h ../Integ/int1D.h ../Integ/int1Ddiscret.h \
+ ../Integ/int1Dgauss.h ../Integ/int1Dtrap.h ../Integ/../Util/fun1D.h \
+ ../Integ/adapt2D.h ../Integ/eltset.h ../Integ/priorityqueue.h \
+ ../Integ/rec.h ../Integ/pool.h ../Integ/gauss2D.h ../Integ/adapt3D.h \
+ ../Integ/brick.h ../Util/util.h ../Alg/alg.h ../Alg/../Util/util.h \
+ ../Alg/clpmtx.h ../Alg/clpmtxband.h odeprob.h prob.h mesh.h element.h \
+ bndr.h eltinfo.h
+prob.o: prob.cpp stdafx.h ../Integ/integ.h ../Integ/../Util/util.h \
+ ../Integ/../Util/bisection.h ../Integ/../Util/fun1D.h \
+ ../Integ/../Util/vec.h ../Integ/../Util/fun2D.h ../Integ/../Util/fun3D.h \
+ ../Integ/../Util/helpfun.h ../Integ/../Util/point3D.h \
+ ../Integ/../Util/lobatto.h ../Integ/../Util/mtx.h \
+ ../Integ/../Util/shreal.h ../Integ/int1D.h ../Integ/int1Ddiscret.h \
+ ../Integ/int1Dgauss.h ../Integ/int1Dtrap.h ../Integ/../Util/fun1D.h \
+ ../Integ/adapt2D.h ../Integ/eltset.h ../Integ/priorityqueue.h \
+ ../Integ/rec.h ../Integ/pool.h ../Integ/gauss2D.h ../Integ/adapt3D.h \
+ ../Integ/brick.h ../Util/util.h ../Alg/alg.h ../Alg/../Util/util.h \
+ ../Alg/clpmtx.h ../Alg/clpmtxband.h prob.h mesh.h element.h bndr.h
