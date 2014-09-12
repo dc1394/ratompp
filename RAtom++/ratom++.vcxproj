@@ -381,6 +381,7 @@
     <ClInclude Include="src\Util\vec.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\README" />
     <None Include="doc\Fem1D-Manual-pl.pdf" />
     <None Include="doc\MolPhys-2009-107-1339.pdf" />
     <None Include="doc\MSMS-2009-17-045001.pdf" />
@@ -388,7 +389,6 @@
     <None Include="exm\clean" />
     <None Include="exm\common.inp" />
     <None Include="exm\run" />
-    <None Include="README" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

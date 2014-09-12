@@ -700,6 +700,6 @@
     <None Include="exm\run">
       <Filter>exm</Filter>
     </None>
-    <None Include="README" />
+    <None Include="..\README" />
   </ItemGroup>
 </Project>
