@@ -9,7 +9,7 @@
 　トウェアとなることを目指して開発を続けています。
 
 ★ライセンス
-  RAtom++には Zbigniew Romanowski 氏による「ratom」のコードを用いています。こち
+  ratom++には Zbigniew Romanowski 氏による「ratom」のコードを用いています。こち
 　らのライセンスは GNU GPL v3 になります。以下は「ratom」に付属のREADMEの内容で
 　す。
 
