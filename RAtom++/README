@@ -1,0 +1,108 @@
+﻿================================================================================
+【 ソフト名 】ratom++
+【  作成者  】@dc1394
+================================================================================
+
+★これは何？
+  原子について、Kohn-Sham方程式を有限要素で離散化して数値的に解くプログラムです。
+  ratom ( https://code.google.com/p/ratom/ ) のコードを改良して、ratomの後継ソフ
+　トウェアとなることを目指して開発を続けています。
+
+★ライセンス
+  RAtom++には Zbigniew Romanowski 氏による「ratom」のコードを用いています。こち
+　らのライセンスは GNU GPL v3 になります。以下は「ratom」に付属のREADMEの内容で
+　す。
+
+  RAtom version 1.4.1
+  Author: Zbigniew Romanowski
+  e-mai: romz@wp.pl
+  Date: 20 April 2011
+  ===========================================
+  
+  RAtom solves nonlinear Kohn-Sham equation for an neutral atom.
+  The adaptive algorithm based on finite element method (FEM) is implemented.
+  
+  -----------------------------------------------------------------------------
+  The implemented algorithm is described in the following papers:
+  
+  1. Z. Romanowski, Adaptive solver of a Kohn-Sham equation for an atom
+     Modelling Simul. Mater. Sci. Eng. vol. 17, 045001 (2009)
+     
+  2. Z. Romanowski: Application of h-adaptive, high order finite 
+     element method to solve radial Schr旦dinger equation,
+     Molecular Physics, vol. 107, pp. 1339-1348  (2009).
+  -----------------------------------------------------------------------------
+  
+  Discretization of the differential eigenvalue problem is done
+  by Finite Element method with Lobatto polynomials as a basis functions.
+  
+  Disctretization leads to generalized eigenvalue problem,
+  which is solved by procedures from LAPACK libraries.
+  
+  The program RAtom is implemented in C++, it runs as a single thread. 
+  It is distributed as a single "tar.gz" file.
+  
+  High order Gauss quadratures are applied in order to obtain 
+  the total energy of atom with absolut accuracy of 1E-6 hartree.
+  
+  -----------------------------------------------------------------------------
+  After extracting you obtain:
+    ./bin    - directory with binary file RAtom.x after compilation
+    ./doc    - directory with documentation
+    ./exm    - directory with exemplary input files for all neutral atoms
+    ./src    - directory with source code
+    INSTALL  - instalation instruction
+    README   - readme file
+  
+  
+  -----------------------------------------------------------------------------
+  In order to compile, change to ./src directory, adjust 
+  Makefile.inc file and type 'make'.
+  In file Makefile.inc there are following macros:
+    LAPACK    # path to LAPACK library
+    BLAS      # path to BLAS library
+    CXX       # C++ compiler
+    CXXFLAGS  # compiler flags
+    CXXINCL   # compiler include directory
+    CXXLIB    # linker libraries
+  Values of the above macros must be set. If you use GCC C++ compiler, 
+  you should only modify LAPACK and BLAS macros.
+  
+  -----------------------------------------------------------------------------
+  After compilation the binary file RAtom.x will be stored in ./bin directory.
+  Program RAtom.x requires one input parameter, which is a path to file
+  with keywords. The format of input file for RAtom.x is very simple, and can be
+  figure out by checking the examples.
+  
+  In order to check the functionality of RAtom program go to ./exm directory.
+  The are 92 sub-directories in ./exm directory. Each sub-directory
+  contains input file for atoms beteen Hydrogen and Uranium
+  In order to run all prepared examples, go to ./exm directory and type ./run.
+  Obtained solutions (i.e. total energies and eigenvalues) are listed
+  in file solution.dat in each sub-directory.
+  
+  
+  -----------------------------------------------------------------------------
+  Directory ./src contains source code files with Makefile, 
+  Makefile.inc and Makefile.lib.
+  There are folowing directories in ./src:
+    ./Alg    - wrapper for selected procedures from LAPACK library;
+    ./ExCorr - exchange correlation potentials (basic functionality);
+    ./Fem1D  - solves adaptively selected ordinary differential 
+               equation and eigenvalue problem in one dimension;
+    ./Integ  - numerical integration: Gaussian quadratures and adaptive;
+    ./Ks     - solves linear and non-linear Kohn-Sham equation for an atom;
+    ./Util   - utilities;
+  
+  
+  -----------------------------------------------------------------------------
+  In directory ./src/Ks there is the file "main.cpp".
+  It is recommended to star reading the program from this file.
+  
+  
+  Best regards,
+  Zbigniew Romanowski
+  romz@wp.pl
+  
+  ----- END-OF-FILE -----
+
