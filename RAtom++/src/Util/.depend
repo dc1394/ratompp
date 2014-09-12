@@ -1,6 +1,0 @@
-bisection.o: bisection.cpp stdafx.h bisection.h fun1D.h vec.h
-helpfun.o: helpfun.cpp stdafx.h helpfun.h point3D.h vec.h
-lobatto.o: lobatto.cpp stdafx.h lobatto.h helpfun.h point3D.h vec.h
-mtx.o: mtx.cpp stdafx.h mtx.h
-shreal.o: shreal.cpp stdafx.h shreal.h helpfun.h point3D.h vec.h
-vec.o: vec.cpp stdafx.h vec.h

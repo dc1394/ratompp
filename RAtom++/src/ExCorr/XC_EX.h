@@ -1,1 +1,0 @@
-void XC_EX(int NSP, double DS0, double DS[2], double EX[1], double VX[2]);
