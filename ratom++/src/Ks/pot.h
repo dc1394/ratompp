@@ -15,12 +15,7 @@
 
 extern void* enabler;
 namespace ks {
-    template <util::IsSpin T, typename X = void>
-    using alpha_enabler = typename std::enable_if<T == util::IsSpin::Alpha, X>::type*&;
-    template <util::IsSpin T, typename X = void>
-    using beta_enabler = typename std::enable_if<T == util::IsSpin::Beta, X>::type*&;
-
-    template <util::IsSpin Spin>
+    template <util::Spin S>
     class Pot final : public util::Fun1D
     {
         friend class Energy;
@@ -57,9 +52,9 @@ namespace ks {
         void SolvePoisson(void);
 
         virtual double Get(double r) const;
-        template <util::IsSpin S, alpha_enabler<S> T = enabler>
+        template <util::Spin S, alpha_enabler<S> T = enabler>
         double GetRho(double r) const;
-        template <util::IsSpin S, beta_enabler<S> T = enabler>
+        template <util::Spin S, beta_enabler<S> T = enabler>
         double GetRho(double r) const;
 
         // March 31st, 2014 Added by @dc1394

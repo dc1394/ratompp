@@ -15,8 +15,8 @@ namespace ks {
     class FunEner final : public util::Fun1D
     {
     public:
-        FunEner(std::pair<const std::shared_ptr<const Pot<util::IsSpin::Alpha>>,
-                const std::shared_ptr<const Pot<util::IsSpin::Beta>>> pot, size_t type);
+        FunEner(std::pair<const std::shared_ptr<const Pot<util::Spin::Alpha>>,
+                const std::shared_ptr<const Pot<util::Spin::Beta>>> pot, size_t type);
         virtual ~FunEner();
 
         virtual double Get(double r) const;
@@ -33,8 +33,8 @@ namespace ks {
 
     private:
         // Interaction potencial
-        const std::pair<const std::shared_ptr<const Pot<util::IsSpin::Alpha>>,
-                        const std::shared_ptr<const Pot<util::IsSpin::Beta>>> m_pot;
+        const std::pair<const std::shared_ptr<const Pot<util::Spin::Alpha>>,
+                        const std::shared_ptr<const Pot<util::Spin::Beta>>> m_pot;
 
         // Flag defining term of evaluated total energy
         size_t m_type;

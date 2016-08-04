@@ -19,7 +19,7 @@ namespace ks {
     //
     // Constructor
     //
-    template <util::IsSpin Spin>
+    template <util::Spin Spin>
     Pot<Spin>::Pot(const ParamDb* db) : /*m_rho(NULL),*/ m_db(db)
     {
         //m_exch = NULL;
@@ -37,7 +37,7 @@ namespace ks {
     //
     // Destructor
     //
-    template <util::IsSpin Spin>
+    template <util::Spin Spin>
     Pot<Spin>::~Pot(void)
     {
     }
@@ -46,8 +46,8 @@ namespace ks {
     //
     // Returns value of electron density for radius "r"
     //
-    template <util::IsSpin Spin>
-    template <util::IsSpin S, alpha_enabler<S> T>
+    template <util::Spin Spin>
+    template <util::Spin S, alpha_enabler<S> T>
     double Pot<Spin>::GetRho(double r) const
     {
     	//return m_rho->Get(r);
@@ -58,8 +58,8 @@ namespace ks {
     //
     // Returns value of electron density for radius "r"
     //
-    template <util::IsSpin Spin>
-    template <util::IsSpin S, beta_enabler<S> T>
+    template <util::Spin Spin>
+    template <util::Spin S, beta_enabler<S> T>
     double Pot<Spin>::GetRho(double r) const
     {
         //return m_rho->Get(r);
@@ -72,7 +72,7 @@ namespace ks {
     @return         effective potential for radial Kohn-Sham equation for radius "r"
     @exception      none
     */
-    template <util::IsSpin Spin>
+    template <util::Spin Spin>
     double Pot<Spin>::Get(double r) const
     {
         double rho, vx, vc, vn, vh;
@@ -103,7 +103,7 @@ namespace ks {
     @exception      none
     */
     //void Pot::SetRho(util::Fun1D* rho)
-    template <util::IsSpin Spin>
+    template <util::Spin Spin>
     void Pot<Spin>::SetRho(std::pair<std::shared_ptr<util::Fun1D>, std::shared_ptr<util::Fun1D>> const & rho)
     {
         const double rc = m_db->GetDouble("Atom_Rc");
@@ -128,7 +128,7 @@ namespace ks {
     /*! Solves Poission equation
     @exception      none
     */
-    template <util::IsSpin Spin>
+    template <util::Spin Spin>
     void Pot<Spin>::SolvePoisson(void)
     {
         const double absMaxCoef = m_db->GetDouble("Solver_PsnAbsMaxCoef");
@@ -152,7 +152,7 @@ namespace ks {
     @return         Electrostatic potential of atomic core
     @exception      none
     */
-    template <util::IsSpin Spin>
+    template <util::Spin Spin>
     double Pot<Spin>::Vn(double r) const
     {
         return -m_z / r;
@@ -173,7 +173,7 @@ namespace ks {
     @return         Exchange potential for radius "r"
     @exception      none
     */
-    template <util::IsSpin Spin>
+    template <util::Spin Spin>
     double Pot<Spin>::Vx(double r) const
     {
         return m_exch->V(r);
@@ -193,7 +193,7 @@ namespace ks {
     // Correlation potential for radius "r"
     // March 7th, 2014	Added by dc1394
     //
-    template <util::IsSpin Spin>
+    template <util::Spin Spin>
     double Pot<Spin>::Vc(double r) const
     {
         return m_corr->V(r);
@@ -202,7 +202,7 @@ namespace ks {
     //
     // Hartree potential
     //
-    template <util::IsSpin Spin>
+    template <util::Spin Spin>
     double Pot<Spin>::Vh(double r) const
     {
         assert(r > 0);
@@ -229,7 +229,7 @@ namespace ks {
     // Density of exchnage energy for radius "r"
     // March 7th, 2014	Added by dc1394
     //
-    template <util::IsSpin Spin>
+    template <util::Spin Spin>
     double Pot<Spin>::Ex(double r) const
     {
         assert(m_exch);
@@ -250,7 +250,7 @@ namespace ks {
     // Density of correlation energy for radius "r"
     // March 8th, 2014	Added by dc1394
     //
-    template <util::IsSpin Spin>
+    template <util::Spin Spin>
     double Pot<Spin>::Ec(double r) const
     {
         assert(m_corr);
@@ -260,7 +260,7 @@ namespace ks {
     //
     // Returns difference between density of energy and potential
     //
-    template <util::IsSpin Spin>
+    template <util::Spin Spin>
     double Pot<Spin>::XcEdiffV(double r) const
     {
         // May 24th, 2014 Modified by dc1394
@@ -279,7 +279,7 @@ namespace ks {
     // exch - name of exchange potential
     // corr - name of correlation potential
     //
-    template <util::IsSpin Spin>
+    template <util::Spin Spin>
     void Pot<Spin>::SetXc(const char* exch, const char* corr)
     {
         // March 7th, 2014	Modified by dc1394
@@ -347,7 +347,7 @@ namespace ks {
     // Writes potential int file
     //
     // March 31st, 2014	Added by dc1394
-    template <util::IsSpin Spin>
+    template <util::Spin Spin>
     void Pot<Spin>::Write() /*const*/
     {
         std::unique_ptr<FILE, decltype(&fclose)> out(m_db->OpenFile("pot", "wt"), fclose);
@@ -398,7 +398,7 @@ namespace ks {
     // April 3rd, 2014 Added by dc1394
     // Returns value of electron density (divided by 4 * pi * r^2) for radius "r"
     //
-    template <util::IsSpin Spin>
+    template <util::Spin Spin>
     std::pair<double, double> Pot<Spin>::GetRhoTilde(double r)
     {
         return std::make_pair(m_rho.first->Get(r) / (M_4PI * r * r),
@@ -409,7 +409,7 @@ namespace ks {
     // April 3rd, 2014 Added by dc1394
     // Returns value of electron density (divided by 4 * pi * r^2) derivative for radius "r"
     //
-    template <util::IsSpin Spin>
+    template <util::Spin Spin>
     std::pair<double, double> Pot<Spin>::GetRhoTildeDeriv(double r)
     {
         const double first = (m_rho.first->GetDeriv(r) - 2.0 * m_rho.first->Get(r) / r) / (M_4PI * r * r);
@@ -423,7 +423,7 @@ namespace ks {
     // Returns value of electron density (divided by 4 * pi * r^2) laplacian for radius "r"
     // April 3rd, 2014 added by dc1394
     //
-    template <util::IsSpin Spin>
+    template <util::Spin Spin>
     std::pair<double, double> Pot<Spin>::GetRhoTildeLapl(double r)
     {
         const double first = (m_rho.first->Get2ndDeriv(r) - 2.0 / r * m_rho.first->GetDeriv(r) +
@@ -434,8 +434,8 @@ namespace ks {
         return std::make_pair(first, second);
     };
 
-    template class Pot<util::IsSpin::Alpha>;
-    template class Pot<util::IsSpin::Beta>;
-    template double Pot<util::IsSpin::Alpha>::GetRho<util::IsSpin::Alpha>(double r) const;
-    template double Pot<util::IsSpin::Beta>::GetRho<util::IsSpin::Beta>(double r) const;
+    template class Pot<util::Spin::Alpha>;
+    template class Pot<util::Spin::Beta>;
+    template double Pot<util::Spin::Alpha>::GetRho<util::Spin::Alpha>(double r) const;
+    template double Pot<util::Spin::Beta>::GetRho<util::Spin::Beta>(double r) const;
 }

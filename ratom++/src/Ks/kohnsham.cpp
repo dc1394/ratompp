@@ -7,7 +7,7 @@ namespace ks {
     //
     // Constructor
     //
-    template <util::IsSpin Spin>
+    template <util::Spin Spin>
     KohnSham<Spin>::KohnSham(const ParamDb* db, StateSet* stateSet) : m_db(db), m_stateSet(stateSet)
     {
     }
@@ -15,7 +15,7 @@ namespace ks {
     //
     // Destructor
     //
-    template <util::IsSpin Spin>
+    template <util::Spin Spin>
     KohnSham<Spin>::~KohnSham(void)
     {
     }
@@ -25,7 +25,7 @@ namespace ks {
     // Required parameters are properly set
     //
     //void KohnSham::Config(util::Fun1D* pot)
-    template <util::IsSpin Spin>
+    template <util::Spin Spin>
     void KohnSham<Spin>::Config(std::shared_ptr<const util::Fun1D> const & pot)
     {
         const double rc = m_db->GetDouble("Atom_Rc");
@@ -55,7 +55,7 @@ namespace ks {
     //
     // Solves linear eqigenvalue problem
     //
-    template <util::IsSpin Spin>
+    template <util::Spin Spin>
     void KohnSham<Spin>::Solve(void)
     {
         const double abstol = m_db->GetDouble("Solver_EigAbsTol");
@@ -86,7 +86,7 @@ namespace ks {
     //
     // Returns value of electron density for radius "r"
     //
-    template <util::IsSpin Spin>
+    template <util::Spin Spin>
     double KohnSham<Spin>::Get(double r) const
     {
         // ÉXÉsÉìÇ…âûÇ∂ÇΩä÷êîÇåƒÇ—èoÇ∑
@@ -141,8 +141,8 @@ namespace ks {
         //return rho;
     }
 
-    template <util::IsSpin Spin>
-    template <util::IsSpin S, alpha_enabler<S> T>
+    template <util::Spin Spin>
+    template <util::Spin S, alpha_enabler<S> T>
     double KohnSham<Spin>::Get(double r) const
     {
         const double rc = m_db->GetDouble("Atom_Rc");
@@ -184,8 +184,8 @@ namespace ks {
         return rho;
     }
 
-    template <util::IsSpin Spin>
-    template <util::IsSpin S, beta_enabler<S> T>
+    template <util::Spin Spin>
+    template <util::Spin S, beta_enabler<S> T>
     double KohnSham<Spin>::Get(double r) const
     {
         const double rc = m_db->GetDouble("Atom_Rc");
@@ -225,7 +225,7 @@ namespace ks {
     // Writes eigenfunctions into file.
     // Lobato coeffictienst are written as well.
     //
-    template <util::IsSpin Spin>
+    template <util::Spin Spin>
     void KohnSham<Spin>::WriteEigen(void) const
     {
         const size_t eigNode = m_db->GetSize_t("Out_EigNode");
@@ -256,8 +256,8 @@ namespace ks {
         }
     }
 
-    template class KohnSham<util::IsSpin::Alpha>;
-    template class KohnSham<util::IsSpin::Beta>;
-    template double KohnSham<util::IsSpin::Alpha>::Get<util::IsSpin::Alpha>(double r) const;
-    template double KohnSham<util::IsSpin::Beta>::Get<util::IsSpin::Beta>(double r) const;
+    template class KohnSham<util::Spin::Alpha>;
+    template class KohnSham<util::Spin::Beta>;
+    template double KohnSham<util::Spin::Alpha>::Get<util::Spin::Alpha>(double r) const;
+    template double KohnSham<util::Spin::Beta>::Get<util::Spin::Beta>(double r) const;
 }

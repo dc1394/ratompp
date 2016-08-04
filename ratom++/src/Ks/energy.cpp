@@ -7,8 +7,8 @@ namespace ks {
     //
     // Construktor
     //
-    Energy::Energy(std::pair<const std::shared_ptr<const Pot<util::IsSpin::Alpha>>,
-                   const std::shared_ptr<const Pot<util::IsSpin::Beta>>> pot,
+    Energy::Energy(std::pair<const std::shared_ptr<const Pot<util::Spin::Alpha>>,
+                   const std::shared_ptr<const Pot<util::Spin::Beta>>> pot,
                    const StateSet* ss, const ParamDb* db) :
         m_pot(std::move(pot)), m_ss(ss)
     {

@@ -11,7 +11,7 @@ namespace ks {
         m_db.WriteParams();
 
         //m_pot = new Pot(&m_db);
-        m_pot = std::make_pair(std::make_shared<Pot<util::IsSpin::Alpha>>(&m_db), std::make_shared<Pot<util::IsSpin::Alpha>>(&m_db));
+        m_pot = std::make_pair(std::make_shared<Pot<util::Spin::Alpha>>(&m_db), std::make_shared<Pot<util::Spin::Alpha>>(&m_db));
         //assert(m_pot);
 
         m_ss = new StateSet(&m_db);
@@ -19,7 +19,7 @@ namespace ks {
 
         // May 25th, 2014 Modified by dc1394
         //m_ks = new KohnSham(&m_db, m_ss);
-        m_ks = std::make_pair(std::make_shared<KohnSham<util::IsSpin::Alpha>>(&m_db, m_ss), std::make_shared<KohnSham<util::IsSpin::Beta>>(&m_db, m_ss));
+        m_ks = std::make_pair(std::make_shared<KohnSham<util::Spin::Alpha>>(&m_db, m_ss), std::make_shared<KohnSham<util::Spin::Beta>>(&m_db, m_ss));
         //assert(m_ks);
 
         m_energy = new Energy(m_pot, m_ss, &m_db);

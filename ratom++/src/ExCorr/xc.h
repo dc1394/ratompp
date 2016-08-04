@@ -10,12 +10,12 @@
 // March 7th, 2014	Modified by dc1394
 
 // March 7th, 2014	Added by dc1394
-#include "../Util/isspin.h"
+#include "../Util/spin.h"
 #include <functional>
 
 // May 24th, 2014 Modified by dc1394
 namespace excorr {
-    template <util::IsSpin Spin>
+    template <util::Spin Spin>
     class Xc final {
         const std::function<double(double)> V_;
         const std::function<double(double)> E_;

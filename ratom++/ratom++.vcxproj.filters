@@ -398,9 +398,6 @@
     <ClInclude Include="src\ExCorr\excorrlda.h">
       <Filter>ヘッダー ファイル\ExCorr</Filter>
     </ClInclude>
-    <ClInclude Include="src\Util\isspin.h">
-      <Filter>ヘッダー ファイル\Util</Filter>
-    </ClInclude>
     <ClInclude Include="exm\01H\atom.h">
       <Filter>exm</Filter>
     </ClInclude>
@@ -676,6 +673,9 @@
     </ClInclude>
     <ClInclude Include="exm\92U\atom.h">
       <Filter>exm</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Util\spin.h">
+      <Filter>ヘッダー ファイル\Util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

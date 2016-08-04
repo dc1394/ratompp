@@ -1,7 +1,7 @@
 #ifndef __RATOM_STATE_H__
 #define __RATOM_STATE_H__
 
-#include "../Util/isspin.h"
+#include "../Util/spin.h"
 #include <utility>
 
 /** \brief State of the atom

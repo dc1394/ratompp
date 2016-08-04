@@ -10,7 +10,7 @@ namespace excorr {
     @return         rでの交換相関ポテンシャル
     @exception      none
     */
-    template <util::IsSpin Spin>
+    template <util::Spin Spin>
     double Xc<Spin>::V(double r) const
     {
         return V_(r);
@@ -21,7 +21,7 @@ namespace excorr {
     @return         rでの交換相関エネルギー密度
     @exception      none
     */
-    template <util::IsSpin Spin>
+    template <util::Spin Spin>
     double Xc<Spin>::E(double r) const
     {
         return E_(r);
@@ -42,7 +42,7 @@ namespace excorr {
     @return         difference betwee energy density and potential for radius "r"
     @exception      none
     */
-    template <util::IsSpin Spin>
+    template <util::Spin Spin>
     double Xc<Spin>::EdiffV(double r) const
     {
         return E_(r) - V_(r);
@@ -103,12 +103,12 @@ namespace excorr {
     @return         交換相関汎関数の名前
     @exception      none
     */
-    template <util::IsSpin Spin>
+    template <util::Spin Spin>
     char const * Xc<Spin>::Name() const
     {
         return Name_();
     }
 
-    template class Xc<util::IsSpin::Alpha>;
-    template class Xc<util::IsSpin::Beta>;
+    template class Xc<util::Spin::Alpha>;
+    template class Xc<util::Spin::Beta>;
 }

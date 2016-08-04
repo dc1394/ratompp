@@ -12,18 +12,18 @@
 #include "paramdb.h"
 #include "stateset.h"
 
-#include "../Util/isspin.h"
+#include "../Util/spin.h"
 #include <type_traits>
 
 extern void* enabler;
 // May 26th, 2014 Modified by dc1394
 namespace ks {
-    template <util::IsSpin T, typename X = void>
-    using alpha_enabler = typename std::enable_if<T == util::IsSpin::Alpha, X>::type*&;
-    template <util::IsSpin T, typename X = void>
-    using beta_enabler = typename std::enable_if<T == util::IsSpin::Beta, X>::type*&;
+    template <util::Spin T, typename X = void>
+    using alpha_enabler = typename std::enable_if<T == util::Spin::Alpha, X>::type*&;
+    template <util::Spin T, typename X = void>
+    using beta_enabler = typename std::enable_if<T == util::Spin::Beta, X>::type*&;
 
-    template <util::IsSpin Spin>
+    template <util::Spin Spin>
     class KohnSham : public util::Fun1D
     {
     private:
@@ -67,9 +67,9 @@ namespace ks {
         void Config(const std::shared_ptr<const util::Fun1D> & pot);
         void Solve(void);
         double Get(double r) const;
-        template <util::IsSpin S, alpha_enabler<S> T = enabler>
+        template <util::Spin S, alpha_enabler<S> T = enabler>
         double Get(double r) const;
-        template <util::IsSpin S, beta_enabler<S> T = enabler>
+        template <util::Spin S, beta_enabler<S> T = enabler>
         double Get(double r) const;
         void WriteEigen(void) const;
 

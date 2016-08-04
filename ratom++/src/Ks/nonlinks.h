@@ -14,7 +14,7 @@
 #include "pot.h"
 #include "kohnsham.h"
 #include "energy.h"
-#include "../Util/isspin.h"
+#include "../Util/spin.h"
 
 namespace ks {
     // May 26th, 2014 Added by dc1394
@@ -36,12 +36,12 @@ namespace ks {
     private:
         // Interaction potential
         //Pot *m_pot;
-        std::pair<std::shared_ptr<Pot<util::IsSpin::Alpha>>, std::shared_ptr<Pot<util::IsSpin::Beta>>> m_pot;
+        std::pair<std::shared_ptr<Pot<util::Spin::Alpha>>, std::shared_ptr<Pot<util::Spin::Beta>>> m_pot;
 
         // Solver for LINER Kohna-Shama equation
         // May 25th, 2014 Modified by dc1394
         //KohnSham *m_ks;
-        std::pair <std::shared_ptr<KohnSham<util::IsSpin::Alpha>>, std::shared_ptr<KohnSham<util::IsSpin::Beta>>> m_ks;
+        std::pair <std::shared_ptr<KohnSham<util::Spin::Alpha>>, std::shared_ptr<KohnSham<util::Spin::Beta>>> m_ks;
 
         // Set of all electronic states (eigenfunctions)
         StateSet *m_ss;
