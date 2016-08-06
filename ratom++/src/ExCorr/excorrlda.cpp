@@ -1,4 +1,11 @@
-﻿#include "excorrlda.h"
+﻿/*! \file excorrlda.cpp
+    \brief Represents any LDA Exchange-Correlation potential.
+
+    Copyright ©  2016 @dc1394 All Rights Reserved.
+    This software is released under the GNU GPL v3.
+*/
+
+#include "excorrlda.h"
 #include <array>        // for std::array
 
 namespace excorr {

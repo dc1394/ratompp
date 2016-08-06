@@ -6,7 +6,7 @@
 namespace util {
     enum class Spin : std::int32_t {
         Alpha = 1,
-        Beta = -1
+        Beta = 2
     };
 }
 

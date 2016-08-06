@@ -52,9 +52,9 @@ namespace ks {
         void SolvePoisson(void);
 
         virtual double Get(double r) const;
-        template <util::Spin S, alpha_enabler<S> T = enabler>
+        template <util::Spin S>
         double GetRho(double r) const;
-        template <util::Spin S, beta_enabler<S> T = enabler>
+        template <util::Spin S>
         double GetRho(double r) const;
 
         // March 31st, 2014 Added by @dc1394
@@ -94,10 +94,10 @@ namespace ks {
         // March 7th, 2014	Modified by dc1394 
         // Exchenge potential
         //Xc* m_exch;
-        std::unique_ptr<excorr::Xc<Spin>> m_exch;
+        std::unique_ptr<excorr::Xc<S>> m_exch;
         // Correlation potential
         //Xc* m_corr;
-        std::unique_ptr<excorr::Xc<Spin>> m_corr;
+        std::unique_ptr<excorr::Xc<S>> m_corr;
 
         // Number of protons in atom
         double m_z;
