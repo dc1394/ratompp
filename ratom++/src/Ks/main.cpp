@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
 
 	try
 	{
-		NonLinKs ks(argv[1]);
+		ks::NonLinKs ks(argv[1]);
 		return ks.Run();
 	}
 	catch(std::exception& e)

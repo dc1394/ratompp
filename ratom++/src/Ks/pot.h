@@ -12,6 +12,7 @@
 #include "../ExCorr/xc.h"
 #include <memory>
 #include <utility>
+#include <boost/mpl/int.hpp>    // for boost::mpl::int_
 
 extern void* enabler;
 namespace ks {
@@ -43,8 +44,8 @@ namespace ks {
 
 
     public:
-        Pot(const ParamDb* db);
-        virtual ~Pot(void);
+        Pot(std::shared_ptr<ParamDb> const & db);
+        virtual ~Pot() = default;
 
         // May 23rd, 2014 Modified by dc1394
         //void SetRho(util::Fun1D* rho);
@@ -52,10 +53,9 @@ namespace ks {
         void SolvePoisson(void);
 
         virtual double Get(double r) const;
-        template <util::Spin S>
         double GetRho(double r) const;
-        template <util::Spin S>
-        double GetRho(double r) const;
+        double GetRho(double r, boost::mpl::int_<static_cast<std::int32_t>(util::Spin::Alpha)>) const;
+        double GetRho(double r, boost::mpl::int_<static_cast<std::int32_t>(util::Spin::Beta)>) const;
 
         // March 31st, 2014 Added by @dc1394
         void Write() /*const*/;
@@ -94,7 +94,7 @@ namespace ks {
         // March 7th, 2014	Modified by dc1394 
         // Exchenge potential
         //Xc* m_exch;
-        std::unique_ptr<excorr::Xc<S>> m_exch;
+        std::shared_ptr<excorr::Xc<S>> m_exch;
         // Correlation potential
         //Xc* m_corr;
         std::unique_ptr<excorr::Xc<S>> m_corr;
@@ -112,11 +112,11 @@ namespace ks {
         RhoHelp m_rhoHelp;
 
         // Database of parameters
-        const ParamDb* m_db;
+        std::shared_ptr<ParamDb> const m_db;
 
 #if defined(__INTEL_COMPILER) || defined(__GXX_EXPERIMENTAL_CXX0X__)
-        static constexpr double MAX = 10.0;
-        static constexpr double DR = 1.0E-3;
+        static auto constexpr MAX = 10.0;
+        static auto constexpr DR = 1.0E-3;
 #else
         static const double MAX;
         static const double DR;

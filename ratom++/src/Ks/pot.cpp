@@ -1,12 +1,9 @@
 // modified by dc1394 - March 7th, 2014
 
+#include "../ExCorr/excorrlda.h"
 #include "stdafx.h"
 #include "pot.h"
-
-// April 3rd, 2014 Added by dc1394
 #include "rho.h"
-#include "../ExCorr/excorrlda.h"
-// March 31st, 2014 Added by dc1394
 #include <cstdint>
 #include <boost/cast.hpp>
 
@@ -19,8 +16,8 @@ namespace ks {
     //
     // Constructor
     //
-    template <util::Spin Spin>
-    Pot<Spin>::Pot(const ParamDb* db) : /*m_rho(NULL),*/ m_db(db)
+    template <util::Spin S>
+    Pot<S>::Pot(std::shared_ptr<ParamDb> const & db) : /*m_rho(NULL),*/ m_db(db)
     {
         //m_exch = NULL;
         //m_corr = NULL;
@@ -32,23 +29,19 @@ namespace ks {
         //m_z = db->GetDouble("Atom_Proton");
         m_rc = m_db->GetDouble("Atom_Rc");
     }
-
-
-    //
-    // Destructor
-    //
-    template <util::Spin Spin>
-    Pot<Spin>::~Pot(void)
+    
+    template <util::Spin S>
+    double Pot<S>::GetRho(double r) const
     {
+        return GetRho(r, boost::mpl::int_<static_cast<std::int32_t>(S)>());
     }
 
     // May 24th, 2014 Modified by dc1394
     //
     // Returns value of electron density for radius "r"
     //
-    template <util::Spin Spin>
-    template <util::Spin S, alpha_enabler<S> T>
-    double Pot<Spin>::GetRho(double r) const
+    template <util::Spin S>
+    double Pot<S>::GetRho(double r, boost::mpl::int_<static_cast<std::int32_t>(util::Spin::Alpha)>) const
     {
     	//return m_rho->Get(r);
         return m_rho.first->Get(r);
@@ -58,9 +51,8 @@ namespace ks {
     //
     // Returns value of electron density for radius "r"
     //
-    template <util::Spin Spin>
-    template <util::Spin S, beta_enabler<S> T>
-    double Pot<Spin>::GetRho(double r) const
+    template <util::Spin S>
+    double Pot<S>::GetRho(double r, boost::mpl::int_<static_cast<std::int32_t>(util::Spin::Beta)>) const
     {
         //return m_rho->Get(r);
         return m_rho.second->Get(r);
@@ -72,8 +64,8 @@ namespace ks {
     @return         effective potential for radial Kohn-Sham equation for radius "r"
     @exception      none
     */
-    template <util::Spin Spin>
-    double Pot<Spin>::Get(double r) const
+    template <util::Spin S>
+    double Pot<S>::Get(double r) const
     {
         double rho, vx, vc, vn, vh;
 
@@ -103,8 +95,8 @@ namespace ks {
     @exception      none
     */
     //void Pot::SetRho(util::Fun1D* rho)
-    template <util::Spin Spin>
-    void Pot<Spin>::SetRho(std::pair<std::shared_ptr<util::Fun1D>, std::shared_ptr<util::Fun1D>> const & rho)
+    template <util::Spin S>
+    void Pot<S>::SetRho(std::pair<std::shared_ptr<util::Fun1D>, std::shared_ptr<util::Fun1D>> const & rho)
     {
         const double rc = m_db->GetDouble("Atom_Rc");
         const size_t psnNode = m_db->GetSize_t("Solver_PsnNode");
@@ -128,8 +120,8 @@ namespace ks {
     /*! Solves Poission equation
     @exception      none
     */
-    template <util::Spin Spin>
-    void Pot<Spin>::SolvePoisson(void)
+    template <util::Spin S>
+    void Pot<S>::SolvePoisson(void)
     {
         const double absMaxCoef = m_db->GetDouble("Solver_PsnAbsMaxCoef");
         const bool adapt = m_db->GetBool("Solver_PsnAdapt");
@@ -152,8 +144,8 @@ namespace ks {
     @return         Electrostatic potential of atomic core
     @exception      none
     */
-    template <util::Spin Spin>
-    double Pot<Spin>::Vn(double r) const
+    template <util::Spin S>
+    double Pot<S>::Vn(double r) const
     {
         return -m_z / r;
     }
@@ -173,8 +165,8 @@ namespace ks {
     @return         Exchange potential for radius "r"
     @exception      none
     */
-    template <util::Spin Spin>
-    double Pot<Spin>::Vx(double r) const
+    template <util::Spin S>
+    double Pot<S>::Vx(double r) const
     {
         return m_exch->V(r);
     }
@@ -193,8 +185,8 @@ namespace ks {
     // Correlation potential for radius "r"
     // March 7th, 2014	Added by dc1394
     //
-    template <util::Spin Spin>
-    double Pot<Spin>::Vc(double r) const
+    template <util::Spin S>
+    double Pot<S>::Vc(double r) const
     {
         return m_corr->V(r);
     }
@@ -202,8 +194,8 @@ namespace ks {
     //
     // Hartree potential
     //
-    template <util::Spin Spin>
-    double Pot<Spin>::Vh(double r) const
+    template <util::Spin S>
+    double Pot<S>::Vh(double r) const
     {
         assert(r > 0);
         const double val = m_hart.GetSol(r);
@@ -229,8 +221,8 @@ namespace ks {
     // Density of exchnage energy for radius "r"
     // March 7th, 2014	Added by dc1394
     //
-    template <util::Spin Spin>
-    double Pot<Spin>::Ex(double r) const
+    template <util::Spin S>
+    double Pot<S>::Ex(double r) const
     {
         assert(m_exch);
         return m_exch->E(r);
@@ -250,8 +242,8 @@ namespace ks {
     // Density of correlation energy for radius "r"
     // March 8th, 2014	Added by dc1394
     //
-    template <util::Spin Spin>
-    double Pot<Spin>::Ec(double r) const
+    template <util::Spin S>
+    double Pot<S>::Ec(double r) const
     {
         assert(m_corr);
         return m_corr->E(r);
@@ -260,8 +252,8 @@ namespace ks {
     //
     // Returns difference between density of energy and potential
     //
-    template <util::Spin Spin>
-    double Pot<Spin>::XcEdiffV(double r) const
+    template <util::Spin S>
+    double Pot<S>::XcEdiffV(double r) const
     {
         // May 24th, 2014 Modified by dc1394
         //assert(m_rho);
@@ -279,13 +271,12 @@ namespace ks {
     // exch - name of exchange potential
     // corr - name of correlation potential
     //
-    template <util::Spin Spin>
-    void Pot<Spin>::SetXc(const char* exch, const char* corr)
+    template <util::Spin S>
+    void Pot<S>::SetXc(const char* exch, const char* corr)
     {
         // March 7th, 2014	Modified by dc1394
         if (strcmp(exch, "slater") == 0) {
-            m_exch.reset(new excorr::Xc<Spin>(excorr::ExCorrLDA(std::bind(&Pot::GetRhoTilde, std::ref(*this),
-                std::placeholders::_1), XC_LDA_X)));
+            m_exch.reset(new excorr::Xc<S>(excorr::ExCorrLDA([this](double r) { return GetRhoTilde(r); }, XC_LDA_X)));
         }
         //else if (strcmp(exch, "b88") == 0) {
         //    //delete m_exch;
@@ -347,8 +338,8 @@ namespace ks {
     // Writes potential int file
     //
     // March 31st, 2014	Added by dc1394
-    template <util::Spin Spin>
-    void Pot<Spin>::Write() /*const*/
+    template <util::Spin S>
+    void Pot<S>::Write() /*const*/
     {
         std::unique_ptr<FILE, decltype(&fclose)> out(m_db->OpenFile("pot", "wt"), fclose);
 
@@ -398,8 +389,8 @@ namespace ks {
     // April 3rd, 2014 Added by dc1394
     // Returns value of electron density (divided by 4 * pi * r^2) for radius "r"
     //
-    template <util::Spin Spin>
-    std::pair<double, double> Pot<Spin>::GetRhoTilde(double r)
+    template <util::Spin S>
+    std::pair<double, double> Pot<S>::GetRhoTilde(double r)
     {
         return std::make_pair(m_rho.first->Get(r) / (M_4PI * r * r),
             m_rho.second->Get(r) / (M_4PI * r * r));
@@ -409,8 +400,8 @@ namespace ks {
     // April 3rd, 2014 Added by dc1394
     // Returns value of electron density (divided by 4 * pi * r^2) derivative for radius "r"
     //
-    template <util::Spin Spin>
-    std::pair<double, double> Pot<Spin>::GetRhoTildeDeriv(double r)
+    template <util::Spin S>
+    std::pair<double, double> Pot<S>::GetRhoTildeDeriv(double r)
     {
         const double first = (m_rho.first->GetDeriv(r) - 2.0 * m_rho.first->Get(r) / r) / (M_4PI * r * r);
         const double second = (m_rho.second->GetDeriv(r) - 2.0 * m_rho.second->Get(r) / r) / (M_4PI * r * r);
@@ -423,8 +414,8 @@ namespace ks {
     // Returns value of electron density (divided by 4 * pi * r^2) laplacian for radius "r"
     // April 3rd, 2014 added by dc1394
     //
-    template <util::Spin Spin>
-    std::pair<double, double> Pot<Spin>::GetRhoTildeLapl(double r)
+    template <util::Spin S>
+    std::pair<double, double> Pot<S>::GetRhoTildeLapl(double r)
     {
         const double first = (m_rho.first->Get2ndDeriv(r) - 2.0 / r * m_rho.first->GetDeriv(r) +
             2.0 / (r * r) * m_rho.first->Get(r)) / (M_4PI * r * r);
@@ -436,6 +427,4 @@ namespace ks {
 
     template class Pot<util::Spin::Alpha>;
     template class Pot<util::Spin::Beta>;
-    template double Pot<util::Spin::Alpha>::GetRho<util::Spin::Alpha>(double r) const;
-    template double Pot<util::Spin::Beta>::GetRho<util::Spin::Beta>(double r) const;
 }

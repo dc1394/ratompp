@@ -105,7 +105,7 @@ namespace ks {
         /*!
             Database of parameters
         */
-        ParamDb m_db;
+        std::shared_ptr<ParamDb> m_db;
 
         //! A private member variable.
         /*!
@@ -128,14 +128,14 @@ namespace ks {
         class RhoMix : public util::Fun1D
         {
         public:
-            RhoMix(const ParamDb* db) : m_rhoCur(NULL), m_rhoOld(NULL)
+            RhoMix(std::shared_ptr<ParamDb> const & db)
             {
                 m_scfMix = atof(db->Get("Scf_Mix"));
             }
-            virtual ~RhoMix() { }
+            virtual ~RhoMix() = default;
             // May23rd, 2014 Modified by dc1394
             //void SetRho(util::Fun1D* rhoCur, util::Fun1D* rhoOld)
-            void SetRho(const std::shared_ptr<util::Fun1D> & rhoCur, const std::shared_ptr<util::Fun1D> & rhoOld)
+            void SetRho(std::shared_ptr<util::Fun1D> const & rhoCur, std::shared_ptr<util::Fun1D> const & rhoOld)
             {
                 m_rhoCur = rhoCur;
                 m_rhoOld = rhoOld;

@@ -13,10 +13,7 @@
 namespace ks {
     class State final
     {
-        State(State const &) = delete;
-        State & operator=(State const &) = delete;
-
-    public:
+     public:
         State(void);
         //explicit State(const char* name);
         explicit State(std::string const & name);
@@ -46,8 +43,7 @@ namespace ks {
         double m_eigVal;
 
         // Number of electrons on the state
-        //size_t m_occ;
-        std::pair<std::size_t, std::size_t> m_occ;
+        size_t m_occ;
         
         // Name of the state
         std::string m_name;

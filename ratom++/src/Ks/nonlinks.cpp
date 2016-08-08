@@ -5,20 +5,20 @@ namespace ks {
     //
     // Constructor
     //
-    NonLinKs::NonLinKs(const char* path) : m_db(path)
+    NonLinKs::NonLinKs(const char* path) : m_db(std::make_shared<ParamDb>(path))
     {
-        m_db.ReadParams();
-        m_db.WriteParams();
+        m_db->ReadParams();
+        m_db->WriteParams();
 
-        m_pot = std::make_pair(std::make_shared<Pot<util::Spin::Alpha>>(&m_db), std::make_shared<Pot<util::Spin::Alpha>>(&m_db));
+        m_pot = std::make_pair(std::make_shared<Pot<util::Spin::Alpha>>(m_db), std::make_shared<Pot<util::Spin::Beta>>(m_db));
 
-        m_ss = std::make_shared<ParamDb>(&m_db);
+        m_ss = std::make_shared<StateSet>(m_db);
 
-        m_ks = std::make_pair(std::make_shared<KohnSham<util::Spin::Alpha>>(&m_db, m_ss), std::make_shared<KohnSham<util::Spin::Beta>>(&m_db, m_ss));
+        m_ks = std::make_pair(std::make_shared<KohnSham<util::Spin::Alpha>>(m_db, m_ss), std::make_shared<KohnSham<util::Spin::Beta>>(m_db, m_ss));
 
-        m_energy = std::make_unique<Energy>(m_pot, m_ss, &m_db);
+        m_energy = std::make_unique<Energy>(m_pot, m_ss, m_db);
 
-        m_rho = std::make_pair(std::make_shared<Rho>(&m_db), std::make_shared<Rho>(&m_db));
+        m_rho = std::make_pair(std::make_shared<Rho>(m_db), std::make_shared<Rho>(m_db));
 
     }
     
@@ -48,52 +48,52 @@ namespace ks {
 
     void NonLinKs::Scf(void)
     {
-        //const auto scfMaxIter = m_db.GetSize_t("Scf_MaxIter");
-        //std::pair<RhoMix, RhoMix> mix(&m_db, &m_db);
-        //std::pair<std::shared_ptr<Rho>, std::shared_ptr<Rho>> rhoOld;
-        //auto iter = 1U;
-        //rhoOld = std::make_pair(std::make_shared<Rho>(&m_db), std::make_shared<Rho>(&m_db));
-        //
-        //m_rho.first->Init();
-        //m_rho.second->Init();
-        //m_ks.first->Config(m_pot.first);
-        //m_ks.second->Config(m_pot.second);
+        const auto scfMaxIter = m_db->GetSize_t("Scf_MaxIter");
+        auto pmix = std::make_pair(std::make_shared<RhoMix>(m_db), std::make_shared<RhoMix>(m_db));
+        std::pair<std::shared_ptr<Rho>, std::shared_ptr<Rho>> rhoOld;
+        auto iter = 1U;
+        rhoOld = std::make_pair(std::make_shared<Rho>(m_db), std::make_shared<Rho>(m_db));
+        
+        m_rho.first->Init();
+        m_rho.second->Init();
+        m_ks.first->Config(m_pot.first);
+        m_ks.second->Config(m_pot.second);
 
-        //printf("********************   S C F   L O O P   ********************\n");
+        printf("********************   S C F   L O O P   ********************\n");
 
-        //while (true)
-        //{
-        //    printf("*  SCF=%3lu   ", static_cast<unsigned long>(iter));
+        while (true)
+        {
+            printf("*  SCF=%3lu   ", static_cast<unsigned long>(iter));
 
-        //    m_pot.first->SetRho(m_rho);
-        //    m_pot.first->SolvePoisson();
-        //    m_pot.second->SetRho(m_rho);
-        //    m_pot.second->SolvePoisson();
-        //    m_ks.first->Solve();
-        //    m_ks.second->Solve();
+            m_pot.first->SetRho(m_rho);
+            m_pot.first->SolvePoisson();
+            m_pot.second->SetRho(m_rho);
+            m_pot.second->SolvePoisson();
+            m_ks.first->Solve();
+            m_ks.second->Solve();
 
-        //    if (IsFinished())
-        //        break;
+            if (IsFinished())
+                break;
 
-        //    if (iter == scfMaxIter)
-        //        break;
-        //    {
-        //        // May 23rd, 2014 Modified by dc1394
-        //        //Rho *tmp = rhoOld;
-        //        //rhoOld = m_rho;
-        //        //m_rho = tmp;
-        //        std::swap(m_rho, rhoOld);
-        //    }
+            if (iter == scfMaxIter)
+                break;
+            {
+                // May 23rd, 2014 Modified by dc1394
+                //Rho *tmp = rhoOld;
+                //rhoOld = m_rho;
+                //m_rho = tmp;
+                std::swap(m_rho, rhoOld);
+            }
 
-        //    //mix.SetRho(m_ks, rhoOld);
-        //    mix.first.SetRho(m_ks.first, rhoOld.first);
-        //    mix.second.SetRho(m_ks.second, rhoOld.second);
-        //    //m_rho->Calc(&mix);
-        //    m_rho.first->Calc(&mix.first);
-        //    m_rho.second->Calc(&mix.second);
+            //mix.SetRho(m_ks, rhoOld);
+            pmix.first->SetRho(m_ks.first, rhoOld.first);
+            pmix.second->SetRho(m_ks.second, rhoOld.second);
+            //m_rho->Calc(&mix);
+            m_rho.first->Calc(pmix.first);
+            m_rho.second->Calc(pmix.second);
 
-        //    iter++;
-        //}
+            iter++;
+        }
 
         //std::vector<double> node;
         //m_rho->GetNode(node);
@@ -116,7 +116,7 @@ namespace ks {
     //
     bool NonLinKs::IsFinished() const
     {
-        const double scfEnerDiff = atof(m_db.Get("Scf_Diff"));
+        const double scfEnerDiff = atof(m_db->Get("Scf_Diff"));
         static double sumOld = 0; // This variable MUST BE "static"
         double sumNew, diff;
 
@@ -133,8 +133,8 @@ namespace ks {
     void NonLinKs::WriteRes(std::chrono::duration<double> const & sec) const
     {
         WriteInfo(sec);
-        m_rho->Write();
-        m_ks->WriteEigen();
+        //m_rho->Write();
+        //m_ks->WriteEigen();
     }
 
     //
@@ -144,7 +144,7 @@ namespace ks {
     {
         FILE* out;
 
-        out = m_db.OpenFile("out", "a");
+        out = m_db->OpenFile("out", "a");
 
         m_ss->WriteSates(stdout);
         m_energy->WriteEnergy(stdout);

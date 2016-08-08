@@ -114,35 +114,35 @@ namespace ks {
     template <util::Spin S>
     double KohnSham<S>::Get(double r, boost::mpl::int_<static_cast<std::int32_t>(util::Spin::Alpha)>) const
     {
-        const double rc = m_db->GetDouble("Atom_Rc");
-        const size_t Lmax = m_stateSet->GetLmax();
-        size_t l, n;
-        double rnl, occ, rhoL, rho = 0;
+        auto const rc = m_db->GetDouble("Atom_Rc");
+        auto const Lmax = m_stateSet->GetLmax();
 
-        if (r >= rc)
-            return 0;
+        if (r >= rc) {
+            return 0.0;
+        }
 
+        auto rho = 0.0;
         // For all quantum angular menetum numbers
-        for (l = 0; l < Lmax; l++)
+        for (auto l = 0U; l < Lmax; l++)
         {
-            rhoL = 0;
+            auto rhoL = 0.0;
 
             // For all states for fixed "L"
-            for (n = 0; n < m_eigNo[l]; n++)
+            for (auto n = 0U; n < m_eigNo[l]; n++)
             {
-                occ = m_stateSet->Occ(l, n);
+                auto const occ = m_stateSet->Occ(l, n);
                 //if (occ > 0)
                 // occにはαスピンの電子のみ
-                if (occ > 0.0 && occ <= static_cast<double>(Lmax)) {
-                    rnl = m_eigProb[l].GetEigFun(n, r); // R_{n, \ell}(r)
-                    // Lmaxまではαスピンの電子数はoccと等しい
+                if (occ > 0.0 && occ <= static_cast<double>(l + 1)) {
+                    auto const rnl = m_eigProb[l].GetEigFun(n, r); // R_{n, \ell}(r)
+                    // occがl + 1まではαスピンの電子数はoccと等しい
                     rhoL += occ * rnl * rnl;
                 }
                 // occにβスピンの電子が含まれる
-                else if (occ > static_cast<double>(Lmax)) {
-                    rnl = m_eigProb[l].GetEigFun(n, r); // R_{n, \ell}(r)
-                    // αスピンの電子数はLmaxと等しい
-                    rhoL += static_cast<double>(Lmax) * rnl * rnl;
+                else {
+                    auto const rnl = m_eigProb[l].GetEigFun(n, r); // R_{n, \ell}(r)
+                    // αスピンの電子数はl + 1と等しい
+                    rhoL += static_cast<double>(l + 1.0) * rnl * rnl;
                 }
             }
 
@@ -156,29 +156,29 @@ namespace ks {
     template <util::Spin S>
     double KohnSham<S>::Get(double r, boost::mpl::int_<static_cast<std::int32_t>(util::Spin::Beta)>) const
     {
-        const double rc = m_db->GetDouble("Atom_Rc");
-        const size_t Lmax = m_stateSet->GetLmax();
-        size_t l, n;
-        double rnl, occ, rhoL, rho = 0;
+        auto const rc = m_db->GetDouble("Atom_Rc");
+        auto const Lmax = m_stateSet->GetLmax();
 
-        if (r >= rc)
-            return 0;
+        if (r >= rc) {
+            return 0.0;
+        }
 
+        auto rho = 0.0;
         // For all quantum angular menetum numbers
-        for (l = 0; l < Lmax; l++)
+        for (auto l = 0U; l < Lmax; l++)
         {
-            rhoL = 0;
+            auto rhoL = 0.0;
 
             // For all states for fixed "L"
-            for (n = 0; n < m_eigNo[l]; n++)
+            for (auto n = 0U; n < m_eigNo[l]; n++)
             {
-                occ = m_stateSet->Occ(l, n);
+                auto const occ = m_stateSet->Occ(l, n);
                 //if (occ > 0)
-                // occがLmaxより大きければ、occにβスピンの電子が含まれる
-                if (occ > static_cast<double>(Lmax)) {
-                    rnl = m_eigProb[l].GetEigFun(n, r); // R_{n, \ell}(r)
-                    // βスピンの電子数は、occからLmax分差し引いたもの
-                    rhoL += (occ - static_cast<double>(Lmax)) * rnl * rnl;
+                // occがl + 1より大きければ、occにβスピンの電子が含まれる
+                if (occ > static_cast<double>(l + 1)) {
+                    auto const rnl = m_eigProb[l].GetEigFun(n, r); // R_{n, \ell}(r)
+                    // βスピンの電子数は、occからl + 1分差し引いたもの
+                    rhoL += (occ - static_cast<double>(l + 1)) * rnl * rnl;
                 }
             }
 

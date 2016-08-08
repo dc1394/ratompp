@@ -29,7 +29,7 @@ namespace ks {
             \param db パラメータへのスマートポインタ
             \param m_stateSet 
         */
-        KohnSham(std::shared_ptr<ParamDb> const & db, std::shared_ptr<StateSet> const & m_stateSet) : m_db(db), m_stateSet(stateSet) {}
+        KohnSham(std::shared_ptr<ParamDb> const & db, std::shared_ptr<StateSet> const & stateSet) : m_db(db), m_stateSet(stateSet) {}
 
         //! A destructor.
         /*!

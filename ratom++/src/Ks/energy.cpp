@@ -7,24 +7,16 @@ namespace ks {
     //
     // Construktor
     //
-    Energy::Energy(std::pair<const std::shared_ptr<const Pot<util::Spin::Alpha>>,
-                   const std::shared_ptr<const Pot<util::Spin::Beta>>> pot,
-                   const StateSet* ss, const ParamDb* db) :
-        m_pot(std::move(pot)), m_ss(ss)
+    Energy::Energy(std::pair<std::shared_ptr<Pot<util::Spin::Alpha>>,
+                   std::shared_ptr<Pot<util::Spin::Beta>>> const & pot,
+                   std::shared_ptr<StateSet> const & ss,
+                   std::shared_ptr<ParamDb> const & db) :
+        m_pot(pot), m_ss(ss)
     {
         m_rc = atof(db->Get("Atom_Rc"));
-        m_gauss = new Int1DGauss(3 * db->GetLong("Rho_Deg"));
+        m_gauss = std::make_shared<Int1DGauss>(3 * db->GetLong("Rho_Deg"));
     }
 
-    //
-    // Destructor
-    //
-    Energy::~Energy(void)
-    {
-        delete m_gauss;
-    }
-
-    //
     // Sets array of nodes needed for approximation of electron density
     // This array is used for numerical integration
     //

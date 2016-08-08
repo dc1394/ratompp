@@ -32,7 +32,7 @@ namespace excorr {
     /*!
         Represents any LDA Exchange-Correlation potential
     */
-    class ExCorrLDA final {
+    class ExCorrLDA {
         // #region コンストラクタ・デストラクタ
 
     public:
@@ -40,8 +40,15 @@ namespace excorr {
         /*!
             唯一のコンストラクタ
             \param rhoTilde 電子密度
+            \param xc_type 汎関数の種類
         */
         ExCorrLDA(std::function<std::pair<double, double>(double)> && rhoTilde, std::uint32_t xc_type);
+
+        //! A private copy constructor.
+        /*!
+            コピーコンストラクタ（禁止）
+        */
+        ExCorrLDA(ExCorrLDA const &) = default;
 
         //! A destructor.
         /*!
@@ -64,9 +71,9 @@ namespace excorr {
         /*!
             rでの交換相関エネルギー密度（LDA）を返す関数
             \param r 原点からの距離（極座標）
-            \return rでの交換相関エネルギー密度（LDA）
+            \return rでのα or βスピンに対する交換相関エネルギー密度（LDA）
         */
-        double xc_exc(double r) const;
+        template <util::Spin S> double xc_exc(double r) const;
         
         //! A public member function (const).
         /*!
@@ -79,6 +86,13 @@ namespace excorr {
         // #endregion publicメンバ関数
 
         // #region privateメンバ関数
+
+        //!  private member function (const).
+        /*! rでの交換相関ポテンシャル（LDA）を返す
+            \param r 原点からの距離（極座標）
+            \return rでの交換相関エネルギー密度（LDA）のαスピンとβスピンのstd::pair
+        */
+        std::pair<double, double> ExCorrLDA::xc_exc_impl(double r) const;
 
         //!  private member function (const).
         /*! rでの交換相関ポテンシャル（LDA）を返す
@@ -103,7 +117,7 @@ namespace excorr {
         /*!
             ratomへのスマートポインタ
         */
-        std::unique_ptr<xc_func_type, decltype(xcfunc_deleter)> const pxcfunc_;
+        std::shared_ptr<xc_func_type> const pxcfunc_;
 
         // #region 禁止されたコンストラクタ・メンバ関数
 
@@ -112,12 +126,6 @@ namespace excorr {
             デフォルトコンストラクタ（禁止）
         */
         ExCorrLDA() = delete;
-
-        //! A private copy constructor (deleted).
-        /*!
-            コピーコンストラクタ（禁止）
-        */
-        ExCorrLDA(ExCorrLDA const &) = delete;
 
         //! A private member function (deleted).
         /*!
@@ -128,23 +136,7 @@ namespace excorr {
         ExCorrLDA & operator=(ExCorrLDA const &) = delete;
 
         // #endregion 禁止されたコンストラクタ・メンバ関数
-    };
-
-    // #region templateメンバ関数の実体化
-
-    template <>
-    double ExCorrLDA::xc_vxc<util::Spin::Alpha>(double r) const
-    {
-        return xc_vxc_impl(r).first;
-    }
-
-    template <>
-    double ExCorrLDA::xc_vxc<util::Spin::Beta>(double r) const
-    {
-        return xc_vxc_impl(r).second;
-    }
-    
-    // #endregion templateメンバ関数の実体化
+    };        
 }
 
 #endif  // __RATOM_EXCORR_LDA_H__

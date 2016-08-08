@@ -1,38 +1,38 @@
-#include "stdafx.h"
-#include "corrHF.h"
-
+//#include "stdafx.h"
+//#include "corrHF.h"
 //
-// Constructor
+////
+//// Constructor
+////
+//CorrHf::CorrHf()
+//	: Xc(nullptr, nullptr, nullptr)
+//{
+//}
 //
-CorrHf::CorrHf()
-	: Xc(nullptr, nullptr, nullptr)
-{
-}
-
-
 //
-// Destructor
+////
+//// Destructor
+////
+//CorrHf::~CorrHf(void)
+//{
+//}
 //
-CorrHf::~CorrHf(void)
-{
-}
-
-
 //
-// Potencial
+////
+//// Potencial
+////
+//double CorrHf::V(double r) const
+//{
+//	return 0.0;
+//}
 //
-double CorrHf::V(double r) const
-{
-	return 0.0;
-}
-
-
 //
-// Energy density
+////
+//// Energy density
+////
+//double CorrHf::E(double r) const
+//{
+//	return 0.0;
+//}
 //
-double CorrHf::E(double r) const
-{
-	return 0.0;
-}
-
 

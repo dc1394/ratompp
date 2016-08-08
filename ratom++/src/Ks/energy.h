@@ -17,9 +17,11 @@ namespace ks {
     class Energy final
     {
     public:
-        Energy(std::pair<const std::shared_ptr<const Pot<util::Spin::Alpha>>,
-               const std::shared_ptr<const Pot<util::Spin::Beta>>> pot, const StateSet* ss, const ParamDb* db);
-        virtual ~Energy(void);
+        Energy(std::pair<std::shared_ptr<Pot<util::Spin::Alpha>>,
+               std::shared_ptr<Pot<util::Spin::Beta>>> const & pot,
+               std::shared_ptr<StateSet> const & ss,
+               std::shared_ptr<ParamDb> const & db);
+        virtual ~Energy() = default;
 
         void SetNode(const std::vector<double>& node);
         void WriteEnergy(FILE* out);
@@ -36,17 +38,17 @@ namespace ks {
 
     private:
         // DFT potencial
-        const std::pair<const std::shared_ptr<const Pot<util::Spin::Alpha>>,
-                        const std::shared_ptr<const Pot<util::Spin::Beta>>> m_pot;
+        std::pair<std::shared_ptr<Pot<util::Spin::Alpha>>,
+                  std::shared_ptr<Pot<util::Spin::Beta>>> const m_pot;
 
         // Atomic eigenstates
-        const StateSet* m_ss;
+        std::shared_ptr<StateSet> const m_ss;
 
         // Integration is on the interval [0, rc]
         double m_rc;
 
         // Gaussa quadratures
-        Int1DGauss *m_gauss;
+        std::shared_ptr<Int1DGauss> m_gauss;
 
         // Coordinaes of nodes for approximation of electron density
         std::vector<double> m_node;

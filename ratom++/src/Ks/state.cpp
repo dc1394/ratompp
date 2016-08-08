@@ -14,7 +14,7 @@ namespace ks {
         m_n = 0;
         m_l = 0;
         m_eigVal = 0.0;
-        m_occ = std::make_pair(0, 0);
+        m_occ = 0;
     }
 
 
@@ -27,7 +27,7 @@ namespace ks {
         char ll;
 
         //assert(name.empty());
-        BOOST_ASSERT(name.empty());
+        BOOST_ASSERT(!name.empty());
         if (std::sscanf(name.c_str(), "%d%c%d", &nn, &ll, &ee) == EOF)
         {
             throw std::invalid_argument("name (str) is incorrect!");
@@ -40,14 +40,7 @@ namespace ks {
         m_n = boost::numeric_cast<std::size_t>(nn - m_l - 1);
         m_eigVal = 0.0;
         const std::size_t occ = boost::numeric_cast<std::size_t>(ee);
-        if (occ <= (2 * m_l + 1))
-        {
-            m_occ = std::make_pair(occ, 0);
-        }
-        else {
-            m_occ = std::make_pair(2 * m_l + 1, occ - 2 * m_l - 1);
-        }
-        //m_occ = static_cast<std::size_t>(ee);
+        m_occ = static_cast<std::size_t>(ee);
 
         // printf("name = %s, n = %lu, l = %lu, occ = %lu\n", name, (unsigned long)m_n, (unsigned long)m_l, (unsigned long)m_occ);
         // fflush(stdout);

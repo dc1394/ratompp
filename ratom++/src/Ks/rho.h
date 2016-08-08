@@ -11,13 +11,13 @@
 
 
 #include "paramdb.h"
-#include <memory>
+#include <memory>       // for std::shared_ptr
 
 namespace ks {
     class Rho : public util::Fun1D
     {
     public:
-        Rho(const ParamDb* db);
+        Rho(std::shared_ptr<ParamDb> const & db);
         virtual ~Rho(void);
 
         virtual double Get(double r) const;
@@ -38,7 +38,7 @@ namespace ks {
 
     private:
         // Database of parameters
-        const ParamDb* m_db;
+        std::shared_ptr<ParamDb> const m_db;
 
         // Function approximation
         fem1d::Approx m_approx;

@@ -21,13 +21,13 @@ namespace excorr {
         return std::string(pxcfunc_->info->name);
     }
 
-    double ExCorrLDA::xc_exc(double r) const
+    std::pair<double, double> ExCorrLDA::xc_exc_impl(double r) const
     {
-        const std::array<double, 2> rho = { rhoTilde_(r).first, rhoTilde_(r).second };
-        std::array<double, 1> zk;
+        std::array<double, 2> const rho = { rhoTilde_(r).first, rhoTilde_(r).second };
+        std::array<double, 2> zk;
         xc_lda_exc(pxcfunc_.get(), 1, rho.data(), zk.data());
 
-        return zk[0];
+        return std::make_pair(zk[0], zk[1]);
     }
 
     std::pair<double, double> ExCorrLDA::xc_vxc_impl(double r) const
@@ -38,4 +38,32 @@ namespace excorr {
 
         return std::make_pair(zk[0], zk[1]);
     }
+
+    // #region templateメンバ関数の実体化
+
+    template <>
+    double ExCorrLDA::xc_exc<util::Spin::Alpha>(double r) const
+    {
+        return xc_exc_impl(r).first;
+    }
+
+    template <>
+    double ExCorrLDA::xc_exc<util::Spin::Beta>(double r) const
+    {
+        return xc_exc_impl(r).second;
+    }
+
+    template <>
+    double ExCorrLDA::xc_vxc<util::Spin::Alpha>(double r) const
+    {
+        return xc_vxc_impl(r).first;
+    }
+
+    template <>
+    double ExCorrLDA::xc_vxc<util::Spin::Beta>(double r) const
+    {
+        return xc_vxc_impl(r).second;
+    }
+
+    // #endregion templateメンバ関数の実体化
 }

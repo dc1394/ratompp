@@ -6,16 +6,9 @@ namespace ks {
     //
     // Constructor
     //
-    FunEner::FunEner(std::pair<const std::shared_ptr<const Pot<util::Spin::Alpha>>,
-                     const std::shared_ptr<const Pot<util::Spin::Beta>>> pot, size_t type)
-        : m_pot(std::move(pot)), m_type(type)
-    {
-    }
-
-    //
-    // Destructor
-    //
-    FunEner::~FunEner(void)
+    FunEner::FunEner(std::pair<std::shared_ptr<Pot<util::Spin::Alpha>>,
+                     std::shared_ptr<Pot<util::Spin::Beta>>> const & pot, size_t type)
+        : m_pot(pot), m_type(type)
     {
     }
 
@@ -47,8 +40,8 @@ namespace ks {
     double FunEner::GetTotal(double r) const
     {
         // αスピンとβスピンの密度の合計
-        const double rho = m_pot.first->GetRho<util::Spin::Alpha>(r) +
-                           m_pot.second->GetRho<util::Spin::Beta>(r);
+        const double rho = m_pot.first->GetRho(r) +
+                           m_pot.second->GetRho(r);
         //const double rhoT = RhoTilde(r, rho);
         double ex, co, vh;
 
@@ -71,8 +64,7 @@ namespace ks {
     double FunEner::GetNucleus(double r) const
     {
         // αスピンとβスピンの密度の合計
-        const double rho = m_pot.first->GetRho<util::Spin::Alpha>(r) +
-            m_pot.second->GetRho<util::Spin::Beta>(r);
+        const double rho = m_pot.first->GetRho(r) + m_pot.second->GetRho(r);
 
         const double vn = m_pot.first->Vn(r);
         if ((vn - m_pot.second->Vn(r)) > 1.0E-12)
@@ -87,8 +79,7 @@ namespace ks {
     double FunEner::GetHartree(double r) const
     {
         // αスピンとβスピンの密度の合計
-        const double rho = m_pot.first->GetRho<util::Spin::Alpha>(r) +
-            m_pot.second->GetRho<util::Spin::Beta>(r);
+        const double rho = m_pot.first->GetRho(r) + m_pot.second->GetRho(r);
         const double vh = m_pot.first->Vh(r);
 
         if ((vh - m_pot.second->Vh(r)) > 1.0E-12)
@@ -102,8 +93,7 @@ namespace ks {
     double FunEner::GetExch(double r) const
     {
         // αスピンとβスピンの密度の合計
-        const double rho = m_pot.first->GetRho<util::Spin::Alpha>(r) +
-            m_pot.second->GetRho<util::Spin::Beta>(r);
+        const double rho = m_pot.first->GetRho(r) + m_pot.second->GetRho(r);
         //const double rhoT = RhoTilde(r, rho);
 
         const double ex = m_pot.first->Ex(r);
@@ -121,8 +111,7 @@ namespace ks {
     double FunEner::GetCorr(double r) const
     {
         // αスピンとβスピンの密度の合計
-        const double rho = m_pot.first->GetRho<util::Spin::Alpha>(r) +
-            m_pot.second->GetRho<util::Spin::Beta>(r);
+        const double rho = m_pot.first->GetRho(r) + m_pot.second->GetRho(r);
 
         const double ec = m_pot.first->Ec(r);
         if ((ec - m_pot.second->Ec(r)) > 1.0E-12)
@@ -140,9 +129,9 @@ namespace ks {
     double FunEner::GetKinetic(double r) const
     {
         // αスピン密度
-        const double rhoalpha = m_pot.first->GetRho<util::Spin::Alpha>(r);
+        const double rhoalpha = m_pot.first->GetRho(r);
         // βスピン密度
-        const double rhobeta = m_pot.second->GetRho<util::Spin::Beta>(r);
+        const double rhobeta = m_pot.second->GetRho(r);
         // αスピンとβスピンの密度の合計
         const double rho = rhoalpha + rhobeta;
         //const double rhoT = RhoTilde(r, rho);

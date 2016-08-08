@@ -11,17 +11,18 @@
 
 // March 7th, 2014	Added by dc1394
 #include "../Util/spin.h"
-#include <functional>
+#include <functional>       // for std::function
+#include <string>           // 
 
 // May 24th, 2014 Modified by dc1394
 namespace excorr {
-    template <util::Spin Spin>
+    template <util::Spin S>
     class Xc final {
-        const std::function<double(double)> V_;
-        const std::function<double(double)> E_;
-        const std::function<char const *()> Name_;
+        std::function<double(double)> const V_;
+        std::function<double(double)> const E_;
+        std::function<std::string()> const Name_;
 
-        //std::function<double(double)> rhoTilde_;
+        //std::function<std::pair<double, double>(double)> const rhoTilde_;
         //std::function<double(double)> rhoTildeDeriv_
         //std::function<double(double)> rhoTildeLapl_;
 
@@ -32,18 +33,30 @@ namespace excorr {
         // Constructor
         template <typename T>
         Xc(const T & obj)
-            : V_([&obj](double r) { return obj.xc_vxc<Spin>(r); }),
-              E_([&obj](double r) { return obj.xc_exc(r); }),
-              Name_([&obj]() { return obj.Name(); })
+            :   V_([this, obj](double r) { return obj.xc_vxc<S>(r); }),
+                E_([&obj](double r) { return obj.xc_exc<S>(r); }),
+                Name_([&obj]() { return obj.Name(); })
         {}
         // Destructor
-        ~Xc(void) {}
+        ~Xc() = default;
 
-        double V(double r) const;
-        double E(double r) const;
-        double EdiffV(double r) const;
+        double V(double r) const
+        {
+            return V_(r);
+        }
+        double E(double r) const
+        {
+            return E_(r);
+        }
+        double EdiffV(double r) const
+        {
+            return E_(r) - V_(r);
+        }
 
-        char const * Name() const;
+        std::string Name() const
+        {
+            return Name_();
+        }
 
         // March 8th, 2014	added by dc1394
         //double my_xc_gga_exc(double r) const;

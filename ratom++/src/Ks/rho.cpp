@@ -8,7 +8,7 @@ namespace ks {
     //
     // Constructor
     //
-    Rho::Rho(const ParamDb* db) : m_db(db)
+    Rho::Rho(std::shared_ptr<ParamDb> const & db) : m_db(db)
     {
         const size_t rhoDeg = m_db->GetSize_t("Rho_Deg");
 
