@@ -3,7 +3,7 @@
 
 Atom_Proton 1
 Atom_Rc 50
-XC_Exch pbe
+XC_Exch slater
 XC_Corr pbe
 Rho0_Default Yes
 Rho0_c 0.0
