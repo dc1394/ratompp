@@ -8,10 +8,6 @@
 #include <boost/cast.hpp>
 
 namespace ks {
-#if !defined(__INTEL_COMPILER) && !defined(__GXX_EXPERIMENTAL_CXX0X__)
-    const double Pot::MAX = 10.0;
-    const double Pot::DR = 1.0E-3;
-#endif
     // May 24th, 2014 Modified by dc1394
     //
     // Constructor
@@ -224,7 +220,6 @@ namespace ks {
     template <util::Spin S>
     double Pot<S>::Ex(double r) const
     {
-        assert(m_exch);
         return m_exch->E(r);
     }
 
@@ -245,7 +240,6 @@ namespace ks {
     template <util::Spin S>
     double Pot<S>::Ec(double r) const
     {
-        assert(m_corr);
         return m_corr->E(r);
     }
 
@@ -313,11 +307,9 @@ namespace ks {
         //    throw std::invalid_argument("Unknown exchange type");
         //}
 
-        //if (strcmp(corr, "vwn") == 0) {
-        //    //delete m_corr;
-        //    m_corr.reset(new CorrVwn(std::bind(&Pot::GetRhoTilde, std::ref(*this),
-        //        std::placeholders::_1)));
-        //}
+        if (strcmp(corr, "vwn") == 0) {
+            m_corr.reset(new excorr::Xc<S>(excorr::ExCorrLDA([this](double r) { return GetRhoTilde(r); }, XC_LDA_C_VWN)));
+        }
         //else if (strcmp(corr, "pbe") == 0) {
         //    m_corr.reset(new CorrPbe(std::bind(&Pot::GetRhoTilde, std::ref(*this),
         //        std::placeholders::_1),
@@ -343,7 +335,7 @@ namespace ks {
     {
         std::unique_ptr<FILE, decltype(&fclose)> out(m_db->OpenFile("pot", "wt"), fclose);
 
-        //m_exch.reset(new ExchSlater(std::bind(&Pot::GetRhoTilde, std::ref(*this),
+        //m_exch.reset(new ExCorrLDA(std::bind(&Pot::GetRhoTilde, std::ref(*this),
         //	std::placeholders::_1)));
         //m_corr.reset(new CorrVwn(std::bind(&Pot::GetRhoTilde, std::ref(*this),
         //	std::placeholders::_1)));
@@ -403,10 +395,10 @@ namespace ks {
     template <util::Spin S>
     std::pair<double, double> Pot<S>::GetRhoTildeDeriv(double r)
     {
-        const double first = (m_rho.first->GetDeriv(r) - 2.0 * m_rho.first->Get(r) / r) / (M_4PI * r * r);
-        const double second = (m_rho.second->GetDeriv(r) - 2.0 * m_rho.second->Get(r) / r) / (M_4PI * r * r);
+        auto const alpha = (m_rho.first->GetDeriv(r) - 2.0 * m_rho.first->Get(r) / r) / (M_4PI * r * r);
+        auto const beta = (m_rho.second->GetDeriv(r) - 2.0 * m_rho.second->Get(r) / r) / (M_4PI * r * r);
 
-        return std::make_pair(first, second);
+        return std::make_pair(alpha, beta);
     };
 
 

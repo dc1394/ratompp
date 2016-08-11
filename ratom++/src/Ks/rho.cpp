@@ -8,20 +8,11 @@ namespace ks {
     //
     // Constructor
     //
-    Rho::Rho(std::shared_ptr<ParamDb> const & db) : m_db(db)
+    Rho::Rho(std::shared_ptr<const ParamDb> const & db) : m_db(db)
     {
-        const size_t rhoDeg = m_db->GetSize_t("Rho_Deg");
+        auto const rhoDeg = m_db->GetSize_t("Rho_Deg");
 
-        m_gauss = new Int1DGauss(2 * rhoDeg);
-        assert(m_gauss);
-    }
-
-    //
-    // Destructor
-    //
-    Rho::~Rho(void)
-    {
-        delete m_gauss;
+        m_gauss = std::make_unique<Int1DGauss>(2 * rhoDeg);
     }
 
 
@@ -73,12 +64,11 @@ namespace ks {
     //
     double Rho::Integ(void) const
     {
-        std::vector<double> node;
+        std::vector<double> node(GetNode());
 
-        GetNode(node);
-
-        double val = 0;
-        for (size_t i = 0; i < node.size() - 1; ++i)
+        double val = 0.0;
+        auto const loop = node.size() - 1;
+        for (auto i = 0U; i < loop; ++i)
             val += m_gauss->Calc(*this, node[i], node[i + 1]);
 
         return val;
@@ -87,7 +77,7 @@ namespace ks {
     //
     // Calculates approximation of electron density based on function "f"
     //
-    void Rho::Calc(std::shared_ptr<const util::Fun1D> f)
+    void Rho::Calc(std::shared_ptr<const util::Fun1D> && f)
     {
         const double rc = m_db->GetDouble("Atom_Rc");
         const size_t rhoDeg = m_db->GetSize_t("Rho_Deg");
@@ -142,12 +132,11 @@ namespace ks {
     //
     // Returns nodes used for perfoming the approximation
     //
-    void Rho::GetNode(std::vector<double>& node) const
+    std::vector<double> Rho::GetNode() const
     {
-        m_approx.GetNode(node);
+        return m_approx.GetNode();
     }
-
-
+    
     //
     // Writes calculated electron density for each state int file
     //
@@ -155,8 +144,6 @@ namespace ks {
     {
         const size_t outRhoNode = m_db->GetSize_t("Out_RhoNode");
         FILE* out;
-        std::vector<double> node;
-        size_t i, k;
         double dr, r;
 
         {
@@ -172,14 +159,14 @@ namespace ks {
 
     {
         // Storing values of electron densities
-        GetNode(node);
+        std::vector<double> node(GetNode());
         out = m_db->OpenFile("rho", "wt");
         fprintf(out, "%16s \t %16s \t %16s \n", "R", "Rho", "RhoTilde");
-        for (i = 0; i < node.size() - 1; ++i)
+        for (auto i = 0U; i < node.size() - 1; ++i)
         {
             dr = (node[i + 1] - node[i]) / outRhoNode;
             r = node[i];
-            for (k = 0; k < outRhoNode; ++k)
+            for (auto k = 0U; k < outRhoNode; ++k)
             {
                 fprintf(out, "%16.6E \t %16.6E \t %16.6E \n", r, Get(r), GetRhoTilde(r));
                 r += dr;

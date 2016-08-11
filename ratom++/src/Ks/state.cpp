@@ -39,7 +39,7 @@ namespace ks {
         //m_n = static_cast<size_t>(nn - m_l - 1);
         m_n = boost::numeric_cast<std::size_t>(nn - m_l - 1);
         m_eigVal = 0.0;
-        const std::size_t occ = boost::numeric_cast<std::size_t>(ee);
+        auto const occ = boost::numeric_cast<std::size_t>(ee);
         m_occ = static_cast<std::size_t>(ee);
 
         // printf("name = %s, n = %lu, l = %lu, occ = %lu\n", name, (unsigned long)m_n, (unsigned long)m_l, (unsigned long)m_occ);

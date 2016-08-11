@@ -87,11 +87,14 @@ namespace ks {
 
         // #ebdregion publicメンバ関数
 
-        // #region メンバ変数
+        // #region インナークラス
 
     private:
-        // Interaction potential used in radial Kohn-Sham equation
-        class PotRad : public util::Fun1D
+        //! A inner class.
+        /*!
+            Interaction potential used in radial Kohn-Sham equation
+        */
+        class PotRad final : public util::Fun1D
         {
             std::shared_ptr<util::Fun1D> m_pot;
 
@@ -113,6 +116,10 @@ namespace ks {
             // Angular quantum number
             size_t m_l;
         };
+
+        // #endregion インナークラス
+
+        // #region メンバ変数
 
         //! A private member variable.
         /*!
@@ -143,6 +150,33 @@ namespace ks {
             Set of eigenstates
         */
         std::shared_ptr<StateSet> m_stateSet;
+
+        // #endregion メンバ変数
+
+        // #region 禁止されたコンストラクタ・メンバ関数
+
+        //! A private constructor (deleted).
+        /*!
+            デフォルトコンストラクタ（禁止）
+        */
+        KohnSham() = delete;
+
+        //! A private copy constructor (deleted).
+        /*!
+            コピーコンストラクタ（禁止）
+            \param コピー元のオブジェクト（未使用）
+        */
+        KohnSham(KohnSham const &) = delete;
+
+        //! A private member function (deleted).
+        /*!
+            operator=()の宣言（禁止）
+            \param コピー元のオブジェクト（未使用）
+            \return コピー元のオブジェクト
+        */
+        KohnSham & operator=(KohnSham const &) = delete;
+
+        // #endregion 禁止されたコンストラクタ・メンバ関数
     };
 }
 

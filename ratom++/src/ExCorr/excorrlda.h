@@ -1,38 +1,27 @@
 ﻿/*! \file excorrlda.h
-    \brief Represents any LDA Exchange-Correlation potential.
+    \brief Represents LDA Exchange-Correlation potential.
 
     Copyright ©  2016 @dc1394 All Rights Reserved.
     This software is released under the GNU GPL v3.
 */
 
-#ifndef __RATOM_EXCORR_LDA_H__
-#define __RATOM_EXCORR_LDA_H__
+#ifndef __RATOM_EXCORRLDA_H__
+#define __RATOM_EXCORRLDA_H__
 
 #include "../Util/spin.h"
-#include <cstdint>                      // for std::uint32_t
-#include <functional>                   // for std::function
-#include <memory>                       // for std::unique_ptr
-#include <string>                       // for std::string
-#include <utility>                      // for std::pair
-#include <xc.h>                         // for xc_func_end
-#include <boost/checked_delete.hpp>     // for boost::checked_delete
+#include "xcfunc_deleter.h"
+#include <cstdint>          // for std::uint32_t
+#include <functional>       // for std::function
+#include <memory>           // for std::unique_ptr
+#include <string>           // for std::string
+#include <utility>          // for std::pair
 
 namespace excorr {
-    //! A lambda expression.
-    /*!
-        xc_func_typeへのポインタを解放するラムダ式
-        \param xcfunc xc_func_type へのポインタ
-    */
-    static auto const xcfunc_deleter = [](xc_func_type * xcfunc) {
-        xc_func_end(xcfunc);
-        boost::checked_delete(xcfunc);
-    };
-
     //! A class.
     /*!
-        Represents any LDA Exchange-Correlation potential
+        Represents LDA Exchange-Correlation potential.
     */
-    class ExCorrLDA {
+    class ExCorrLDA final {
         // #region コンストラクタ・デストラクタ
 
     public:
@@ -44,9 +33,9 @@ namespace excorr {
         */
         ExCorrLDA(std::function<std::pair<double, double>(double)> && rhoTilde, std::uint32_t xc_type);
 
-        //! A private copy constructor.
+        //! A copy constructor.
         /*!
-            コピーコンストラクタ（禁止）
+            デフォルトコピーコンストラクタ
         */
         ExCorrLDA(ExCorrLDA const &) = default;
 
@@ -65,16 +54,19 @@ namespace excorr {
             交換相関汎関数の名前を返す
             \return 交換相関汎関数の名前
         */
-        std::string Name() const;
+        std::string ExCorrLDA::Name() const
+        {
+            return std::string(pxcfunc_->info->name);
+        }
 
         //! A public member function (const).
         /*!
             rでの交換相関エネルギー密度（LDA）を返す関数
             \param r 原点からの距離（極座標）
-            \return rでのα or βスピンに対する交換相関エネルギー密度（LDA）
+            \return rでの交換相関エネルギー密度（LDA）
         */
-        template <util::Spin S> double xc_exc(double r) const;
-        
+        double xc_exc(double r) const;
+
         //! A public member function (const).
         /*!
             rでのα or βスピンに対する交換相関ポテンシャル（LDA）を返す関数
@@ -88,14 +80,8 @@ namespace excorr {
         // #region privateメンバ関数
 
         //!  private member function (const).
-        /*! rでの交換相関ポテンシャル（LDA）を返す
-            \param r 原点からの距離（極座標）
-            \return rでの交換相関エネルギー密度（LDA）のαスピンとβスピンのstd::pair
-        */
-        std::pair<double, double> ExCorrLDA::xc_exc_impl(double r) const;
-
-        //!  private member function (const).
-        /*! rでの交換相関ポテンシャル（LDA）を返す
+        /*! 
+            rでの交換相関ポテンシャル（LDA）を返す
             \param r 原点からの距離（極座標）
             \return rでの交換相関ポテンシャル（LDA）のαスピンとβスピンのstd::pair
         */
@@ -106,18 +92,19 @@ namespace excorr {
         // #region メンバ変数
 
     private:
+        //! A private member variable (constant).
+        /*!
+            libxcへのスマートポインタ
+        */
+        std::shared_ptr<xc_func_type> const pxcfunc_;
 
         //! A private member variable (constant).
         /*!
             電子密度
         */
         std::function<std::pair<double, double> (double)> const rhoTilde_;
-        
-        //! A private member variable (constant).
-        /*!
-            ratomへのスマートポインタ
-        */
-        std::shared_ptr<xc_func_type> const pxcfunc_;
+
+        // #endregion メンバ変数
 
         // #region 禁止されたコンストラクタ・メンバ関数
 
@@ -139,4 +126,4 @@ namespace excorr {
     };        
 }
 
-#endif  // __RATOM_EXCORR_LDA_H__
+#endif  // __RATOM_EXCORRLDA_H__

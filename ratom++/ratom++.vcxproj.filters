@@ -66,16 +66,10 @@
     <ClCompile Include="src\ExCorr\exchs.cpp">
       <Filter>ソース ファイル\ExCorr</Filter>
     </ClCompile>
-    <ClCompile Include="src\ExCorr\exchslater.cpp">
-      <Filter>ソース ファイル\ExCorr</Filter>
-    </ClCompile>
     <ClCompile Include="src\ExCorr\xc.cpp">
       <Filter>ソース ファイル\ExCorr</Filter>
     </ClCompile>
     <ClCompile Include="src\ExCorr\exchb88.cpp">
-      <Filter>ソース ファイル\ExCorr</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ExCorr\corrvwn.cpp">
       <Filter>ソース ファイル\ExCorr</Filter>
     </ClCompile>
     <ClCompile Include="src\ExCorr\corrlyp.cpp">
@@ -198,6 +192,9 @@
     <ClCompile Include="src\ExCorr\excorrlda.cpp">
       <Filter>ソース ファイル\ExCorr</Filter>
     </ClCompile>
+    <ClCompile Include="src\ExCorr\excorrgga.cpp">
+      <Filter>ソース ファイル\ExCorr</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Alg\clpmtxband.h">
@@ -218,9 +215,6 @@
     <ClInclude Include="src\ExCorr\excorr.h">
       <Filter>ヘッダー ファイル\ExCorr</Filter>
     </ClInclude>
-    <ClInclude Include="src\ExCorr\exchslater.h">
-      <Filter>ヘッダー ファイル\ExCorr</Filter>
-    </ClInclude>
     <ClInclude Include="src\ExCorr\exchs.h">
       <Filter>ヘッダー ファイル\ExCorr</Filter>
     </ClInclude>
@@ -228,9 +222,6 @@
       <Filter>ヘッダー ファイル\ExCorr</Filter>
     </ClInclude>
     <ClInclude Include="src\ExCorr\exchb88.h">
-      <Filter>ヘッダー ファイル\ExCorr</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ExCorr\corrvwn.h">
       <Filter>ヘッダー ファイル\ExCorr</Filter>
     </ClInclude>
     <ClInclude Include="src\ExCorr\corrlyp.h">
@@ -393,9 +384,6 @@
       <Filter>ヘッダー ファイル\ExCorr</Filter>
     </ClInclude>
     <ClInclude Include="src\ExCorr\corrhf.h">
-      <Filter>ヘッダー ファイル\ExCorr</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ExCorr\excorrlda.h">
       <Filter>ヘッダー ファイル\ExCorr</Filter>
     </ClInclude>
     <ClInclude Include="exm\01H\atom.h">
@@ -676,6 +664,15 @@
     </ClInclude>
     <ClInclude Include="src\Util\spin.h">
       <Filter>ヘッダー ファイル\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ExCorr\xcfunc_deleter.h">
+      <Filter>ヘッダー ファイル\ExCorr</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ExCorr\excorrlda.h">
+      <Filter>ヘッダー ファイル\ExCorr</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ExCorr\excorrgga.h">
+      <Filter>ヘッダー ファイル\ExCorr</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

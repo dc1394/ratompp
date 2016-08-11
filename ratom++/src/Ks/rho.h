@@ -17,8 +17,8 @@ namespace ks {
     class Rho : public util::Fun1D
     {
     public:
-        Rho(std::shared_ptr<ParamDb> const & db);
-        virtual ~Rho(void);
+        Rho(std::shared_ptr<const ParamDb> const & db);
+        virtual ~Rho() = default;
 
         virtual double Get(double r) const;
         double GetRhoTilde(double r) const;
@@ -26,11 +26,11 @@ namespace ks {
         virtual double GetDeriv(double r) const;
         virtual double Get2ndDeriv(double r) const;
 
-        void Calc(std::shared_ptr<const util::Fun1D> f);
+        void Calc(std::shared_ptr<const util::Fun1D> && f);
 
         void Init();
 
-        void GetNode(std::vector<double>& node) const;
+        std::vector<double> GetNode() const;
         void Write(void) const;
 
     private:
@@ -38,13 +38,13 @@ namespace ks {
 
     private:
         // Database of parameters
-        std::shared_ptr<ParamDb> const m_db;
+        std::shared_ptr<const ParamDb> const m_db;
 
         // Function approximation
         fem1d::Approx m_approx;
 
         // Gauss quadratures
-        Int1DGauss *m_gauss;
+        std::unique_ptr<Int1DGauss> m_gauss;
 
 
     private:

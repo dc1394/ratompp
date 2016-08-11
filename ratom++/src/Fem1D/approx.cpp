@@ -495,9 +495,11 @@ namespace fem1d {
     }
 
 
-    void Approx::GetNode(std::vector<double>& node) const
+    std::vector<double> Approx::GetNode() const
     {
-        node.clear();
+        std::vector<double> node;
+        node.reserve(m_heap.Size());
+
         for (size_t i = 0; i < m_heap.Size(); i++)
         {
             const HeapElt& e = m_heap[i];
@@ -510,6 +512,7 @@ namespace fem1d {
         newEnd = std::unique(node.begin(), node.end());
         node.erase(newEnd, node.end());
 
+        return node;
     }
 
 

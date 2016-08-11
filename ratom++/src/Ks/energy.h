@@ -17,10 +17,10 @@ namespace ks {
     class Energy final
     {
     public:
-        Energy(std::pair<std::shared_ptr<Pot<util::Spin::Alpha>>,
-               std::shared_ptr<Pot<util::Spin::Beta>>> const & pot,
-               std::shared_ptr<StateSet> const & ss,
-               std::shared_ptr<ParamDb> const & db);
+        Energy(std::pair<std::shared_ptr<const Pot<util::Spin::Alpha>>,
+               std::shared_ptr<const Pot<util::Spin::Beta>>> const & pot,
+               std::shared_ptr<const StateSet> const & ss,
+               std::shared_ptr<const ParamDb> const & db);
         virtual ~Energy() = default;
 
         void SetNode(const std::vector<double>& node);
@@ -38,11 +38,11 @@ namespace ks {
 
     private:
         // DFT potencial
-        std::pair<std::shared_ptr<Pot<util::Spin::Alpha>>,
-                  std::shared_ptr<Pot<util::Spin::Beta>>> const m_pot;
+        std::pair<std::shared_ptr<const Pot<util::Spin::Alpha>>,
+                  std::shared_ptr<const Pot<util::Spin::Beta>>> const m_pot;
 
         // Atomic eigenstates
-        std::shared_ptr<StateSet> const m_ss;
+        std::shared_ptr<const StateSet> const m_ss;
 
         // Integration is on the interval [0, rc]
         double m_rc;

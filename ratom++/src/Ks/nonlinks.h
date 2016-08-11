@@ -1,5 +1,6 @@
 ﻿/*! \file nonlinks.h
     \brief Nonlinear Kohn-Sham equation
+
     Copyright ©  2016 Zbigniew Romanowski [ROMZ@wp.pl] and @dc1394 All Rights Reserved.
     This software is released under the GNU GPL v3.
 */
@@ -16,6 +17,10 @@
 #include <chrono>           // for std::chrono::high_resolution_clock::time_point
 
 namespace ks {
+    //! A class.
+    /*!
+        Nonlinear Kohn-Sham equation
+    */
     class NonLinKs final
     {
         // #region コンストラクタ・デストラクタ
@@ -99,8 +104,14 @@ namespace ks {
         /*!
             Set of all electronic states (eigenfunctions)
         */
-        std::shared_ptr<StateSet> m_ss;
+        std::shared_ptr<StateSet> m_ss_alpha;
 
+        //! A private member variable.
+        /*!
+            Set of all electronic states (eigenfunctions)
+        */
+        std::shared_ptr<StateSet> m_ss_beta;
+        
         //! A private member variable.
         /*!
             Database of parameters

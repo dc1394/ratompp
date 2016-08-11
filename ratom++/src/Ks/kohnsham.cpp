@@ -133,16 +133,16 @@ namespace ks {
                 auto const occ = m_stateSet->Occ(l, n);
                 //if (occ > 0)
                 // occにはαスピンの電子のみ
-                if (occ > 0.0 && occ <= static_cast<double>(l + 1)) {
+                if (occ > 0.0 && occ <= static_cast<double>(2 * l + 1)) {
                     auto const rnl = m_eigProb[l].GetEigFun(n, r); // R_{n, \ell}(r)
-                    // occがl + 1まではαスピンの電子数はoccと等しい
+                    // occが2 * l + 1まではαスピンの電子数はoccと等しい
                     rhoL += occ * rnl * rnl;
                 }
                 // occにβスピンの電子が含まれる
                 else {
                     auto const rnl = m_eigProb[l].GetEigFun(n, r); // R_{n, \ell}(r)
-                    // αスピンの電子数はl + 1と等しい
-                    rhoL += static_cast<double>(l + 1.0) * rnl * rnl;
+                    // αスピンの電子数は2 * l + 1と等しい
+                    rhoL += static_cast<double>(2 * l + 1) * rnl * rnl;
                 }
             }
 
@@ -174,11 +174,11 @@ namespace ks {
             {
                 auto const occ = m_stateSet->Occ(l, n);
                 //if (occ > 0)
-                // occがl + 1より大きければ、occにβスピンの電子が含まれる
-                if (occ > static_cast<double>(l + 1)) {
+                // occが2 * l + 1より大きければ、occにβスピンの電子が含まれる
+                if (occ > static_cast<double>(2 * l + 1)) {
                     auto const rnl = m_eigProb[l].GetEigFun(n, r); // R_{n, \ell}(r)
-                    // βスピンの電子数は、occからl + 1分差し引いたもの
-                    rhoL += (occ - static_cast<double>(l + 1)) * rnl * rnl;
+                    // βスピンの電子数は、occから2 * l + 1分差し引いたもの
+                    rhoL += (occ - static_cast<double>(2 * l + 1)) * rnl * rnl;
                 }
             }
 

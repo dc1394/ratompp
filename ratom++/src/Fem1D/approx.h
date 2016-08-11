@@ -51,7 +51,7 @@ namespace fem1d {
 
         void SolveAdapt(double a, double b, double delta);
 
-        void GetNode(std::vector<double>& node) const;
+        std::vector<double> GetNode() const;
 
         void WriteCoef(FILE* out) const;
 

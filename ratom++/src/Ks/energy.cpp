@@ -7,10 +7,10 @@ namespace ks {
     //
     // Construktor
     //
-    Energy::Energy(std::pair<std::shared_ptr<Pot<util::Spin::Alpha>>,
-                   std::shared_ptr<Pot<util::Spin::Beta>>> const & pot,
-                   std::shared_ptr<StateSet> const & ss,
-                   std::shared_ptr<ParamDb> const & db) :
+    Energy::Energy(std::pair<std::shared_ptr<const Pot<util::Spin::Alpha>>,
+                   std::shared_ptr<const Pot<util::Spin::Beta>>> const & pot,
+                   std::shared_ptr<const StateSet> const & ss,
+                   std::shared_ptr<const ParamDb> const & db) :
         m_pot(pot), m_ss(ss)
     {
         m_rc = atof(db->Get("Atom_Rc"));

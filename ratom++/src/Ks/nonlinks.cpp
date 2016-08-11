@@ -12,11 +12,12 @@ namespace ks {
 
         m_pot = std::make_pair(std::make_shared<Pot<util::Spin::Alpha>>(m_db), std::make_shared<Pot<util::Spin::Beta>>(m_db));
 
-        m_ss = std::make_shared<StateSet>(m_db);
+        m_ss_alpha = std::make_shared<StateSet>(m_db);
+        m_ss_beta = std::make_shared<StateSet>(m_db);
+        
+        m_ks = std::make_pair(std::make_shared<KohnSham<util::Spin::Alpha>>(m_db, m_ss_alpha), std::make_shared<KohnSham<util::Spin::Beta>>(m_db, m_ss_beta));
 
-        m_ks = std::make_pair(std::make_shared<KohnSham<util::Spin::Alpha>>(m_db, m_ss), std::make_shared<KohnSham<util::Spin::Beta>>(m_db, m_ss));
-
-        m_energy = std::make_unique<Energy>(m_pot, m_ss, m_db);
+        m_energy = std::make_unique<Energy>(m_pot, m_ss_alpha, m_db);
 
         m_rho = std::make_pair(std::make_shared<Rho>(m_db), std::make_shared<Rho>(m_db));
 
@@ -95,10 +96,9 @@ namespace ks {
             iter++;
         }
 
-        //std::vector<double> node;
-        //m_rho->GetNode(node);
-        //m_energy->SetNode(node);
-        //// m_energy->WriteEnergy(stdout);
+        auto const node = m_rho.first->GetNode();
+        m_energy->SetNode(node);
+        m_energy->WriteEnergy(stdout);
         //// March 31st, 2014	Added by dc1394
         //m_pot->Write();
 
@@ -120,7 +120,7 @@ namespace ks {
         static double sumOld = 0; // This variable MUST BE "static"
         double sumNew, diff;
 
-        sumNew = m_ss->EigenSum();
+        sumNew = m_ss_alpha->EigenSum();
         diff = ::fabs(sumNew - sumOld);
         sumOld = sumNew;
 
@@ -146,10 +146,10 @@ namespace ks {
 
         out = m_db->OpenFile("out", "a");
 
-        m_ss->WriteSates(stdout);
+        m_ss_alpha->WriteSates(stdout);
         m_energy->WriteEnergy(stdout);
 
-        m_ss->WriteSates(out);
+        m_ss_alpha->WriteSates(out);
         m_energy->WriteEnergy(out);
 
         fprintf(out, "\n\nC A L C U L A T I O N   T I M E :   %ld  [s]\n", sec);

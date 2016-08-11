@@ -14,13 +14,11 @@
 #include <utility>
 #include <boost/mpl/int.hpp>    // for boost::mpl::int_
 
-extern void* enabler;
 namespace ks {
     template <util::Spin S>
     class Pot final : public util::Fun1D
     {
         friend class Energy;
-        friend class FunEner;
 
     private:
         // May 23rd, 2014 Added by dc1394
@@ -60,7 +58,6 @@ namespace ks {
         // March 31st, 2014 Added by @dc1394
         void Write() /*const*/;
 
-    private:
         double Vn(double r) const;
         //double Vx(double rho, double rhoDer) const;
         // March 7th, 2014	Added by dc1394
@@ -91,6 +88,7 @@ namespace ks {
         //util::Fun1D* m_rho;
         std::pair<std::shared_ptr<util::Fun1D>, std::shared_ptr<util::Fun1D>> m_rho;
 
+    public:
         // March 7th, 2014	Modified by dc1394 
         // Exchenge potential
         //Xc* m_exch;
@@ -99,6 +97,7 @@ namespace ks {
         //Xc* m_corr;
         std::unique_ptr<excorr::Xc<S>> m_corr;
 
+    private:
         // Number of protons in atom
         double m_z;
 
@@ -114,13 +113,8 @@ namespace ks {
         // Database of parameters
         std::shared_ptr<ParamDb> const m_db;
 
-#if defined(__INTEL_COMPILER) || defined(__GXX_EXPERIMENTAL_CXX0X__)
         static auto constexpr MAX = 10.0;
         static auto constexpr DR = 1.0E-3;
-#else
-        static const double MAX;
-        static const double DR;
-#endif
     };
 }
 #endif
