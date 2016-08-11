@@ -111,10 +111,30 @@ namespace excorr {
         
         // #endregion メンバ変数
 
-        
+        // #region 禁止されたコンストラクタ・メンバ関数
+
+        //! A private constructor (deleted).
+        /*!
+            デフォルトコンストラクタ（禁止）
+        */
+        Xc() = delete;
+
+        //! A private copy constructor (deleted).
+        /*!
+            コピーコンストラクタ（禁止）
+            \param コピー元のオブジェクト（未使用）
+        */
         Xc(Xc const &) = delete;
+
+        //! A private member function (deleted).
+        /*!
+            operator=()の宣言（禁止）
+            \param コピー元のオブジェクト（未使用）
+            \return コピー元のオブジェクト
+        */
         Xc & operator=(const Xc &) = delete;
 
+        // #endregion 禁止されたコンストラクタ・メンバ関数
     };
 }
 

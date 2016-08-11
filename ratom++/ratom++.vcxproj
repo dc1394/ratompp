@@ -185,7 +185,6 @@
     <ClCompile Include="src\ExCorr\exchs.cpp" />
     <ClCompile Include="src\ExCorr\excorrgga.cpp" />
     <ClCompile Include="src\ExCorr\excorrlda.cpp" />
-    <ClCompile Include="src\ExCorr\xc.cpp" />
     <ClCompile Include="src\Fem1D\approx.cpp" />
     <ClCompile Include="src\Fem1D\bndr.cpp" />
     <ClCompile Include="src\Fem1D\eigprob.cpp" />

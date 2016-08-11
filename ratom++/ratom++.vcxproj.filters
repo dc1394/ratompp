@@ -66,9 +66,6 @@
     <ClCompile Include="src\ExCorr\exchs.cpp">
       <Filter>ソース ファイル\ExCorr</Filter>
     </ClCompile>
-    <ClCompile Include="src\ExCorr\xc.cpp">
-      <Filter>ソース ファイル\ExCorr</Filter>
-    </ClCompile>
     <ClCompile Include="src\ExCorr\exchb88.cpp">
       <Filter>ソース ファイル\ExCorr</Filter>
     </ClCompile>
