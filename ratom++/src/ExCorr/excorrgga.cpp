@@ -28,11 +28,11 @@ namespace excorr {
     {
         std::array<double, 2> const rho = { rhoTilde_(r).first, rhoTilde_(r).second };
 
-        auto const rhotdaa = rhoTildeDeriv_(r).first * rhoTildeDeriv_(r).first;
-        auto const rhotdab = rhoTildeDeriv_(r).first * rhoTildeDeriv_(r).second;
-        auto const rhotdbb = rhoTildeDeriv_(r).second * rhoTildeDeriv_(r).second;
+        auto const rhodaa = rhoTildeDeriv_(r).first * rhoTildeDeriv_(r).first;
+        auto const rhodab = rhoTildeDeriv_(r).first * rhoTildeDeriv_(r).second;
+        auto const rhodbb = rhoTildeDeriv_(r).second * rhoTildeDeriv_(r).second;
 
-        std::array<double, 3> const sigma = { rhotdaa, rhotdab, rhotdbb };
+        std::array<double, 3> const sigma = { rhodaa, rhodab, rhodbb };
         std::array<double, 1> zk;
         
         xc_gga_exc(pxcfunc_.get(), 1, rho.data(), sigma.data(), zk.data());
@@ -47,10 +47,49 @@ namespace excorr {
     std::pair<double, double> ExCorrGGA::xc_vxc_impl(double r) const
     {
         std::array<double, 2> const rho = { rhoTilde_(r).first, rhoTilde_(r).second };
-        std::array<double, 2> zk;
-        xc_lda_vxc(pxcfunc_.get(), 1, rho.data(), zk.data());
+        std::array<double, 2> const rhod = { rhoTildeDeriv_(r).first, rhoTildeDeriv_(r).second };
 
-        return std::make_pair(zk[0], zk[1]);
+        auto const rhodaa = rhod[0] * rhod[0];
+        auto const rhodab = rhod[0] * rhod[1];
+        auto const rhodbb = rhod[1] * rhod[1];
+
+        std::array<double, 3> const sigma = { rhodaa, rhodab, rhodbb };
+
+        std::array<double, 2> vrho;
+        std::array<double, 3> deds;
+
+        xc_gga_vxc(pxcfunc_.get(), 1, rho.data(), sigma.data(), vrho.data(), deds.data());
+
+        std::array<double, 3> dedgrad = { 2.0 * deds[0] * rhod[0] + deds[1] * rhod[1], 2.0 * deds[2] * rhod[1] + deds[1] * rhod[0] };
+        std::array<double, 3> d2edn2;
+        std::array<double, 6> d2ednds, d2eds2;
+        xc_gga_fxc(pxcfunc_.get(), 1, rho.data(), sigma.data(), d2edn2.data(), d2ednds.data(), d2eds2.data());
+
+        std::array<double, 4> d2edrhodgrad;
+        std::array<double, 3> d2edgrad2;
+
+        d2edrhodgrad[0] = 2.0 * rhod[0] * d2ednds[0] + rhod[1] * d2ednds[1];
+        d2edrhodgrad[1] = 2.0 * rhod[0] * d2ednds[3] + rhod[1] * d2ednds[4];
+        d2edrhodgrad[2] = 2.0 * rhod[1] * d2ednds[2] + rhod[0] * d2ednds[1];
+        d2edrhodgrad[3] = 2.0 * rhod[1] * d2ednds[5] + rhod[0] * d2ednds[4];
+
+        d2edgrad2[0] = 2.0 * deds[0] + 4.0 * sigma[0] * d2eds2[0] + 4.0 * sigma[1] * d2eds2[1] + sigma[2] * d2eds2[3];
+        d2edgrad2[1] = deds[1] + 4.0 * sigma[1] * d2eds2[2] + 2.0 * sigma[0] * d2eds2[1] + 2.0 * sigma[2] * d2eds2[4] + sigma[1] * d2eds2[3];
+        d2edgrad2[2] = 2.0 * deds[2] + 4.0 * sigma[2] * d2eds2[5] + 4.0 * sigma[1] * d2eds2[4] + sigma[0] * d2eds2[3];
+
+        vrho[0] += - 2.0 / r * dedgrad[0]
+                   - d2edgrad2[0] * (rhoTildeLapl_(r).first - 2.0 / r * rhod[0])
+                   - d2edgrad2[1] * (rhoTildeLapl_(r).second - 2.0 / r * rhod[1])
+                   - d2edrhodgrad[0] * rhod[0]
+                   - d2edrhodgrad[1] * rhod[1];
+
+        vrho[1] += - 2.0 / r * dedgrad[1]
+                   - d2edgrad2[2] * (rhoTildeLapl_(r).second - 2.0 / r * rhod[1])
+                   - d2edgrad2[1] * (rhoTildeLapl_(r).first - 2.0 / r * rhod[0])
+                   - d2edrhodgrad[2] * rhod[0]
+                   - d2edrhodgrad[3] * rhod[1];
+
+        return std::make_pair(vrho[0], vrho[1]);
     }
 
     // #endregion privateメンバ関数

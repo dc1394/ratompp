@@ -55,8 +55,8 @@ namespace ks {
         auto iter = 1U;
         rhoOld = std::make_pair(std::make_shared<Rho>(m_db), std::make_shared<Rho>(m_db));
         
-        m_rho.first->Init();
-        m_rho.second->Init();
+        m_rho.first->Init<util::Spin::Alpha>();
+        m_rho.second->Init<util::Spin::Beta>();
         m_ks.first->Config(m_pot.first);
         m_ks.second->Config(m_pot.second);
 
@@ -69,7 +69,7 @@ namespace ks {
             m_pot.first->SetRho(m_rho);
             m_pot.first->SolvePoisson();
             m_pot.second->SetRho(m_rho);
-            m_pot.second->SolvePoisson();
+            m_pot.second->Hart() = m_pot.first->Hart;
             m_ks.first->Solve();
             m_ks.second->Solve();
 
@@ -102,11 +102,8 @@ namespace ks {
         //// March 31st, 2014	Added by dc1394
         //m_pot->Write();
 
-        //printf("*  SCF-ITERATIONS = %lu\n", static_cast<unsigned long>(iter));
-        //printf("***********   S C F   L O O P   F I N I S H E D   ***********\n");
-
-        // May 23rd, 2014 Modified by dc1394
-        //delete rhoOld;
+        printf("*  SCF-ITERATIONS = %lu\n", static_cast<unsigned long>(iter));
+        printf("***********   S C F   L O O P   F I N I S H E D   ***********\n");
     }
 
 
@@ -133,7 +130,7 @@ namespace ks {
     void NonLinKs::WriteRes(std::chrono::duration<double> const & sec) const
     {
         WriteInfo(sec);
-        //m_rho->Write();
+        m_rho.first->Write();
         //m_ks->WriteEigen();
     }
 
@@ -152,7 +149,7 @@ namespace ks {
         m_ss_alpha->WriteSates(out);
         m_energy->WriteEnergy(out);
 
-        fprintf(out, "\n\nC A L C U L A T I O N   T I M E :   %ld  [s]\n", sec);
+        fprintf(out, "\n\nC A L C U L A T I O N   T I M E :   %.3f  [s]\n", sec);
 
         fclose(out);
     }

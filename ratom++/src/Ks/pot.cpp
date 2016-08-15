@@ -1,5 +1,6 @@
 // modified by dc1394 - March 7th, 2014
 
+#include "../ExCorr/excorrgga.h"
 #include "../ExCorr/excorrlda.h"
 #include "stdafx.h"
 #include "pot.h"
@@ -13,11 +14,11 @@ namespace ks {
     // Constructor
     //
     template <util::Spin S>
-    Pot<S>::Pot(std::shared_ptr<ParamDb> const & db) : /*m_rho(NULL),*/ m_db(db)
+    Pot<S>::Pot(std::shared_ptr<ParamDb> const & db)
+        :   Hart([this] { return std::ref(m_hart); }, [this](std::shared_ptr<OdeProb> const & hart) { return m_hart = hart; }),
+            m_db(db),
+            m_hart(std::make_shared<OdeProb>())
     {
-        //m_exch = NULL;
-        //m_corr = NULL;
-
         // March 28th, 2014 Modified by dc1394
         m_z = db->GetDouble("Atom_Proton");
         SetXc(db->Get("XC_Exch"), db->Get("XC_Corr"));
@@ -94,6 +95,28 @@ namespace ks {
     template <util::Spin S>
     void Pot<S>::SetRho(std::pair<std::shared_ptr<util::Fun1D>, std::shared_ptr<util::Fun1D>> const & rho)
     {
+        //const double rc = m_db->GetDouble("Atom_Rc");
+        //const size_t psnNode = m_db->GetSize_t("Solver_PsnNode");
+        //const size_t psnDeg = m_db->GetSize_t("Solver_PsnDeg");
+
+        //const double gamma = 1;
+
+        //// const Bndr left(BndrType_Dir, 0), right(BndrType_Dir, m_z);
+        //// Zero Dirichlet boundary conditions
+        //const Bndr left(BndrType_Dir, 0), right(BndrType_Dir, 0);
+
+        ////assert(rho);
+        //m_rho = rho;
+        //m_rhoHelp.m_rho = rho;
+
+        //m_hart->Define(left, right, gamma, NULL, &m_rhoHelp);
+        //m_hart->GenMeshLin(0, rc, psnNode, psnDeg);
+        SetRho(rho, boost::mpl::int_<static_cast<std::int32_t>(S)>());
+    }
+
+    template <util::Spin S>
+    void Pot<S>::SetRho(std::pair<std::shared_ptr<util::Fun1D>, std::shared_ptr<util::Fun1D>> const & rho, boost::mpl::int_<static_cast<std::int32_t>(util::Spin::Alpha)>)
+    {
         const double rc = m_db->GetDouble("Atom_Rc");
         const size_t psnNode = m_db->GetSize_t("Solver_PsnNode");
         const size_t psnDeg = m_db->GetSize_t("Solver_PsnDeg");
@@ -108,8 +131,15 @@ namespace ks {
         m_rho = rho;
         m_rhoHelp.m_rho = rho;
 
-        m_hart.Define(left, right, gamma, NULL, &m_rhoHelp);
-        m_hart.GenMeshLin(0, rc, psnNode, psnDeg);
+        m_hart->Define(left, right, gamma, NULL, &m_rhoHelp);
+        m_hart->GenMeshLin(0, rc, psnNode, psnDeg);
+    }
+
+    template <util::Spin S>
+    void Pot<S>::SetRho(std::pair<std::shared_ptr<util::Fun1D>, std::shared_ptr<util::Fun1D>> const & rho, boost::mpl::int_<static_cast<std::int32_t>(util::Spin::Beta)>)
+    {
+        m_rho = rho;
+        m_rhoHelp.m_rho = rho;
     }
 
 
@@ -123,11 +153,11 @@ namespace ks {
         const bool adapt = m_db->GetBool("Solver_PsnAdapt");
 
         if (adapt)
-            m_hart.SolveAdapt(absMaxCoef);
+            m_hart->SolveAdapt(absMaxCoef);
         else
-            m_hart.Solve();
+            m_hart->Solve();
 
-        // m_hart.WriteSol("C:\\romz\\Syf\\OdeProb\\Hartree.dat", 2000);
+        // m_hart->WriteSol("C:\\romz\\Syf\\OdeProb\\Hartree.dat", 2000);
     }
 
 
@@ -194,7 +224,7 @@ namespace ks {
     double Pot<S>::Vh(double r) const
     {
         assert(r > 0);
-        const double val = m_hart.GetSol(r);
+        const double val = m_hart->GetSol(r);
 
         // Apply non-zero Dirichlet boundary conditions
         const double ua = 0, ub = m_z, a = 0, b = m_rc;
@@ -272,15 +302,16 @@ namespace ks {
         if (strcmp(exch, "slater") == 0) {
             m_exch.reset(new excorr::Xc<S>(excorr::ExCorrLDA([this](double r) { return GetRhoTilde(r); }, XC_LDA_X)));
         }
-        //else if (strcmp(exch, "b88") == 0) {
-        //    //delete m_exch;
-        //    m_exch.reset(new ExchB88(std::bind(&Pot::GetRhoTilde, std::ref(*this),
-        //        std::placeholders::_1),
-        //        std::bind(&Pot::GetRhoTildeDeriv, std::ref(*this),
-        //        std::placeholders::_1),
-        //        std::bind(&Pot::GetRhoTildeLapl, std::ref(*this),
-        //        std::placeholders::_1)));
-        //}
+        else if (strcmp(exch, "b88") == 0) {
+            m_exch.reset(new excorr::Xc<S>(excorr::ExCorrGGA([this](double r) { return GetRhoTilde(r); },
+                                                             [this](double r) { return GetRhoTildeDeriv(r); },
+                                                             [this](double r) { return GetRhoTildeLapl(r); }, XC_GGA_X_B88)));
+        }
+        else if (strcmp(exch, "pbe") == 0) {
+            m_exch.reset(new excorr::Xc<S>(excorr::ExCorrGGA([this](double r) { return GetRhoTilde(r); },
+                [this](double r) { return GetRhoTildeDeriv(r); },
+                [this](double r) { return GetRhoTildeLapl(r); }, XC_GGA_X_PBE)));
+        }
         //else if (strcmp(exch, "pbe") == 0) {
         //    m_exch.reset(new ExchPbe(false, std::bind(&Pot::GetRhoTilde, std::ref(*this),
         //        std::placeholders::_1),
@@ -309,6 +340,11 @@ namespace ks {
 
         if (strcmp(corr, "vwn") == 0) {
             m_corr.reset(new excorr::Xc<S>(excorr::ExCorrLDA([this](double r) { return GetRhoTilde(r); }, XC_LDA_C_VWN)));
+        }
+        else if (strcmp(exch, "pbe") == 0) {
+            m_corr.reset(new excorr::Xc<S>(excorr::ExCorrGGA([this](double r) { return GetRhoTilde(r); },
+                [this](double r) { return GetRhoTildeDeriv(r); },
+                [this](double r) { return GetRhoTildeLapl(r); }, XC_GGA_C_PBE)));
         }
         //else if (strcmp(corr, "pbe") == 0) {
         //    m_corr.reset(new CorrPbe(std::bind(&Pot::GetRhoTilde, std::ref(*this),

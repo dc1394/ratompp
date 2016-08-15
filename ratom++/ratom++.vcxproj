@@ -374,6 +374,7 @@
     <ClInclude Include="src\Util\lobatto.h" />
     <ClInclude Include="src\Util\mtx.h" />
     <ClInclude Include="src\Util\point3D.h" />
+    <ClInclude Include="src\Util\property.h" />
     <ClInclude Include="src\Util\shreal.h" />
     <ClInclude Include="src\Util\spin.h" />
     <ClInclude Include="src\Util\stdafx.h" />

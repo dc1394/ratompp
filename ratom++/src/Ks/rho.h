@@ -9,9 +9,10 @@
 */
 // March 16th, 2014 Modified by dc1394
 
-
+#include "../Util/spin.h"
 #include "paramdb.h"
 #include <memory>       // for std::shared_ptr
+#include <boost/mpl/int.hpp>
 
 namespace ks {
     class Rho : public util::Fun1D
@@ -28,8 +29,9 @@ namespace ks {
 
         void Calc(std::shared_ptr<const util::Fun1D> && f);
 
+        template <util::Spin S>
         void Init();
-
+                
         std::vector<double> GetNode() const;
         void Write(void) const;
 

@@ -671,6 +671,9 @@
     <ClInclude Include="src\ExCorr\excorrgga.h">
       <Filter>ヘッダー ファイル\ExCorr</Filter>
     </ClInclude>
+    <ClInclude Include="src\Util\property.h">
+      <Filter>ヘッダー ファイル\Util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="doc\Fem1D-Manual-pl.pdf">

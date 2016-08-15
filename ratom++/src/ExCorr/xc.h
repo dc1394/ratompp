@@ -91,6 +91,7 @@ namespace excorr {
 
         // #region メンバ変数
 
+    private:
         //! A private member variable (const).
         /*!
             交換相関エネルギーの値を返す関数オブジェクト

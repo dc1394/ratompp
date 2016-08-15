@@ -19,7 +19,8 @@ namespace ks {
     //
     // Initialization of electron density
     //
-    void Rho::Init(void)
+    template <>
+    void Rho::Init<util::Spin::Alpha>(void)
     {
         const bool def = m_db->GetBool("Rho0_Default");
         const double M = m_db->GetDouble("Atom_Proton");
@@ -55,6 +56,37 @@ namespace ks {
         printf("+  Number of protons (electrons) = %.2lf\n", M);
         printf("+  Applied 'Rho0' gives %.6lf electrons\n", Integ());
         printf("+++++++++++++++++++++++++++++++++++++++++++++++++++\n\n");
+    }
+
+    template <>
+    void Rho::Init<util::Spin::Beta>(void)
+    {
+        const bool def = m_db->GetBool("Rho0_Default");
+        const double M = m_db->GetDouble("Atom_Proton");
+        // const double N = m_db->GetDouble("Atom_Electron");
+        double c, alpha;
+
+        if (def)
+        {
+            double w;
+            if (M < 50)
+                w = M;
+            else
+                w = 50;
+            // Default inicjalization
+            c = w * w * w * w / 16;
+            alpha = 0.5 * w;
+            c *= (M / w);
+        }
+        else
+        {
+            // User defined initialization
+            c = M_4PI * m_db->GetDouble("Rho0_c");
+            alpha = m_db->GetDouble("Rho0_Alpha");
+        }
+
+        //std::shared_ptr<const RhoInit> pf(std::make_shared<const RhoInit>(c, alpha));
+        Calc(std::make_shared<const RhoInit>(c, alpha));
     }
 
     //

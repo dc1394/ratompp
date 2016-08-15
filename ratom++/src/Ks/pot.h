@@ -9,6 +9,7 @@
 */
 
 #include "paramdb.h"
+#include "../Util/property.h"
 #include "../ExCorr/xc.h"
 #include <memory>
 #include <utility>
@@ -48,6 +49,8 @@ namespace ks {
         // May 23rd, 2014 Modified by dc1394
         //void SetRho(util::Fun1D* rho);
         void SetRho(std::pair<std::shared_ptr<util::Fun1D>, std::shared_ptr<util::Fun1D>> const & rho);
+        void SetRho(std::pair<std::shared_ptr<util::Fun1D>, std::shared_ptr<util::Fun1D>> const & rho, boost::mpl::int_<static_cast<std::int32_t>(util::Spin::Alpha)>);
+        void SetRho(std::pair<std::shared_ptr<util::Fun1D>, std::shared_ptr<util::Fun1D>> const & rho, boost::mpl::int_<static_cast<std::int32_t>(util::Spin::Beta)>);
         void SolvePoisson(void);
 
         virtual double Get(double r) const;
@@ -59,19 +62,11 @@ namespace ks {
         void Write() /*const*/;
 
         double Vn(double r) const;
-        //double Vx(double rho, double rhoDer) const;
-        // March 7th, 2014	Added by dc1394
         double Vx(double r) const;
-        //double Vc(double rho, double rhoDer) const;
-        // March 8th, 2014	Added by dc1394
         double Vc(double r) const;
         double Vh(double r) const;
 
-        //double Ex(double rho, double rhoDer) const;
-        // March 7th, 2014	Added by dc1394
         double Ex(double r) const;
-        //double Ec(double rho, double rhoDer) const;
-        // March 7th, 2014	Added by dc1394
         double Ec(double r) const;
         double XcEdiffV(double r) const;
 
@@ -82,10 +77,13 @@ namespace ks {
         std::pair<double, double> GetRhoTildeDeriv(double r);
         std::pair<double, double> GetRhoTildeLapl(double r);
 
+        //! A property.
+        /*!
+        */
+        util::Property<std::shared_ptr<OdeProb> &> Hart;
+
     private:
         // Electron density
-        // May 23rd, 2014 Modified by dc1394
-        //util::Fun1D* m_rho;
         std::pair<std::shared_ptr<util::Fun1D>, std::shared_ptr<util::Fun1D>> m_rho;
 
     public:
@@ -105,7 +103,7 @@ namespace ks {
         double m_rc;
 
         // Hartree potential
-        OdeProb m_hart;
+        std::shared_ptr<OdeProb> m_hart;
 
         // Helper funtion required to solve Poisson equation
         RhoHelp m_rhoHelp;
