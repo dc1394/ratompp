@@ -4,7 +4,7 @@
 
 
 const double ExchS::m_alpha = 2./3;
-const double ExchS::m_c = pow(3. / (4. * M_PI), 1./3.);
+const double ExchS::m_c = pow(3. / (4. * util::HelpFun::M_PI), 1./3.);
 
 //
 // Construktor

@@ -1,5 +1,9 @@
 #include "stdafx.h"
 #include "paramdb.h"
+#include <vector>                                       // for std::vector
+#include <boost/algorithm/string/classification.hpp>    // for boost::is_any_of
+#include <boost/algorithm/string/split.hpp>             // for boost::algorithm::split
+#include <boost/format.hpp>                             // for boost::format
 
 extern void Intro(FILE* out);
 
@@ -28,9 +32,7 @@ std::map <std::string, std::string>::const_iterator iter = find(param);
 		return iter->second.c_str();
 	else
 	{
-		char str[100];
-		sprintf(str, "Parametr '%s' could not be found.", param);
-		throw std::invalid_argument(str);
+        throw std::invalid_argument((boost::format("Parametr '%s' could not be found.") % param).str());
 	}
 }
 
@@ -60,14 +62,14 @@ bool ParamDb::GetBool(const char* param) const
 //
 void ParamDb::ReadParams(void)
 {
-FILE* in = OpenFile(NULL, "rt");
-char param[50], val[50];
+    FILE* in = OpenFile(NULL, "rt");
 
 	while(true)
 	{
-		if(ReadOneParam(in, param, val) != 0)
+        auto const ret = ReadOneParam(in);
+		if(std::get<0>(ret) != 0)
 			break;
-		 insert( std::pair <std::string, std::string>(param, val) );
+        insert(std::pair <std::string, std::string>(std::get<1>(ret), std::get<2>(ret)));
 	}
 
 	fclose(in);
@@ -78,29 +80,31 @@ char param[50], val[50];
 // Returns "0", if parameter is read.
 // Returns "1", if end of file is found.
 //
-int ParamDb::ReadOneParam(FILE* in, char* param, char* val) const
+std::tuple<int, std::string, std::string> ParamDb::ReadOneParam(FILE* in) const
 {
-char line[500 + 1];
-char *s;
+    char line[500 + 1];
 
-	while(1)
+	while (true)
 	{
-		s = fgets(line, 500, in);
-		if(s == NULL || feof(in))
-			return 1;
+		auto const s = std::fgets(line, 500, in);
+		if (s == nullptr || feof(in))
+            return std::make_tuple(1, std::string(), std::string());
 
 		// Skip comments and empty lines
 		if(!(line[0] == '#' || line[0] == '\n'))
 			break;
 	}
+    
+    std::string s(line);
+    std::vector<std::string> tokens;
+    boost::algorithm::split(tokens, s, boost::is_any_of(" \n"));
 
-	if(sscanf(line, "%s %s", param, val) != 2)
+	if (tokens.size() != 3)
 	{
-		char str[1000];
-		sprintf(str, "Error during reading file. Line '%s'.", line);
-		throw std::invalid_argument(str);
+        throw std::invalid_argument((boost::format("Error during reading file. Line '%s'.") % line).str());
 	}
-	return 0;
+
+    return std::make_tuple(0, tokens[0], tokens[1]);
 }
 
 //
@@ -123,9 +127,7 @@ FILE* file;
 
 	if(!file)
 	{
-		char str[1000];
-		sprintf(str, "Cannot open file '%s'.", tmp.c_str());
-		throw std::invalid_argument(str);
+        throw std::invalid_argument((boost::format("Cannot open file '%s'.") % tmp).str());
 	}
 	return file;
 }

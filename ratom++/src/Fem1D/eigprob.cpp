@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "eigprob.h"
+#include <boost/format.hpp>     // for boost::format
 
 //
 // Constructor
@@ -399,9 +400,7 @@ FILE* out;
 	out = fopen(path, "wt");
 	if(!out)
 	{
-		char str[1000];
-		sprintf(str, "Cannot open file '%s' for write.", path);
-		throw std::invalid_argument(str);
+        throw std::invalid_argument((boost::format("Cannot open file '%s' for write.") % path).str());
 	}
 
 
@@ -439,9 +438,7 @@ FILE* out;
 	out = fopen(path, "wt");
 	if(!out)
 	{
-		char str[1000];
-		sprintf(str, "Cannot open file '%s' for write.", path);
-		throw std::invalid_argument(str);
+        throw std::invalid_argument((boost::format("Cannot open file '%s' for write.") % path).str());
 	}
 
 	fprintf(out, "# %14s %18s %18s %18s %18s\n", "r = radius", "R(r)", "R(r)/r", "R'(r)", "R''(r)");

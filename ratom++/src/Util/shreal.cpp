@@ -15,54 +15,54 @@ static bool init = false;
 	if(!init)
 	{	
 		// l = 0
-		m_clm[0] = 1. / sqrt(4 * M_PI);
+		m_clm[0] = 1. / sqrt(4 * util::HelpFun::M_PI);
 	
 		// l = 1
-		m_clm[1] = sqrt(3. / (4 * M_PI));
-		m_clm[2] = sqrt(3. / (4 * M_PI));
-		m_clm[3] = sqrt(3. / (4 * M_PI));
+		m_clm[1] = sqrt(3. / (4 * util::HelpFun::M_PI));
+		m_clm[2] = sqrt(3. / (4 * util::HelpFun::M_PI));
+		m_clm[3] = sqrt(3. / (4 * util::HelpFun::M_PI));
 	
 		// l = 2
-		m_clm[4] = sqrt(15. / ( 4 * M_PI));
-		m_clm[5] = sqrt(15. / ( 4 * M_PI));
-		m_clm[6] = sqrt( 5. / (16 * M_PI));
-		m_clm[7] = sqrt(15. / ( 4 * M_PI));
-		m_clm[8] = sqrt(15. / (16 * M_PI));
+		m_clm[4] = sqrt(15. / ( 4 * util::HelpFun::M_PI));
+		m_clm[5] = sqrt(15. / ( 4 * util::HelpFun::M_PI));
+		m_clm[6] = sqrt( 5. / (16 * util::HelpFun::M_PI));
+		m_clm[7] = sqrt(15. / ( 4 * util::HelpFun::M_PI));
+		m_clm[8] = sqrt(15. / (16 * util::HelpFun::M_PI));
 	
 		// l = 3
-		m_clm[ 9] = sqrt( 35. / (32 * M_PI));
-		m_clm[10] = sqrt(105. / ( 4 * M_PI));
-		m_clm[11] = sqrt( 21. / (32 * M_PI));
-		m_clm[12] = sqrt(  7. / (16 * M_PI));
-		m_clm[13] = sqrt( 21. / (32 * M_PI));
-		m_clm[14] = sqrt(105. / (16 * M_PI));
-		m_clm[15] = sqrt( 35. / (32 * M_PI));
+		m_clm[ 9] = sqrt( 35. / (32 * util::HelpFun::M_PI));
+		m_clm[10] = sqrt(105. / ( 4 * util::HelpFun::M_PI));
+		m_clm[11] = sqrt( 21. / (32 * util::HelpFun::M_PI));
+		m_clm[12] = sqrt(  7. / (16 * util::HelpFun::M_PI));
+		m_clm[13] = sqrt( 21. / (32 * util::HelpFun::M_PI));
+		m_clm[14] = sqrt(105. / (16 * util::HelpFun::M_PI));
+		m_clm[15] = sqrt( 35. / (32 * util::HelpFun::M_PI));
 
 		// -------------------------------------------------------------
 
 		// l = 0
-		m_slm[0] = 1. / sqrt(4 * M_PI);
+		m_slm[0] = 1. / sqrt(4 * util::HelpFun::M_PI);
 	
 		// l = 1
-		m_slm[1] = sqrt(3. / (8 * M_PI));
-		m_slm[2] = sqrt(3. / (4 * M_PI));
-		m_slm[3] = sqrt(3. / (8 * M_PI));
+		m_slm[1] = sqrt(3. / (8 * util::HelpFun::M_PI));
+		m_slm[2] = sqrt(3. / (4 * util::HelpFun::M_PI));
+		m_slm[3] = sqrt(3. / (8 * util::HelpFun::M_PI));
 	
 		// l = 2
-		m_slm[4] = sqrt(15. / (32 * M_PI));
-		m_slm[5] = sqrt(15. / (32 * M_PI));
-		m_slm[6] = sqrt( 5. / (64 * M_PI));
-		m_slm[7] = sqrt(15. / (32 * M_PI));
-		m_slm[8] = sqrt(15. / (32 * M_PI));
+		m_slm[4] = sqrt(15. / (32 * util::HelpFun::M_PI));
+		m_slm[5] = sqrt(15. / (32 * util::HelpFun::M_PI));
+		m_slm[6] = sqrt( 5. / (64 * util::HelpFun::M_PI));
+		m_slm[7] = sqrt(15. / (32 * util::HelpFun::M_PI));
+		m_slm[8] = sqrt(15. / (32 * util::HelpFun::M_PI));
 	
 		// l = 3
-		m_slm[ 9] = sqrt( 35. / (  64 * M_PI));
-		m_slm[10] = sqrt(105. / (  32 * M_PI));
-		m_slm[11] = sqrt( 21. / (1024 * M_PI));
-		m_slm[12] = sqrt(  7. / ( 256 * M_PI));
-		m_slm[13] = sqrt( 21. / (1024 * M_PI));
-		m_slm[14] = sqrt(105. / (  32 * M_PI));
-		m_slm[15] = sqrt( 35. / (  64 * M_PI));
+		m_slm[ 9] = sqrt( 35. / (  64 * util::HelpFun::M_PI));
+		m_slm[10] = sqrt(105. / (  32 * util::HelpFun::M_PI));
+		m_slm[11] = sqrt( 21. / (1024 * util::HelpFun::M_PI));
+		m_slm[12] = sqrt(  7. / ( 256 * util::HelpFun::M_PI));
+		m_slm[13] = sqrt( 21. / (1024 * util::HelpFun::M_PI));
+		m_slm[14] = sqrt(105. / (  32 * util::HelpFun::M_PI));
+		m_slm[15] = sqrt( 35. / (  64 * util::HelpFun::M_PI));
 
 
 		init = true;

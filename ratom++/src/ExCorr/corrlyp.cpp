@@ -7,7 +7,7 @@ const double CorrLyp::m_a = 0.04918;
 const double CorrLyp::m_b = 0.132;
 const double CorrLyp::m_c = 0.2533;
 const double CorrLyp::m_d = 0.349;
-const double CorrLyp::m_cf = (3. / 10) * pow(3 * M_PI * M_PI, 2. / 3.);
+const double CorrLyp::m_cf = (3. / 10) * pow(3 * util::HelpFun::M_PI * util::HelpFun::M_PI, 2. / 3.);
 
 CorrLyp::CorrLyp(void)
 {

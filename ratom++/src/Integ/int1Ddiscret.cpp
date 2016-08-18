@@ -26,7 +26,7 @@ Vec tmp(f.size());
 	for(size_t i = 0; i < f.size(); i++)
 		tmp[i] = mesh->R2(i) * f[i];
 
-	return 4. * M_PI * Order4a(tmp, mesh->Dr());
+	return 4. * util::HelpFun::M_PI * Order4a(tmp, mesh->Dr());
 }
 
 //!
@@ -44,7 +44,7 @@ Vec tmp(f.size());
 	for(size_t i = 0; i < f.size(); i++)
 		tmp[i] = mesh->R2(i) * f[i] * g[i];
 
-	return 4. * M_PI * Order4a(tmp, mesh->Dr());
+	return 4. * util::HelpFun::M_PI * Order4a(tmp, mesh->Dr());
 
 }
 */

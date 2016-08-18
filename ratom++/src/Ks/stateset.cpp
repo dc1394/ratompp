@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "stateset.h"
+#include <boost/algorithm/string/classification.hpp>    // for boost::is_any_of
+#include <boost/algorithm/string/split.hpp>             // for boost::algorithm::split
 
 namespace ks {
     //
@@ -130,23 +132,17 @@ namespace ks {
     //
     StateSet::StateSet(std::shared_ptr<ParamDb> const & db) : m_db(db)
     {
-        const size_t proton = m_db->GetSize_t("Atom_Proton");
-        const char delim[] = " ";
-        char* config, *saveptr, *token;
+        auto const proton = m_db->GetSize_t("Atom_Proton");
+        auto const delim = " ";
 
         assert(proton <= 92);
-        config = new char[::strlen(m_atom[proton]) + 1];
-        assert(config);
-        ::strcpy(config, m_atom[proton]);
+        std::string config(m_atom[proton]);
 
-        token = ::strtok(config, delim);
-        while (token)
-        {
-            push_back(State(token));
-            token = ::strtok(NULL, delim);
+        std::vector<std::string> tokens;
+        boost::algorithm::split(tokens, config, boost::is_any_of(delim)); // ƒJƒ“ƒ}‚Å•ªŠ„
+        for (auto && str : tokens) {
+            push_back(State(str));
         }
-
-        delete[] config;
     }
 
     //

@@ -72,7 +72,7 @@ namespace ks {
         //	return -1 / r; 
 
         //assert(m_rho);
-        //rho = m_rho->Get(r) / (M_4PI * r * r);
+        //rho = m_rho->Get(r) / (util::HelpFun::M_4PI * r * r);
 
         //assert(rho >= 0);
 
@@ -420,8 +420,8 @@ namespace ks {
     template <util::Spin S>
     std::pair<double, double> Pot<S>::GetRhoTilde(double r)
     {
-        return std::make_pair(m_rho.first->Get(r) / (M_4PI * r * r),
-            m_rho.second->Get(r) / (M_4PI * r * r));
+        return std::make_pair(m_rho.first->Get(r) / (util::HelpFun::M_4PI * r * r),
+            m_rho.second->Get(r) / (util::HelpFun::M_4PI * r * r));
     }
 
 
@@ -431,8 +431,8 @@ namespace ks {
     template <util::Spin S>
     std::pair<double, double> Pot<S>::GetRhoTildeDeriv(double r)
     {
-        auto const alpha = (m_rho.first->GetDeriv(r) - 2.0 * m_rho.first->Get(r) / r) / (M_4PI * r * r);
-        auto const beta = (m_rho.second->GetDeriv(r) - 2.0 * m_rho.second->Get(r) / r) / (M_4PI * r * r);
+        auto const alpha = (m_rho.first->GetDeriv(r) - 2.0 * m_rho.first->Get(r) / r) / (util::HelpFun::M_4PI * r * r);
+        auto const beta = (m_rho.second->GetDeriv(r) - 2.0 * m_rho.second->Get(r) / r) / (util::HelpFun::M_4PI * r * r);
 
         return std::make_pair(alpha, beta);
     };
@@ -446,9 +446,9 @@ namespace ks {
     std::pair<double, double> Pot<S>::GetRhoTildeLapl(double r)
     {
         const double first = (m_rho.first->Get2ndDeriv(r) - 2.0 / r * m_rho.first->GetDeriv(r) +
-            2.0 / (r * r) * m_rho.first->Get(r)) / (M_4PI * r * r);
+            2.0 / (r * r) * m_rho.first->Get(r)) / (util::HelpFun::M_4PI * r * r);
         const double second = (m_rho.second->Get2ndDeriv(r) - 2.0 / r * m_rho.second->GetDeriv(r) +
-            2.0 / (r * r) * m_rho.second->Get(r)) / (M_4PI * r * r);
+            2.0 / (r * r) * m_rho.second->Get(r)) / (util::HelpFun::M_4PI * r * r);
 
         return std::make_pair(first, second);
     };

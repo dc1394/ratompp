@@ -9,7 +9,7 @@ Int1DGauss::Int1DGauss(size_t deg) : m_deg(deg)
 	m_w.resize(m_deg);
 	m_t.resize(m_deg);
 
-	::gauleg(-1, 1, m_t, m_w, m_deg);
+	util::gauleg(-1, 1, m_t, m_w, m_deg);
 }
 
 //!

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "kohnsham.h"
+#include <boost/format.hpp>     // for boost::format.hpp
 
 namespace ks {
     template <util::Spin S>
@@ -196,15 +197,13 @@ namespace ks {
         const size_t Lmax = m_stateSet->GetLmax();
         size_t l, n;
         std::string path;
-        char buf[10];
 
 
         // For each angular quantum number
         for (l = 0; l < Lmax; l++)
         {
             m_db->GetPath(path);
-            sprintf(buf, ".L=%lu", static_cast<unsigned long>(l));
-            path += buf;
+            path += (boost::format(".L=%lu") % static_cast<unsigned long>(l)).str();
             m_eigProb[l].WriteEigCoef(path.c_str(), m_eigNo[l]);
 
             // For each state for fixed "L"

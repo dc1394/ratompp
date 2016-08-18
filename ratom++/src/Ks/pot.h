@@ -31,7 +31,7 @@ namespace ks {
             virtual double Get(double r) const
             {
                 //assert(m_rho); 
-                // return 4 * M_PI * r * m_rho->Get(r); 
+                // return 4 * util::HelpFun::M_PI * r * m_rho->Get(r); 
                 //return m_rho->Get(r) / r;
                 // alpha spin + beta spin
                 return (m_rho.first->Get(r) + m_rho.second->Get(r)) / r;

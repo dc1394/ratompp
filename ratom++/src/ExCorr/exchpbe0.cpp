@@ -9,7 +9,7 @@
 //// Constructor
 ////
 //// March 8th, 2014	Modified by dc1394
-////ExchPbe0::ExchPbe0(void) : m_c(-pow(1.5 / M_PI, 2. / 3.))
+////ExchPbe0::ExchPbe0(void) : m_c(-pow(1.5 / util::HelpFun::M_PI, 2. / 3.))
 //ExchPbe0::ExchPbe0(std::function<double(double)> rhoTilde,
 //				   std::function<double(double)> rhoTildeDeriv,
 //				   std::function<double(double)> rhoTildeLapl,

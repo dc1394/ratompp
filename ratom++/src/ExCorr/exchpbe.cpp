@@ -7,10 +7,10 @@
 //
 //const double ExchPbe::m_kpTable[2] = {0.804, 1.245};
 //// const double ExchPbe::m_beta = 0.066725;
-//// const double ExchPbe::m_mu = m_beta * M_PI * M_PI / 3.;
+//// const double ExchPbe::m_mu = m_beta * util::HelpFun::M_PI * util::HelpFun::M_PI / 3.;
 //const double ExchPbe::m_mu = 0.2195149727645171;
 //const ExchS ExchPbe::m_slater;
-//const double ExchPbe::m_coef = 1. / (2 * pow(3. * M_PI * M_PI, 1./3.));
+//const double ExchPbe::m_coef = 1. / (2 * pow(3. * util::HelpFun::M_PI * util::HelpFun::M_PI, 1./3.));
 //
 //
 ////!
@@ -101,7 +101,7 @@
 //
 //double ExchPbe::Kf(double rho) const
 //{
-//	return pow(3 * M_PI * M_PI * rho, 1./3.);
+//	return pow(3 * util::HelpFun::M_PI * util::HelpFun::M_PI * rho, 1./3.);
 //}
 //
 // 

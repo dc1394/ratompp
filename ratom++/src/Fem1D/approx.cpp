@@ -9,38 +9,20 @@ namespace fem1d {
     Approx::Approx()
     {
         m_M = 0;
-        //m_f = NULL;
-        m_b = NULL;
-        m_c = NULL;
-        m_K = NULL;
     }
 
     //
     // Constructor
     //
-    Approx::Approx(size_t M, std::shared_ptr<const util::Fun1D> f)
+    Approx::Approx(size_t M, std::shared_ptr<const util::Fun1D> && f)
     {
-        m_b = NULL;
-        m_c = NULL;
-        m_K = NULL;
-
         Define(M, std::move(f));
     }
-
-    //
-    // Destructor
-    //
-    Approx::~Approx(void)
-    {
-        delete m_b;
-        delete m_c;
-        delete m_K;
-    }
-
+    
     //
     // Defines approximation problem
     //
-    void Approx::Define(size_t M, std::shared_ptr<const util::Fun1D> f)
+    void Approx::Define(size_t M, std::shared_ptr<const util::Fun1D> && f)
     {
         const size_t DIAG = 2; // Number of super diagonals
 
@@ -53,14 +35,11 @@ namespace fem1d {
         M = M - 1;
         m_M = M;
 
-        delete m_b;
-        m_b = new Vec(M);
+        m_b.reset(new Vec(M));
 
-        delete m_c;
-        m_c = new Vec(M);
+        m_c.reset(new Vec(M));
 
-        delete m_K;
-        m_K = new ClpMtxBand(M, DIAG, 0);
+        m_K.reset(new ClpMtxBand(M, DIAG, 0));
 
         size_t i, j;
         for (i = 0; i < M; i++)

@@ -42,7 +42,7 @@ namespace ks {
         else
         {
             // User defined initialization
-            c = M_4PI * m_db->GetDouble("Rho0_c");
+            c = util::HelpFun::M_4PI * m_db->GetDouble("Rho0_c");
             alpha = m_db->GetDouble("Rho0_Alpha");
         }
 
@@ -81,7 +81,7 @@ namespace ks {
         else
         {
             // User defined initialization
-            c = M_4PI * m_db->GetDouble("Rho0_c");
+            c = util::HelpFun::M_4PI * m_db->GetDouble("Rho0_c");
             alpha = m_db->GetDouble("Rho0_Alpha");
         }
 
@@ -150,7 +150,7 @@ namespace ks {
         const double rho = Get(r);
 
         if (r > 0)
-            return rho / (M_4PI * r * r);
+            return rho / (util::HelpFun::M_4PI * r * r);
 
         // Linear extrapolation for (r == 0)
         const double eps = 1E-12;

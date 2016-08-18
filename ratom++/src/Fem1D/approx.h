@@ -39,10 +39,10 @@ namespace fem1d {
 
     public:
         Approx();
-        Approx(size_t M, std::shared_ptr<const util::Fun1D> f);
-        virtual ~Approx(void);
+        Approx(size_t M, std::shared_ptr<const util::Fun1D> && f);
+        virtual ~Approx() = default;
 
-        void Define(size_t M, std::shared_ptr<const util::Fun1D> f);
+        void Define(size_t M, std::shared_ptr<const util::Fun1D> && f);
         virtual double Get(double x) const;
 
         // April 3rd, 2014 Added by dc1394
@@ -73,16 +73,16 @@ namespace fem1d {
     private:
 
         // Right hand size of system of equations
-        Vec* m_b;
+        std::unique_ptr<Vec> m_b;
 
         // Searched approximation coefficients for one element
-        Vec* m_c;
+        std::unique_ptr<Vec> m_c;
 
         // Searched approximation coefficients for all elements
         std::vector<double> m_cAll;
 
         // Matrix of system of equations
-        ClpMtxBand* m_K;
+        std::unique_ptr<ClpMtxBand> m_K;
 
         // Approximation degree
         size_t m_M;

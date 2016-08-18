@@ -317,6 +317,6 @@ const size_t n = 3*MAXP; // Is it OK?
 
 	m_xGauss.resize(n);
 	m_wGauss.resize(n);
-	::gauleg(-1, 1, m_xGauss, m_wGauss, n);
+	util::gauleg(-1, 1, m_xGauss, m_wGauss, n);
 }
 

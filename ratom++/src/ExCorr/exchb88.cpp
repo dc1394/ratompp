@@ -60,7 +60,7 @@
 ////!
 //double ExchB88::G(double x) const
 //{
-//const double q = 3. / 2. * pow(3. / (4 * M_PI), 1. / 3.);
+//const double q = 3. / 2. * pow(3. / (4 * util::HelpFun::M_PI), 1. / 3.);
 //const double b = 0.0042; // Stala z pracy B88
 //
 //	return -q - b * x * x / (1 + 6 * b * x * asinh(x));
