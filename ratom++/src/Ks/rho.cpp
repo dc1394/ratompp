@@ -193,14 +193,14 @@ namespace ks {
         // Storing values of electron densities
         std::vector<double> node(GetNode());
         out = m_db->OpenFile("rho", "wt");
-        fprintf(out, "%16s \t %16s \t %16s \n", "R", "Rho", "RhoTilde");
+        //fprintf(out, "%16s \t %16s \t %16s \n", "R", "Rho", "RhoTilde");
         for (auto i = 0U; i < node.size() - 1; ++i)
         {
             dr = (node[i + 1] - node[i]) / outRhoNode;
             r = node[i];
             for (auto k = 0U; k < outRhoNode; ++k)
             {
-                fprintf(out, "%16.6E \t %16.6E \t %16.6E \n", r, Get(r), GetRhoTilde(r));
+                fprintf(out, "%.15f,%.15f,%.15f\n", r, Get(r), GetRhoTilde(r));
                 r += dr;
             }
         }

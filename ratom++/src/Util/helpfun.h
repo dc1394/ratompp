@@ -12,13 +12,14 @@
 
 #include "point3D.h"
 #include "vec.h"
-
+#include <boost/math/constants/constants.hpp> // for boost::math::constants::pi
 // Sometimes M_PI is defined as a macro
 #ifdef M_PI
 # undef M_PI
 #endif
-const double M_PI = 4 * atan(1.);  // \pi
-const double M_4PI = 4 * M_PI;		// 4 * \pi
+
+const double M_PI = boost::math::constants::pi<double>();  // \pi
+const double M_4PI = 4.0 * M_PI;		// 4 * \pi
 
 
 
