@@ -113,7 +113,7 @@ namespace ks {
     //
     bool NonLinKs::IsFinished() const
     {
-        const double scfEnerDiff = atof(m_db->Get("Scf_Diff"));
+        const double scfEnerDiff = std::stof(m_db->Get("Scf_Diff"));
         static double sumOld = 0; // This variable MUST BE "static"
         double sumNew, diff;
 

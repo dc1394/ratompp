@@ -141,7 +141,7 @@ namespace ks {
         public:
             RhoMix(std::shared_ptr<ParamDb> const & db)
             {
-                m_scfMix = atof(db->Get("Scf_Mix"));
+                m_scfMix = std::stof(db->Get("Scf_Mix"));
             }
             virtual ~RhoMix() = default;
             // May23rd, 2014 Modified by dc1394

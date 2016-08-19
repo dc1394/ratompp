@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "paramdb.h"
+#include <array>                                        // for std::array
 #include <vector>                                       // for std::vector
 #include <boost/algorithm/string/classification.hpp>    // for boost::is_any_of
 #include <boost/algorithm/string/split.hpp>             // for boost::algorithm::split
@@ -24,36 +25,36 @@ ParamDb::~ParamDb(void)
 //
 // Returns value of parameter "param"
 //
-const char* ParamDb::Get(const char* param) const
+std::string ParamDb::Get(std::string const & param) const
 {
-std::map <std::string, std::string>::const_iterator iter = find(param);
+    auto const iter = find(param);
 
-	if(iter != end())
-		return iter->second.c_str();
-	else
-	{
+    if (iter != end()) {
+        return iter->second;
+    }
+    else {
         throw std::invalid_argument((boost::format("Parametr '%s' could not be found.") % param).str());
 	}
 }
 
-size_t ParamDb::GetSize_t(const char* param) const
+std::size_t ParamDb::GetSize_t(std::string const & param) const
 {
-	return static_cast<size_t>(GetLong(param));
+	return static_cast<std::size_t>(GetLong(param));
 }
 
-double ParamDb::GetDouble(const char* param) const
+double ParamDb::GetDouble(std::string const & param) const
 {
-	return ::atof(Get(param));
+	return std::stod(Get(param));
 }
 
-long int ParamDb::GetLong(const char* param) const
+long int ParamDb::GetLong(std::string const & param) const
 {
-	return ::atol(Get(param));
+	return std::stol(Get(param));
 }
 
-bool ParamDb::GetBool(const char* param) const
+bool ParamDb::GetBool(std::string const & param) const
 {
-	return (::strcmp("Yes", Get(param)) == 0);
+	return "Yes" == Get(param);
 }
 
 
@@ -82,11 +83,11 @@ void ParamDb::ReadParams(void)
 //
 std::tuple<int, std::string, std::string> ParamDb::ReadOneParam(FILE* in) const
 {
-    char line[500 + 1];
+    std::array<char, 500 + 1> line;
 
 	while (true)
 	{
-		auto const s = std::fgets(line, 500, in);
+		auto const s = std::fgets(line.data(), line.size() - 1, in);
 		if (s == nullptr || feof(in))
             return std::make_tuple(1, std::string(), std::string());
 
@@ -95,13 +96,13 @@ std::tuple<int, std::string, std::string> ParamDb::ReadOneParam(FILE* in) const
 			break;
 	}
     
-    std::string s(line);
+    std::string s(line.data());
     std::vector<std::string> tokens;
     boost::algorithm::split(tokens, s, boost::is_any_of(" \n"));
 
 	if (tokens.size() != 3)
 	{
-        throw std::invalid_argument((boost::format("Error during reading file. Line '%s'.") % line).str());
+        throw std::invalid_argument((boost::format("Error during reading file. Line '%s'.") % s).str());
 	}
 
     return std::make_tuple(0, tokens[0], tokens[1]);
@@ -153,9 +154,7 @@ FILE* out = OpenFile("out", "wt");
 		"*                                   *\n"
 		"*************************************\n");
 
-	std::map <std::string, std::string>::const_iterator i;
-
-	for(i = begin(); i != end(); ++i)
+	for (auto && i = begin(); i != end(); ++i)
 		fprintf(out, "%-30s   %s\n\n", i->first.c_str(), i->second.c_str());
 
 	fclose(out);

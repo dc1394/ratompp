@@ -296,18 +296,18 @@ namespace ks {
     // corr - name of correlation potential
     //
     template <util::Spin S>
-    void Pot<S>::SetXc(const char* exch, const char* corr)
+    void Pot<S>::SetXc(std::string const & exch, std::string const & corr)
     {
         // March 7th, 2014	Modified by dc1394
-        if (strcmp(exch, "slater") == 0) {
+        if (exch == "slater") {
             m_exch.reset(new excorr::Xc<S>(excorr::ExCorrLDA([this](double r) { return GetRhoTilde(r); }, XC_LDA_X)));
         }
-        else if (strcmp(exch, "b88") == 0) {
+        else if (exch == "b88") {
             m_exch.reset(new excorr::Xc<S>(excorr::ExCorrGGA([this](double r) { return GetRhoTilde(r); },
                                                              [this](double r) { return GetRhoTildeDeriv(r); },
                                                              [this](double r) { return GetRhoTildeLapl(r); }, XC_GGA_X_B88)));
         }
-        else if (strcmp(exch, "pbe") == 0) {
+        else if (exch == "pbe") {
             m_exch.reset(new excorr::Xc<S>(excorr::ExCorrGGA([this](double r) { return GetRhoTilde(r); },
                 [this](double r) { return GetRhoTildeDeriv(r); },
                 [this](double r) { return GetRhoTildeLapl(r); }, XC_GGA_X_PBE)));
@@ -338,10 +338,10 @@ namespace ks {
         //    throw std::invalid_argument("Unknown exchange type");
         //}
 
-        if (strcmp(corr, "vwn") == 0) {
+        if (corr == "vwn") {
             m_corr.reset(new excorr::Xc<S>(excorr::ExCorrLDA([this](double r) { return GetRhoTilde(r); }, XC_LDA_C_VWN)));
         }
-        else if (strcmp(exch, "pbe") == 0) {
+        else if (exch == "pbe") {
             m_corr.reset(new excorr::Xc<S>(excorr::ExCorrGGA([this](double r) { return GetRhoTilde(r); },
                 [this](double r) { return GetRhoTildeDeriv(r); },
                 [this](double r) { return GetRhoTildeLapl(r); }, XC_GGA_C_PBE)));

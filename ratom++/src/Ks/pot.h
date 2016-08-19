@@ -70,7 +70,7 @@ namespace ks {
         double Ec(double r) const;
         double XcEdiffV(double r) const;
 
-        void SetXc(const char* exch, const char* corr);
+        void SetXc(std::string const & exch, std::string const & corr);
 
         // April 3rd, 2014 Added by dc1394
         std::pair<double, double> GetRhoTilde(double r);

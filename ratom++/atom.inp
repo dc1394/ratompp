@@ -32,5 +32,5 @@ Scf_Mix 0.3
 Scf_Diff 1E-9
 
 
-Out_RhoNode 1000
+Out_RhoNode 10
 Out_EigNode 10

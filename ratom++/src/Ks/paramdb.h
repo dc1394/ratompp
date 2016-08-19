@@ -24,11 +24,11 @@ public:
 	void ReadParams();
 	void WriteParams() const;
 
-	const char* Get(const char* param) const;
-	size_t GetSize_t(const char* param) const;
-	double GetDouble(const char* param) const;
-	long int GetLong(const char* param) const;
-	bool GetBool(const char* param) const;
+	std::string Get(std::string const & param) const;
+    std::size_t GetSize_t(std::string const & param) const;
+    double GetDouble(std::string const & param) const;
+    long int GetLong(std::string const & param) const;
+    bool GetBool(std::string const & param) const;
 
 
 	FILE* OpenFile(const char* ext, const char* mode) const;

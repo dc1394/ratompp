@@ -13,7 +13,7 @@ namespace ks {
                    std::shared_ptr<const ParamDb> const & db) :
         m_pot(pot), m_ss(ss)
     {
-        m_rc = atof(db->Get("Atom_Rc"));
+        m_rc = std::stof(db->Get("Atom_Rc"));
         m_gauss = std::make_shared<Int1DGauss>(3 * db->GetLong("Rho_Deg"));
     }
 
