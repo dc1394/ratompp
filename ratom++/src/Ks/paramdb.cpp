@@ -63,17 +63,15 @@ bool ParamDb::GetBool(std::string const & param) const
 //
 void ParamDb::ReadParams(void)
 {
-    FILE* in = OpenFile(NULL, "rt");
+    auto ifs = OpenFile();
 
 	while(true)
 	{
-        auto const ret = ReadOneParam(in);
+        auto const ret = ReadOneParam(ifs);
 		if(std::get<0>(ret) != 0)
 			break;
         insert(std::pair <std::string, std::string>(std::get<1>(ret), std::get<2>(ret)));
 	}
-
-	fclose(in);
 }
 
 //
@@ -81,28 +79,33 @@ void ParamDb::ReadParams(void)
 // Returns "0", if parameter is read.
 // Returns "1", if end of file is found.
 //
-std::tuple<int, std::string, std::string> ParamDb::ReadOneParam(FILE* in) const
+std::tuple<int, std::string, std::string> ParamDb::ReadOneParam(std::ifstream & ifs) const
 {
-    std::array<char, 500 + 1> line;
+    std::string line;
 
-	while (true)
+    while (true)
 	{
-		auto const s = std::fgets(line.data(), line.size() - 1, in);
-		if (s == nullptr || feof(in))
+        std::getline(ifs, line);
+		
+        if (ifs.eof()) {
             return std::make_tuple(1, std::string(), std::string());
+        }
 
-		// Skip comments and empty lines
-		if(!(line[0] == '#' || line[0] == '\n'))
-			break;
+        if (line.empty()) {
+            continue;
+        }
+        // Skip comments and empty lines
+        else if (!(line[0] == '#')) {
+            break;
+        }
 	}
     
-    std::string s(line.data());
     std::vector<std::string> tokens;
-    boost::algorithm::split(tokens, s, boost::is_any_of(" \n"));
+    boost::algorithm::split(tokens, line, boost::is_any_of(" "));
 
-	if (tokens.size() != 3)
+	if (tokens.size() != 2)
 	{
-        throw std::invalid_argument((boost::format("Error during reading file. Line '%s'.") % s).str());
+        throw std::invalid_argument((boost::format("Error during reading file. Line '%s'.") % line).str());
 	}
 
     return std::make_tuple(0, tokens[0], tokens[1]);
@@ -133,6 +136,22 @@ FILE* file;
 	return file;
 }
 
+//
+// Returns pointer FILE* for opend file.
+// "ext" - extenstion of file.
+// "mode" - mode of opening.
+//
+std::ifstream ParamDb::OpenFile() const
+{
+    auto ifs = std::ifstream(m_path, std::ios::in);
+
+    if (!ifs)
+    {
+        throw std::invalid_argument((boost::format("Cannot open file '%s'.") % m_path).str());
+    }
+
+    return ifs;
+}
 
 //
 // Log of read input files

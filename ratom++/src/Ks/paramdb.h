@@ -1,7 +1,8 @@
 #ifndef __RATOM_PARAMDB_H__
 #define __RATOM_PARAMDB_H__
 
-#include <string>   // fro std::string
+#include <fstream>  // for std::ifstream
+#include <string>   // for std::string
 #include <tuple>    // for std::tuple
 
 /** \brief Database of input parameters.
@@ -32,11 +33,12 @@ public:
 
 
 	FILE* OpenFile(const char* ext, const char* mode) const;
+    std::ifstream ParamDb::OpenFile() const;
 
 	void GetPath(std::string& path) const { path = m_path; }
 
 private:
-	std::tuple<int, std::string, std::string> ReadOneParam(FILE* in) const;
+    std::tuple<int, std::string, std::string> ReadOneParam(std::ifstream & ifs) const;
 
 private:
         // Path to input file

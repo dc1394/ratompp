@@ -57,6 +57,7 @@ namespace excorr {
 
         //! A public member function (const).
         /*!
+            Returns difference betwee energy density and potential for radius "r"
             rでの交換相関エネルギーと交換相関ポテンシャルの差の値を返す
             \param r 原点からの距離（極座標）
             \return rでの交換相関エネルギーと交換相関ポテンシャルの差の値
