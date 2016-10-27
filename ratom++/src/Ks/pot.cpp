@@ -406,10 +406,10 @@ namespace ks {
 
         fprintf(out.get(), "%16s \t %16s \t %16s \t %16s \n", "R", "Hartree potential", "Exchange potential", "Correlation potential");
 
-        const std::int32_t max = boost::numeric_cast<std::int32_t>(MAX / DR);
-        for (std::int32_t k = 1; k <= max; ++k)
+        auto const m = boost::numeric_cast<std::int32_t>(MAX / DR);
+        for (auto k = 1; k <= m; ++k)
         {
-            const double r = static_cast<double>(k)* DR;
+            auto const r = static_cast<double>(k)* DR;
             fprintf(out.get(), "%16.6E \t %16.6E \t %16.6E \t %16.6E\n", r, Vh(r), Vx(r), Vc(r));
         }
     }

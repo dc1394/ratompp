@@ -11,7 +11,7 @@
 namespace excorr {
     // #region コンストラクタ
 
-    ExCorrGGA::ExCorrGGA(std::function<std::pair<double, double>(double)> && rhoTilde, std::function<std::pair<double, double>(double)> && rhoTildeDeriv, std::function<std::pair<double, double>(double)> && rhoTildeLapl, std::uint32_t xc_type)
+    ExCorrGGA::ExCorrGGA(std::function<dpair(double)> && rhoTilde, std::function<dpair(double)> && rhoTildeDeriv, std::function<dpair(double)> && rhoTildeLapl, std::uint32_t xc_type)
         :   pxcfunc_(new xc_func_type, xcfunc_deleter),
             rhoTilde_(std::move(rhoTilde)),
             rhoTildeDeriv_(std::move(rhoTildeDeriv)),
@@ -44,7 +44,7 @@ namespace excorr {
 
     // #region privateメンバ関数
     
-    std::pair<double, double> ExCorrGGA::xc_vxc_impl(double r) const
+    ExCorrGGA::dpair ExCorrGGA::xc_vxc_impl(double r) const
     {
         std::array<double, 2> const rho = { rhoTilde_(r).first, rhoTilde_(r).second };
         std::array<double, 2> const rhod = { rhoTildeDeriv_(r).first, rhoTildeDeriv_(r).second };

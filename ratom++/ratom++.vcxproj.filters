@@ -212,16 +212,7 @@
     <ClInclude Include="src\ExCorr\excorr.h">
       <Filter>ヘッダー ファイル\ExCorr</Filter>
     </ClInclude>
-    <ClInclude Include="src\ExCorr\exchs.h">
-      <Filter>ヘッダー ファイル\ExCorr</Filter>
-    </ClInclude>
     <ClInclude Include="src\ExCorr\exchpbe.h">
-      <Filter>ヘッダー ファイル\ExCorr</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ExCorr\exchb88.h">
-      <Filter>ヘッダー ファイル\ExCorr</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ExCorr\corrlyp.h">
       <Filter>ヘッダー ファイル\ExCorr</Filter>
     </ClInclude>
     <ClInclude Include="src\ExCorr\stdafx.h">
@@ -370,9 +361,6 @@
     </ClInclude>
     <ClInclude Include="src\Util\vec.h">
       <Filter>ヘッダー ファイル\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ExCorr\corrpbe.h">
-      <Filter>ヘッダー ファイル\ExCorr</Filter>
     </ClInclude>
     <ClInclude Include="src\ExCorr\exchpbe0.h">
       <Filter>ヘッダー ファイル\ExCorr</Filter>

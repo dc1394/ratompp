@@ -88,7 +88,7 @@ std::tuple<int, std::string, std::string> ParamDb::ReadOneParam(std::ifstream & 
         std::getline(ifs, line);
 		
         if (ifs.eof()) {
-            return std::make_tuple(1, std::string(), std::string());
+            return std::forward_as_tuple(1, std::string(), std::string());
         }
 
         if (line.empty()) {
@@ -108,7 +108,7 @@ std::tuple<int, std::string, std::string> ParamDb::ReadOneParam(std::ifstream & 
         throw std::invalid_argument((boost::format("Error during reading file. Line '%s'.") % line).str());
 	}
 
-    return std::make_tuple(0, tokens[0], tokens[1]);
+    return std::forward_as_tuple(0, tokens[0], tokens[1]);
 }
 
 //
