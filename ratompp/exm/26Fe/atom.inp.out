@@ -1,0 +1,95 @@
+===============================================================================
+ RRRR   AAA  TTTTT  OOO   M   M      Zbigniew Romanowski          
+ R   R A   A  TTT  O   O  MM MM                                   
+ RRRR  AAAAA   T   O   O  M M M      VERSION   1.4.1              
+ R  R  A   A   T   O   O  M   M                                   
+ R   R A   A   T    OOO   M   M      compilation date: Apr 20 2011         
+===============================================================================
+
+
+  C A L C U L A T I O N   D A T E   Wed Apr 20 12:57:57 2011
+
+
+
+*************************************
+*                                   *
+*      I N P U T   P A R A M S      *
+*                                   *
+*************************************
+Atom_Proton                      26
+
+Atom_Rc                          30
+
+Out_EigNode                      10
+
+Out_RhoNode                      10
+
+Rho0_Alpha                       0.0
+
+Rho0_Default                     Yes
+
+Rho0_c                           0.0
+
+Rho_Deg                          8
+
+Rho_Delta                        1E-9
+
+Scf_Diff                         1E-9
+
+Scf_MaxIter                      100
+
+Scf_Mix                          0.3
+
+Solver_EigAbsMaxCoef             1E-4
+
+Solver_EigAbsTol                 1E-14
+
+Solver_EigAdapt                  Yes
+
+Solver_EigDeg                    6
+
+Solver_EigNode                   4
+
+Solver_PsnAbsMaxCoef             1E-4
+
+Solver_PsnAdapt                  Yes
+
+Solver_PsnDeg                    6
+
+Solver_PsnNode                   4
+
+XC_Corr                          vwn
+
+XC_Exch                          slater
+
+
+
+===================================================================
+     E I G E N V A L U E S
+-------------------------------------------------------------------
+           State          Value [Ha]           Value [eV]
+-------------------------------------------------------------------
+   (n=0, L=0) 1s2      -254.2255045 Ha =   -6917.8954507 eV
+   (n=1, L=0) 2s2       -29.5648604 Ha =    -804.5086345 eV
+   (n=0, L=1) 2p6       -25.5517664 Ha =    -695.3057253 eV
+   (n=2, L=0) 3s2        -3.3606211 Ha =     -91.4480442 eV
+   (n=1, L=1) 3p6        -2.1875232 Ha =     -59.5261168 eV
+   (n=0, L=2) 3d6        -0.2950489 Ha =      -8.0287674 eV
+   (n=3, L=0) 4s2        -0.1979778 Ha =      -5.3873023 eV
+===================================================================
+
+
+==========================================================
+     E N E R G Y 
+----------------------------------------------------------
+	 Etot   =   -1261.0930558 Ha =    -34316.4229 eV
+	 Ekin   =    1259.5534282 Ha =     34274.5270 eV
+	 Ecoul  =     535.2958318 Ha =     14566.2828 eV
+	 Eenucl =   -3003.0824833 Ha =    -81718.8295 eV
+	 Eexch  =     -50.6517891 Ha =     -1378.3188 eV
+	 Ecorr  =      -2.2080434 Ha =       -60.0845 eV
+	 Exc    =     -52.8598325 Ha =     -1438.4033 eV
+==========================================================
+
+
+C A L C U L A T I O N   T I M E :   21  [s]
