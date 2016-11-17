@@ -16,11 +16,11 @@
 */
 
 
-class ParamDb : private std::map<std::string, std::string>
+class ParamDb final : private std::map<std::string, std::string>
 {
 public:
 	ParamDb(const char* path);
-	~ParamDb(void);
+    ~ParamDb() = default;
 
 	void ReadParams();
 	void WriteParams() const;

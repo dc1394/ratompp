@@ -4,6 +4,7 @@
 #include <vector>                                       // for std::vector
 #include <boost/algorithm/string/classification.hpp>    // for boost::is_any_of
 #include <boost/algorithm/string/split.hpp>             // for boost::algorithm::split
+#include <boost/date_time/posix_time/posix_time.hpp>    // for boost::posix_time::second_clock
 #include <boost/format.hpp>                             // for boost::format
 
 extern void Intro(FILE* out);
@@ -12,13 +13,6 @@ extern void Intro(FILE* out);
 // Constructor
 //
 ParamDb::ParamDb(const char* path) : m_path(path)
-{
-}
-
-//
-// Destructor
-//
-ParamDb::~ParamDb(void)
 {
 }
 
@@ -65,11 +59,12 @@ void ParamDb::ReadParams(void)
 {
     auto ifs = OpenFile();
 
-	while(true)
+	while (true)
 	{
         auto const ret = ReadOneParam(ifs);
-		if(std::get<0>(ret) != 0)
-			break;
+        if (std::get<0>(ret) != 0) {
+            break;
+        }
         insert(std::pair <std::string, std::string>(std::get<1>(ret), std::get<2>(ret)));
 	}
 }
@@ -118,10 +113,10 @@ std::tuple<int, std::string, std::string> ParamDb::ReadOneParam(std::ifstream & 
 //
 FILE* ParamDb::OpenFile(const char* ext, const char* mode) const
 {
-std::string tmp(m_path);
-FILE* file;
+    std::string tmp(m_path);
+    FILE* file;
 
-	if(ext)
+	if (ext)
 	{
 		tmp += std::string(".");
 		tmp += std::string(ext);
@@ -129,7 +124,7 @@ FILE* file;
 
 	file = fopen(tmp.c_str(), mode);
 
-	if(!file)
+	if (!file)
 	{
         throw std::invalid_argument((boost::format("Cannot open file '%s'.") % tmp).str());
 	}
@@ -158,13 +153,15 @@ std::ifstream ParamDb::OpenFile() const
 //
 void ParamDb::WriteParams(void) const
 {
-FILE* out = OpenFile("out", "wt");
+    using namespace boost::posix_time;
 
+    auto out = OpenFile("out", "wt");
 	::Intro(out);
 
-	time_t tt;
-	time(&tt);
-	fprintf(out, "  C A L C U L A T I O N   D A T E   %s\n", ctime(&tt));
+    auto const now = second_clock::local_time();
+    auto const nowdate = now.date();
+    auto str = boost::format("%s %s %s %s %s") % nowdate.day_of_week() % nowdate.month() % nowdate.day() % now.time_of_day() % nowdate.year();
+    fprintf(out, "  C A L C U L A T I O N   D A T E   %s\n", str.str().c_str());
 
 	fprintf(out, "\n\n"
 		"*************************************\n"
@@ -173,8 +170,9 @@ FILE* out = OpenFile("out", "wt");
 		"*                                   *\n"
 		"*************************************\n");
 
-	for (auto && i = begin(); i != end(); ++i)
-		fprintf(out, "%-30s   %s\n\n", i->first.c_str(), i->second.c_str());
+    for (auto && i = begin(); i != end(); ++i) {
+        fprintf(out, "%-30s   %s\n\n", i->first.c_str(), i->second.c_str());
+    }
 
 	fclose(out);
 }

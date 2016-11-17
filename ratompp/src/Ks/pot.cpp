@@ -1,5 +1,6 @@
 // modified by dc1394 - March 7th, 2014
 
+#include "../ExCorr/exchhf.h"
 #include "../ExCorr/excorrgga.h"
 #include "../ExCorr/excorrlda.h"
 #include "stdafx.h"
