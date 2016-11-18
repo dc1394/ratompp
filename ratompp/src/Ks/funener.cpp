@@ -54,10 +54,7 @@ namespace ks {
         auto const cobeta = m_pot.second->m_corr->EdiffV(r);
         auto const vh = m_pot.first->Vh(r);
 
-        if ((vh - m_pot.second->Vh(r)) > 1.0E-12)
-            throw std::runtime_error("Debug Error!");
-
-        return (exalpha + coalpha - 0.5 * vh) * rhoalpha + (exalpha + coalpha - 0.5 * vh) * rhobeta;
+        return (exalpha + coalpha - 0.5 * vh) * rhoalpha + (exbeta + cobeta - 0.5 * vh) * rhobeta;
     }
 
     //
@@ -69,8 +66,6 @@ namespace ks {
         auto const rho = m_pot.first->GetRho(r) + m_pot.second->GetRho(r);
 
         auto const vn = m_pot.first->Vn(r);
-        if ((vn - m_pot.second->Vn(r)) > 1.0E-12)
-            throw std::runtime_error("Debug Error!");
 
         return vn * rho;
     }
@@ -84,8 +79,6 @@ namespace ks {
         auto const rho = m_pot.first->GetRho(r) + m_pot.second->GetRho(r);
         auto const vh = m_pot.first->Vh(r);
 
-        if ((vh - m_pot.second->Vh(r)) > 1.0E-12)
-            throw std::runtime_error("Debug Error!");
         return 0.5 * vh * rho;
     }
 
@@ -143,7 +136,6 @@ namespace ks {
 
         //return (m_pot->Vx(rhoT, 0) + m_pot->Vc(rhoT, 0) + m_pot->Vn(r) + m_pot->Vh(r)) * rho;
 
-        // March 7th, 2014	Modified by dc1394 
         return (m_pot.first->Vx(r) + m_pot.first->Vc(r)) * rhoalpha +
                (m_pot.second->Vx(r) + m_pot.second->Vc(r)) * rhobeta +
                (m_pot.first->Vn(r) + m_pot.first->Vh(r)) * rho;

@@ -12,7 +12,8 @@ namespace excorr {
     // #region コンストラクタ
 
     ExCorrGGA::ExCorrGGA(std::function<dpair(double)> && rhoTilde, std::function<dpair(double)> && rhoTildeDeriv, std::function<dpair(double)> && rhoTildeLapl, std::uint32_t xc_type)
-        :   pxcfunc_(new xc_func_type, xcfunc_deleter),
+        :   ExCorr(),
+            pxcfunc_(new xc_func_type, xcfunc_deleter),
             rhoTilde_(std::move(rhoTilde)),
             rhoTildeDeriv_(std::move(rhoTildeDeriv)),
             rhoTildeLapl_(std::move(rhoTildeLapl))
@@ -44,7 +45,7 @@ namespace excorr {
 
     // #region privateメンバ関数
     
-    ExCorrGGA::dpair ExCorrGGA::xc_vxc_impl(double r) const
+    ExCorr::dpair ExCorrGGA::xc_vxc_impl(double r) const
     {
         std::array<double, 2> const rho = { rhoTilde_(r).first, rhoTilde_(r).second };
         std::array<double, 2> const rhod = { rhoTildeDeriv_(r).first, rhoTildeDeriv_(r).second };
@@ -91,22 +92,4 @@ namespace excorr {
 
         return std::make_pair(vrho[0], vrho[1]);
     }
-
-    // #endregion privateメンバ関数
-
-    // #region templateメンバ関数の実体化
-
-    template <>
-    double ExCorrGGA::xc_vxc<util::Spin::Alpha>(double r) const
-    {
-        return xc_vxc_impl(r).first;
-    }
-
-    template <>
-    double ExCorrGGA::xc_vxc<util::Spin::Beta>(double r) const
-    {
-        return xc_vxc_impl(r).second;
-    }
-
-    // #endregion templateメンバ関数の実体化
 }

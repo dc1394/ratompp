@@ -90,7 +90,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <OpenMP>GenerateParallelCode</OpenMP>
-      <AdditionalIncludeDirectories>C:\mylib64\libxc\include;C:\Program Files (x86)\IntelSWTools\compilers_and_libraries_2016.3.207\windows\mkl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\mylib64\libxc\include;C:\Program Files %28x86%29\IntelSWTools\compilers_and_libraries_2017.1.143\windows\mkl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Cpp0xSupport>true</Cpp0xSupport>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
@@ -98,7 +98,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>mkl_intel_c.lib;mkl_core.lib;mkl_sequential.lib;libxc.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\mylib64\boost_1_61_0\stage\ia32\icl16\lib;C:\mylib64\libxc\lib\ia32;C:\Program Files (x86)\IntelSWTools\compilers_and_libraries_2016.3.207\windows\mkl\lib\ia32_win;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\mylib64\boost_1_61_0\stage\ia32\icl16\lib;C:\mylib64\libxc\lib\ia32;C:\Program Files %28x86%29\IntelSWTools\compilers_and_libraries_2017.1.143\windows\mkl\lib\ia32_win;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -174,7 +174,6 @@
   <ItemGroup>
     <ClCompile Include="src\Alg\clpmtx.cpp" />
     <ClCompile Include="src\Alg\clpmtxband.cpp" />
-    <ClCompile Include="src\ExCorr\corrhf.cpp" />
     <ClCompile Include="src\ExCorr\exchhf.cpp" />
     <ClCompile Include="src\ExCorr\exchpbe0.cpp" />
     <ClCompile Include="src\ExCorr\excorrgga.cpp" />
@@ -312,7 +311,6 @@
     <ClInclude Include="src\Alg\stdafx.h" />
     <ClInclude Include="src\ExCorr\corrhf.h" />
     <ClInclude Include="src\ExCorr\exchhf.h" />
-    <ClInclude Include="src\ExCorr\exchpbe.h" />
     <ClInclude Include="src\ExCorr\exchpbe0.h" />
     <ClInclude Include="src\ExCorr\excorr.h" />
     <ClInclude Include="src\ExCorr\excorrgga.h" />

@@ -1,6 +1,7 @@
 // modified by dc1394 - March 7th, 2014
 
 #include "../ExCorr/exchhf.h"
+#include "../ExCorr/corrhf.h"
 #include "../ExCorr/excorrgga.h"
 #include "../ExCorr/excorrlda.h"
 #include "stdafx.h"
@@ -331,10 +332,10 @@ namespace ks {
         //        std::bind(&Pot::Vh, std::ref(*this),
         //        std::placeholders::_1), m_z));
         //}
-        //else if (strcmp(exch, "hf") == 0) {
-        //    m_exch.reset(new ExchHf(std::bind(&Pot::Vh, std::ref(*this),
-        //        std::placeholders::_1), m_z));
-        //}
+        else if (exch == "hf") {
+            m_exch.reset(new excorr::Xc<S>(excorr::ExchHf([this](double r) { return Vh(r); },
+                                                          m_z)));
+        }
         //else {
         //    throw std::invalid_argument("Unknown exchange type");
         //}
@@ -342,7 +343,7 @@ namespace ks {
         if (corr == "vwn") {
             m_corr.reset(new excorr::Xc<S>(excorr::ExCorrLDA([this](double r) { return GetRhoTilde(r); }, XC_LDA_C_VWN)));
         }
-        else if (exch == "pbe") {
+        else if (corr == "pbe") {
             m_corr.reset(new excorr::Xc<S>(excorr::ExCorrGGA([this](double r) { return GetRhoTilde(r); },
                 [this](double r) { return GetRhoTildeDeriv(r); },
                 [this](double r) { return GetRhoTildeLapl(r); }, XC_GGA_C_PBE)));
@@ -355,9 +356,9 @@ namespace ks {
         //        std::bind(&Pot::GetRhoTildeLapl, std::ref(*this),
         //        std::placeholders::_1)));
         //}
-        //else if (strcmp(corr, "hf") == 0) {
-        //    m_corr.reset(new CorrHf);
-        //}
+        else if (corr == "hf") {
+            m_corr.reset(new excorr::Xc<S>(excorr::CorrHf()));
+        }
         //else
         //    throw std::invalid_argument("Unknown correlation type");
     }

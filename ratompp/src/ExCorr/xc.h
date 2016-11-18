@@ -31,7 +31,7 @@ namespace excorr {
         Xc(const T & obj)
             :   V_([obj](double r) { return obj.xc_vxc<S>(r); }),
                 E_([obj](double r) { return obj.xc_exc(r); }),
-                Name_([obj]() { return obj.Name(); })
+                Name_([obj]() { return obj.name(); })
         {}
 
         //! A destructor.

@@ -8,20 +8,20 @@
 #ifndef __RATOM_EXCORRLDA_H__
 #define __RATOM_EXCORRLDA_H__
 
+#include "excorr.h"
 #include "../Util/spin.h"
 #include "xcfunc_deleter.h"
 #include <cstdint>          // for std::uint32_t
 #include <functional>       // for std::function
 #include <memory>           // for std::unique_ptr
 #include <string>           // for std::string
-#include <utility>          // for std::pair
 
 namespace excorr {
     //! A class.
     /*!
         Represents LDA Exchange-Correlation potential.
     */
-    class ExCorrLDA final {
+    class ExCorrLDA final : public ExCorr {
         // #region コンストラクタ・デストラクタ
 
     public:
@@ -54,7 +54,7 @@ namespace excorr {
             交換相関汎関数の名前を返す
             \return 交換相関汎関数の名前
         */
-        std::string ExCorrLDA::Name() const
+        std::string name() const override
         {
             return std::string(pxcfunc_->info->name);
         }
@@ -65,15 +65,7 @@ namespace excorr {
             \param r 原点からの距離（極座標）
             \return rでの交換相関エネルギー密度（LDA）
         */
-        double xc_exc(double r) const;
-
-        //! A public member function (const).
-        /*!
-            rでのα or βスピンに対する交換相関ポテンシャル（LDA）を返す関数
-            \param r 原点からの距離（極座標）
-            \return rでのα or βスピンに対する交換相関ポテンシャル（LDA）
-        */
-        template <util::Spin S> double xc_vxc(double r) const;
+        double xc_exc(double r) const override;
 
         // #endregion publicメンバ関数
 
@@ -85,7 +77,7 @@ namespace excorr {
             \param r 原点からの距離（極座標）
             \return rでの交換相関ポテンシャル（LDA）のαスピンとβスピンのstd::pair
         */
-        std::pair<double, double> ExCorrLDA::xc_vxc_impl(double r) const;
+        dpair xc_vxc_impl(double r) const override;
 
         // #endregion privateメンバ関数
 

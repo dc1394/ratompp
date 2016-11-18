@@ -65,7 +65,7 @@ void ParamDb::ReadParams(void)
         if (std::get<0>(ret) != 0) {
             break;
         }
-        insert(std::pair <std::string, std::string>(std::get<1>(ret), std::get<2>(ret)));
+        insert(std::make_pair(std::get<1>(ret), std::get<2>(ret)));
 	}
 }
 

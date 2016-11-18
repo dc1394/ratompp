@@ -12,7 +12,8 @@ namespace excorr {
     // #region コンストラクタ
 
     ExCorrLDA::ExCorrLDA(std::function<std::pair<double, double> (double)> && rhoTilde, std::uint32_t xc_type)
-        :   pxcfunc_(new xc_func_type, xcfunc_deleter),
+        :   ExCorr(),
+            pxcfunc_(new xc_func_type, xcfunc_deleter),
             rhoTilde_(std::move(rhoTilde))
     {
         xc_func_init(pxcfunc_.get(), xc_type, XC_POLARIZED);
@@ -35,7 +36,7 @@ namespace excorr {
 
     // #region privateメンバ関数
     
-    std::pair<double, double> ExCorrLDA::xc_vxc_impl(double r) const
+    ExCorr::dpair ExCorrLDA::xc_vxc_impl(double r) const
     {
         std::array<double, 2> const rho = { rhoTilde_(r).first, rhoTilde_(r).second };
         std::array<double, 2> zk;
@@ -45,20 +46,4 @@ namespace excorr {
     }
 
     // #endregion privateメンバ関数
-
-    // #region templateメンバ関数の実体化
-
-    template <>
-    double ExCorrLDA::xc_vxc<util::Spin::Alpha>(double r) const
-    {
-        return xc_vxc_impl(r).first;
-    }
-
-    template <>
-    double ExCorrLDA::xc_vxc<util::Spin::Beta>(double r) const
-    {
-        return xc_vxc_impl(r).second;
-    }
-
-    // #endregion templateメンバ関数の実体化
 }

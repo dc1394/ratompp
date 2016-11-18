@@ -162,9 +162,6 @@
     <ClCompile Include="src\Util\vec.cpp">
       <Filter>ソース ファイル\Util</Filter>
     </ClCompile>
-    <ClCompile Include="src\ExCorr\corrhf.cpp">
-      <Filter>ソース ファイル\ExCorr</Filter>
-    </ClCompile>
     <ClCompile Include="src\ExCorr\exchpbe0.cpp">
       <Filter>ソース ファイル\ExCorr</Filter>
     </ClCompile>
@@ -195,9 +192,6 @@
       <Filter>ヘッダー ファイル\ExCorr</Filter>
     </ClInclude>
     <ClInclude Include="src\ExCorr\excorr.h">
-      <Filter>ヘッダー ファイル\ExCorr</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ExCorr\exchpbe.h">
       <Filter>ヘッダー ファイル\ExCorr</Filter>
     </ClInclude>
     <ClInclude Include="src\ExCorr\stdafx.h">
