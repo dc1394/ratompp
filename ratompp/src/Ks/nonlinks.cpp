@@ -139,18 +139,14 @@ namespace ks {
     //
     void NonLinKs::WriteInfo(std::chrono::duration<double> const & sec) const
     {
-        FILE* out;
-
-        out = m_db->OpenFile("out", "a");
+        auto out = m_db->OpenFile("out", "a");
 
         m_ss_alpha->WriteSates(stdout);
         m_energy->WriteEnergy(stdout);
 
-        m_ss_alpha->WriteSates(out);
-        m_energy->WriteEnergy(out);
+        m_ss_alpha->WriteSates(out.get());
+        m_energy->WriteEnergy(out.get());
 
-        fprintf(out, "\n\nC A L C U L A T I O N   T I M E :   %.3f  [s]\n", sec);
-
-        fclose(out);
+        fprintf(out.get(), "\n\nC A L C U L A T I O N   T I M E :   %.3f  [s]\n", sec);
     }
 }

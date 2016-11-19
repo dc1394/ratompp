@@ -12,20 +12,18 @@
 #include "../Util/spin.h"
 #include "paramdb.h"
 #include <memory>       // for std::shared_ptr
-#include <boost/mpl/int.hpp>
 
 namespace ks {
-    class Rho : public util::Fun1D
+    class Rho final : public util::Fun1D
     {
     public:
         Rho(std::shared_ptr<const ParamDb> const & db);
-        virtual ~Rho() = default;
+        ~Rho() override = default;
 
-        virtual double Get(double r) const;
+        double Get(double r) const override;
         double GetRhoTilde(double r) const;
-        // April 3rd, 2014 Added by dc1394
-        virtual double GetDeriv(double r) const;
-        virtual double Get2ndDeriv(double r) const;
+        double GetDeriv(double r) const override;
+        double Get2ndDeriv(double r) const override;
 
         void Calc(std::shared_ptr<const util::Fun1D> && f);
 
@@ -58,19 +56,19 @@ namespace ks {
         std::vector<size_t> m_eigNo;
 
         // Gauss quadratures
-        std::unique_ptr<Int1DGauss> m_gauss;
+        std::unique_ptr<const Int1DGauss> m_gauss;
 
     private:
-        class RhoInit : public util::Fun1D
+        class RhoInit final : public util::Fun1D
         {
             RhoInit(RhoInit const &) = delete;
             RhoInit& operator=(RhoInit const &) = delete;
 
         public:
             RhoInit(double c, double alpha) : m_c(c), m_alpha(alpha) { }
-            virtual ~RhoInit() { }
+            ~RhoInit() override = default;
             // èâä˙ñßìx
-            virtual double Get(double r) const
+            double Get(double r) const override
             {
                 return r * r * m_c * exp(-m_alpha * r);
             }
@@ -81,4 +79,3 @@ namespace ks {
 }
 
 #endif
-

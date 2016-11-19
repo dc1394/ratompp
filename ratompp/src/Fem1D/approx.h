@@ -15,15 +15,15 @@
 #include <memory>
 
 namespace fem1d {
-    class Approx : public util::Fun1D, private Mesh, private Lobatto
+    class Approx final : public util::Fun1D, private Mesh, private Lobatto
     {
     private:
         // Auxilary class
-        class FunF2 : public util::Fun1D
+        class FunF2 final : public util::Fun1D
         {
         public:
             FunF2(std::shared_ptr<const util::Fun1D> const & f, const Element& e, double fa, double fb) : m_f(f), m_e(e), m_fa(fa), m_fb(fb) { }
-            virtual ~FunF2() { }
+            virtual ~FunF2() = default;
             virtual double Get(double r) const
             {
                 double s = m_e.Xinv(r);
@@ -43,11 +43,10 @@ namespace fem1d {
         virtual ~Approx() = default;
 
         void Define(size_t M, std::shared_ptr<const util::Fun1D> && f);
-        virtual double Get(double x) const;
+        double Get(double x) const override;
 
-        // April 3rd, 2014 Added by dc1394
-        virtual double GetDeriv(double r) const;
-        virtual double Get2ndDeriv(double r) const;
+        double GetDeriv(double r) const override;
+        double Get2ndDeriv(double r) const override;
 
         void SolveAdapt(double a, double b, double delta);
 

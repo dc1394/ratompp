@@ -151,8 +151,6 @@ namespace fem1d {
             }
         }
 
-        throw std::runtime_error("‚±‚±‚É—ˆ‚Ä‚Í‚È‚ç‚È‚¢I");
-
         assert(0);
         return 0;
 
@@ -180,8 +178,6 @@ namespace fem1d {
                 return val / e.Getc2();
             }
         }
-
-        throw std::runtime_error("‚±‚±‚É—ˆ‚Ä‚Í‚È‚ç‚È‚¢I");
 
         assert(0);
         return 0;

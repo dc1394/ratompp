@@ -23,18 +23,18 @@ namespace ks {
                std::shared_ptr<const ParamDb> const & db);
         virtual ~Energy() = default;
 
-        void SetNode(const std::vector<double>& node);
+        void SetNode(std::vector<double> const & node);
         void WriteEnergy(FILE* out);
 
     private:
-        double Total();
-        double Nucleus();
-        double Hartree();
-        double Exch();
-        double Corr();
-        double Kinetic();
+        double Total() const;
+        double Nucleus() const;
+        double Hartree() const;
+        double Exch() const;
+        double Corr() const;
+        double Kinetic() const;
 
-        double Integ(size_t type);
+        double Integ(size_t type) const;
 
     private:
         // DFT potencial
@@ -48,7 +48,7 @@ namespace ks {
         double m_rc;
 
         // Gaussa quadratures
-        std::shared_ptr<Int1DGauss> m_gauss;
+        std::shared_ptr<const Int1DGauss> m_gauss;
 
         // Coordinaes of nodes for approximation of electron density
         std::vector<double> m_node;

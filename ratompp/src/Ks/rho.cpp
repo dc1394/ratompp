@@ -150,24 +150,22 @@ namespace ks {
     void Rho::Write(void) const
     {
         const size_t outRhoNode = m_db->GetSize_t("Out_RhoNode");
-        FILE* out;
         double dr, r;
 
         {
             // Nodes coordinates and approximation coefficients for electron density
-            out = m_db->OpenFile("rho.app", "wt");
-            fprintf(out, "#\n");
-            fprintf(out, "# Orders of intervals is random,\n");
-            fprintf(out, "# You must sord on column 'r_i', in order to get ordered intervals.\n");
-            fprintf(out, "#\n");
-            m_approx.WriteCoef(out);
-            fclose(out);
+            auto out = m_db->OpenFile("rho.app", "wt");
+            fprintf(out.get(), "#\n");
+            fprintf(out.get(), "# Orders of intervals is random,\n");
+            fprintf(out.get(), "# You must sord on column 'r_i', in order to get ordered intervals.\n");
+            fprintf(out.get(), "#\n");
+            m_approx.WriteCoef(out.get());
         }
 
     {
         // Storing values of electron densities
         std::vector<double> node(GetNode());
-        out = m_db->OpenFile("rho", "wt");
+        auto out = m_db->OpenFile("rho", "wt");
         //fprintf(out, "%16s \t %16s \t %16s \n", "R", "Rho", "RhoTilde");
         for (auto i = 0U; i < node.size() - 1; ++i)
         {
@@ -175,11 +173,10 @@ namespace ks {
             r = node[i];
             for (auto k = 0U; k < outRhoNode; ++k)
             {
-                fprintf(out, "%.15f,%.15f,%.15f\n", r, Get(r), GetRhoTilde(r));
+                fprintf(out.get(), "%.15f,%.15f,%.15f\n", r, Get(r), GetRhoTilde(r));
                 r += dr;
             }
         }
-        fclose(out);
     }
     }
 

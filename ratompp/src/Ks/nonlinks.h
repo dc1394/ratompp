@@ -136,31 +136,31 @@ namespace ks {
         //
         // Linear mixing of states neaded to aobtain SCF convergence
         //
-        class RhoMix : public util::Fun1D
+        class RhoMix final : public util::Fun1D
         {
         public:
             RhoMix(std::shared_ptr<ParamDb> const & db)
             {
                 m_scfMix = std::stof(db->Get("Scf_Mix"));
             }
-            virtual ~RhoMix() = default;
-            // May23rd, 2014 Modified by dc1394
-            //void SetRho(util::Fun1D* rhoCur, util::Fun1D* rhoOld)
+            ~RhoMix() override = default;
+            
             void SetRho(std::shared_ptr<util::Fun1D> const & rhoCur, std::shared_ptr<util::Fun1D> const & rhoOld)
             {
                 m_rhoCur = rhoCur;
                 m_rhoOld = rhoOld;
             }
-            virtual double Get(double r) const
+            
+            double Get(double r) const override
             {
                 return m_scfMix * m_rhoCur->Get(r) + (1 - m_scfMix) * m_rhoOld->Get(r);
             }
+
         private:
-            // May 23rd, 2014 Modified by dc1394
-            //util::Fun1D* m_rhoCur;
             std::shared_ptr<util::Fun1D> m_rhoCur;
-            //util::Fun1D* m_rhoOld;
+            
             std::shared_ptr<util::Fun1D> m_rhoOld;
+            
             double m_scfMix;
         };
     };

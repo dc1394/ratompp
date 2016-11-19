@@ -180,21 +180,16 @@ void ClpMtx::Zero()
 //!
 void ClpMtx::Write(const char* path, bool rowId) const
 {
-FILE* out;
-size_t row, col;
-
-	out = fopen(path, "wt");
-	for(row = 0; row < RowNo(); row++)
+    auto out = std::unique_ptr<FILE, decltype(&std::fclose)>(fopen(path, "wt"), std::fclose);
+	for (auto row = 0U; row < RowNo(); row++)
 	{
 		if(rowId)
-			fprintf(out, "ROW=%2lu ", static_cast<unsigned long>(row));
+			fprintf(out.get(), "ROW=%2lu ", static_cast<unsigned long>(row));
 
-		for(col = 0; col < ColNo(); col++)
-			fprintf(out, "%15.6E", Get(row, col));
-		fprintf(out, "\n");
+		for (auto col = 0U; col < ColNo(); col++)
+			fprintf(out.get(), "%15.6E", Get(row, col));
+		fprintf(out.get(), "\n");
 	}
-
-	fclose(out);
 }
 
 

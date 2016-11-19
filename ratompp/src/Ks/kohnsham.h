@@ -101,17 +101,19 @@ namespace ks {
         public:
             PotRad(void) : m_l(0) {}
             PotRad(std::shared_ptr<util::Fun1D> const & pot) : m_pot(pot), m_l(0) {}
-            virtual ~PotRad() = default;
+            ~PotRad() override = default;
 
-            virtual double Get(double r) const
+            double Get(double r) const override
             {
                 assert(r > 0);
                 return m_pot->Get(r) + m_l * (m_l + 1) / (2 * r * r);
             }
+
             std::shared_ptr<util::Fun1D> & getPot()
             {
                 return m_pot;
             }
+
         public:
             // Angular quantum number
             size_t m_l;

@@ -2,6 +2,7 @@
 #define __RATOM_PARAMDB_H__
 
 #include <fstream>  // for std::ifstream
+#include <memory>   // for std::unique_ptr
 #include <string>   // for std::string
 #include <tuple>    // for std::tuple
 
@@ -30,9 +31,8 @@ public:
     double GetDouble(std::string const & param) const;
     long int GetLong(std::string const & param) const;
     bool GetBool(std::string const & param) const;
-
-
-	FILE* OpenFile(const char* ext, const char* mode) const;
+    
+    std::unique_ptr<FILE, decltype(&std::fclose)> OpenFile(const char* ext, const char* mode) const;
     std::ifstream ParamDb::OpenFile() const;
 
 	void GetPath(std::string& path) const { path = m_path; }
@@ -40,8 +40,7 @@ public:
 private:
     std::tuple<int, std::string, std::string> ReadOneParam(std::ifstream & ifs) const;
 
-private:
-        // Path to input file
+    // Path to input file
 	std::string m_path;
 };
 

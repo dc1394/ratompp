@@ -371,7 +371,7 @@ namespace ks {
     template <util::Spin S>
     void Pot<S>::Write() /*const*/
     {
-        std::unique_ptr<FILE, decltype(&fclose)> out(m_db->OpenFile("pot", "wt"), fclose);
+        auto out = m_db->OpenFile("pot", "wt");
 
         //m_exch.reset(new ExCorrLDA(std::bind(&Pot::GetRhoTilde, std::ref(*this),
         //	std::placeholders::_1)));

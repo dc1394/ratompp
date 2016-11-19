@@ -20,7 +20,7 @@ namespace ks {
     // Sets array of nodes needed for approximation of electron density
     // This array is used for numerical integration
     //
-    void Energy::SetNode(const std::vector<double>& node)
+    void Energy::SetNode(std::vector<double> const & node)
     {
         m_node = node;
 
@@ -35,7 +35,7 @@ namespace ks {
     //
     // Returns total energy of system
     //
-    double Energy::Total()
+    double Energy::Total() const
     {
         return m_ss->EigenEnerg() + Integ(0);
     }
@@ -43,7 +43,7 @@ namespace ks {
     //
     // Returns interaction energy  of electrons with atomic core.
     //
-    double Energy::Nucleus()
+    double Energy::Nucleus() const
     {
         return Integ(1);
     }
@@ -51,7 +51,7 @@ namespace ks {
     //
     // Returns Hartree energy
     //
-    double Energy::Hartree()
+    double Energy::Hartree() const
     {
         return Integ(2);
     }
@@ -59,7 +59,7 @@ namespace ks {
     //
     // Returns exchange energy
     //
-    double Energy::Exch()
+    double Energy::Exch() const
     {
         return Integ(3);
     }
@@ -67,7 +67,7 @@ namespace ks {
     //
     // Returns correlation energy
     //
-    double Energy::Corr()
+    double Energy::Corr() const
     {
         return Integ(4);
     }
@@ -75,7 +75,7 @@ namespace ks {
     //
     // Returns kinetic energy
     //
-    double Energy::Kinetic()
+    double Energy::Kinetic() const
     {
         return m_ss->EigenEnerg() - Integ(5);
     }
@@ -84,7 +84,7 @@ namespace ks {
     //
     // Returns integral of type "type"
     //
-    double Energy::Integ(size_t type)
+    double Energy::Integ(size_t type) const
     {
         // const double absTol = 1E-14;
         FunEner ener(m_pot, type);

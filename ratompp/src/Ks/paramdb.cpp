@@ -111,10 +111,9 @@ std::tuple<int, std::string, std::string> ParamDb::ReadOneParam(std::ifstream & 
 // "ext" - extenstion of file.
 // "mode" - mode of opening.
 //
-FILE* ParamDb::OpenFile(const char* ext, const char* mode) const
+std::unique_ptr<FILE, decltype(&std::fclose)> ParamDb::OpenFile(const char* ext, const char* mode) const
 {
     std::string tmp(m_path);
-    FILE* file;
 
 	if (ext)
 	{
@@ -122,12 +121,13 @@ FILE* ParamDb::OpenFile(const char* ext, const char* mode) const
 		tmp += std::string(ext);
 	}
 
-	file = fopen(tmp.c_str(), mode);
+	auto file = std::unique_ptr<FILE, decltype(&std::fclose)>(fopen(tmp.c_str(), mode), std::fclose);
 
 	if (!file)
 	{
         throw std::invalid_argument((boost::format("Cannot open file '%s'.") % tmp).str());
 	}
+
 	return file;
 }
 
@@ -156,14 +156,14 @@ void ParamDb::WriteParams(void) const
     using namespace boost::posix_time;
 
     auto out = OpenFile("out", "wt");
-	::Intro(out);
+	::Intro(out.get());
 
     auto const now = second_clock::local_time();
     auto const nowdate = now.date();
-    auto str = boost::format("%s %s %s %s %s") % nowdate.day_of_week() % nowdate.month() % nowdate.day() % now.time_of_day() % nowdate.year();
-    fprintf(out, "  C A L C U L A T I O N   D A T E   %s\n", str.str().c_str());
+    auto s = boost::format("%s %s %s %s %s") % nowdate.day_of_week() % nowdate.month() % nowdate.day() % now.time_of_day() % nowdate.year();
+    fprintf(out.get(), "  C A L C U L A T I O N   D A T E   %s\n", s.str().c_str());
 
-	fprintf(out, "\n\n"
+	fprintf(out.get(), "\n\n"
 		"*************************************\n"
 		"*                                   *\n"
 		"*      I N P U T   P A R A M S      *\n"
@@ -171,8 +171,6 @@ void ParamDb::WriteParams(void) const
 		"*************************************\n");
 
     for (auto && i = begin(); i != end(); ++i) {
-        fprintf(out, "%-30s   %s\n\n", i->first.c_str(), i->second.c_str());
+        fprintf(out.get(), "%-30s   %s\n\n", i->first.c_str(), i->second.c_str());
     }
-
-	fclose(out);
 }
