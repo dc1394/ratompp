@@ -143,7 +143,7 @@ namespace ks {
         /*!
             database of parameters
         */
-        std::shared_ptr<ParamDb> const m_db;
+        std::shared_ptr<const ParamDb> const m_db;
 
         //! A private member variable.
         /*!

@@ -39,15 +39,26 @@ namespace ks {
         double Integ() const;
 
     private:
-        // Database of parameters
+        //! A private member variable.
+        /*!
+            Function approximation
+        */
+        fem1d::Approx m_approx;
+
+        //! A private member variable.
+        /*!
+            Database of parameters
+        */
         std::shared_ptr<const ParamDb> const m_db;
 
-        // Function approximation
-        fem1d::Approx m_approx;
+        //! A private member variable.
+        /*!
+            Number of calculated eigenvalues for each angular quantum number L
+        */
+        std::vector<size_t> m_eigNo;
 
         // Gauss quadratures
         std::unique_ptr<Int1DGauss> m_gauss;
-
 
     private:
         class RhoInit : public util::Fun1D
