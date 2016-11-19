@@ -281,13 +281,6 @@ namespace ks {
     template <util::Spin S>
     double Pot<S>::XcEdiffV(double r) const
     {
-        // May 24th, 2014 Modified by dc1394
-        //assert(m_rho);
-
-        // March 8th, 2014	Modified by dc1394
-        //const double rho = m_rho->Get(r);
-
-        //return m_exch->EdiffV(rho, 0) + m_corr->EdiffV(rho, 0);
         return m_exch->EdiffV(r) + m_corr->EdiffV(r);
     }
 
@@ -305,12 +298,14 @@ namespace ks {
             m_exch.reset(new excorr::Xc<S>(excorr::ExCorrLDA([this](double r) { return GetRhoTilde(r); }, XC_LDA_X)));
         }
         else if (exch == "b88") {
-            m_exch.reset(new excorr::Xc<S>(excorr::ExCorrGGA([this](double r) { return GetRhoTilde(r); },
-                                                             [this](double r) { return GetRhoTildeDeriv(r); },
-                                                             [this](double r) { return GetRhoTildeLapl(r); }, XC_GGA_X_B88)));
+            m_exch.reset(new excorr::Xc<S>(excorr::ExCorrGGA(
+                [this](double r) { return GetRhoTilde(r); },
+                [this](double r) { return GetRhoTildeDeriv(r); },
+                [this](double r) { return GetRhoTildeLapl(r); }, XC_GGA_X_B88)));
         }
         else if (exch == "pbe") {
-            m_exch.reset(new excorr::Xc<S>(excorr::ExCorrGGA([this](double r) { return GetRhoTilde(r); },
+            m_exch.reset(new excorr::Xc<S>(excorr::ExCorrGGA(
+                [this](double r) { return GetRhoTilde(r); },
                 [this](double r) { return GetRhoTildeDeriv(r); },
                 [this](double r) { return GetRhoTildeLapl(r); }, XC_GGA_X_PBE)));
         }
@@ -447,9 +442,9 @@ namespace ks {
     template <util::Spin S>
     std::pair<double, double> Pot<S>::GetRhoTildeLapl(double r)
     {
-        const double first = (m_rho.first->Get2ndDeriv(r) - 2.0 / r * m_rho.first->GetDeriv(r) +
+        auto const first = (m_rho.first->Get2ndDeriv(r) - 2.0 / r * m_rho.first->GetDeriv(r) +
             2.0 / (r * r) * m_rho.first->Get(r)) / (util::HelpFun::M_4PI * r * r);
-        const double second = (m_rho.second->Get2ndDeriv(r) - 2.0 / r * m_rho.second->GetDeriv(r) +
+        auto const second = (m_rho.second->Get2ndDeriv(r) - 2.0 / r * m_rho.second->GetDeriv(r) +
             2.0 / (r * r) * m_rho.second->Get(r)) / (util::HelpFun::M_4PI * r * r);
 
         return std::make_pair(first, second);
