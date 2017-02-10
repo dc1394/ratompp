@@ -191,9 +191,6 @@
     <ClInclude Include="src\ExCorr\xc.h">
       <Filter>ヘッダー ファイル\ExCorr</Filter>
     </ClInclude>
-    <ClInclude Include="src\ExCorr\excorr.h">
-      <Filter>ヘッダー ファイル\ExCorr</Filter>
-    </ClInclude>
     <ClInclude Include="src\ExCorr\stdafx.h">
       <Filter>ヘッダー ファイル\ExCorr</Filter>
     </ClInclude>
@@ -640,6 +637,9 @@
     </ClInclude>
     <ClInclude Include="src\Util\property.h">
       <Filter>ヘッダー ファイル\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ExCorr\excorr.h">
+      <Filter>ヘッダー ファイル\ExCorr</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

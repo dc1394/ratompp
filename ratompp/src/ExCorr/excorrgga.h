@@ -19,9 +19,9 @@
 namespace excorr {
     //! A class.
     /*!
-        Represents Slater Exchange potential
+        Represents GGA Exchange potential
     */
-    class ExCorrGGA final : public ExCorr {
+    class ExCorrGGA : virtual public ExCorr {
         // #region コンストラクタ・デストラクタ
 
     public:
@@ -56,7 +56,7 @@ namespace excorr {
             交換相関汎関数の名前を返す
             \return 交換相関汎関数の名前
         */
-        std::string name() const override
+        virtual std::string name() const override
         {
             return std::string(pxcfunc_->info->name);
         }
@@ -67,24 +67,25 @@ namespace excorr {
             \param r 原点からの距離（極座標）
             \return rでの交換エネルギー密度（Slater）
         */
-        double xc_exc(double r) const override;
+        virtual double xc_exc(double r) const override;
 
         // #endregion publicメンバ関数
 
-        // #region privateメンバ関数
+        // #region protectedメンバ関数
 
-    private:
-        //! A private member function (const).
+    protected:
+        //! A protected member function (const).
         /*! rでの交換相関ポテンシャル（Slater）を返す
             \param r 原点からの距離（極座標）
             \return rでの交換相関ポテンシャル（Slater）のαスピンとβスピンのstd::pair
         */
-        dpair xc_vxc_impl(double r) const override;
+        virtual dpair xc_vxc_impl(double r) const override;
 
-        // #endregion privateメンバ関数
+        // #endregion protectedメンバ関数
 
-        // #region メンバ変数
+        // #region privateメンバ変数
 
+    private:
         //! A private member variable (constant).
         /*!
             ratomへのスマートポインタ
@@ -93,24 +94,25 @@ namespace excorr {
 
         //! A private member variable (constant).
         /*!
-            電子密度
+            電子密度を与える関数オブジェクト
         */
         std::function<dpair(double)> const rhoTilde_;
 
         //! A private member variable (constant).
         /*!
-            電子密度の勾配
+            電子密度の勾配を与える関数オブジェクト
         */
         std::function<dpair(double)> const rhoTildeDeriv_;
 
         //! A private member variable (constant).
         /*!
-            電子密度のラプラシアン
+            電子密度のラプラシアンを与える関数オブジェクト
         */
         std::function<dpair(double)> const rhoTildeLapl_;
 
-        // #endregion メンバ変数
-
+        // #region privateメンバ変数
+        
+    private:
         // #region 禁止されたコンストラクタ・メンバ関数
 
         //! A private constructor (deleted).

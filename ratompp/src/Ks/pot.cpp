@@ -2,6 +2,7 @@
 
 #include "../ExCorr/exchhf.h"
 #include "../ExCorr/corrhf.h"
+#include "../ExCorr/exchpbe0.h"
 #include "../ExCorr/excorrgga.h"
 #include "../ExCorr/excorrlda.h"
 #include "stdafx.h"
@@ -298,38 +299,36 @@ namespace ks {
             m_exch.reset(new excorr::Xc<S>(excorr::ExCorrLDA([this](double r) { return GetRhoTilde(r); }, XC_LDA_X)));
         }
         else if (exch == "b88") {
-            m_exch.reset(new excorr::Xc<S>(excorr::ExCorrGGA(
-                [this](double r) { return GetRhoTilde(r); },
-                [this](double r) { return GetRhoTildeDeriv(r); },
-                [this](double r) { return GetRhoTildeLapl(r); }, XC_GGA_X_B88)));
+            m_exch.reset(
+                new excorr::Xc<S>(
+                    excorr::ExCorrGGA(
+                        [this](double r) { return GetRhoTilde(r); },
+                        [this](double r) { return GetRhoTildeDeriv(r); },
+                        [this](double r) { return GetRhoTildeLapl(r); },
+                        XC_GGA_X_B88)));
         }
         else if (exch == "pbe") {
-            m_exch.reset(new excorr::Xc<S>(excorr::ExCorrGGA(
-                [this](double r) { return GetRhoTilde(r); },
-                [this](double r) { return GetRhoTildeDeriv(r); },
-                [this](double r) { return GetRhoTildeLapl(r); }, XC_GGA_X_PBE)));
+            m_exch.reset(
+                new excorr::Xc<S>(
+                    excorr::ExCorrGGA(
+                        [this](double r) { return GetRhoTilde(r); },
+                        [this](double r) { return GetRhoTildeDeriv(r); },
+                        [this](double r) { return GetRhoTildeLapl(r); },
+                        XC_GGA_X_PBE)));
         }
-        //else if (strcmp(exch, "pbe") == 0) {
-        //    m_exch.reset(new ExchPbe(false, std::bind(&Pot::GetRhoTilde, std::ref(*this),
-        //        std::placeholders::_1),
-        //        std::bind(&Pot::GetRhoTildeDeriv, std::ref(*this),
-        //        std::placeholders::_1),
-        //        std::bind(&Pot::GetRhoTildeLapl, std::ref(*this),
-        //        std::placeholders::_1)));
-        //}
-        //else if (strcmp(exch, "pbe0") == 0) {
-        //    m_exch.reset(new ExchPbe0(std::bind(&Pot::GetRhoTilde, std::ref(*this),
-        //        std::placeholders::_1),
-        //        std::bind(&Pot::GetRhoTildeDeriv, std::ref(*this),
-        //        std::placeholders::_1),
-        //        std::bind(&Pot::GetRhoTildeLapl, std::ref(*this),
-        //        std::placeholders::_1),
-        //        std::bind(&Pot::Vh, std::ref(*this),
-        //        std::placeholders::_1), m_z));
-        //}
+        else if (exch == "pbe0") {
+            m_exch.reset(
+                new excorr::Xc<S>(
+                    excorr::ExchPbe0(
+                        [this](double r) { return GetRhoTilde(r); },
+                        [this](double r) { return GetRhoTildeDeriv(r); },
+                        [this](double r) { return GetRhoTildeLapl(r); },
+                        [this](double r) { return Vh(r); },
+                        XC_GGA_X_PBE,
+                        m_z)));
+        }
         else if (exch == "hf") {
-            m_exch.reset(new excorr::Xc<S>(excorr::ExchHf([this](double r) { return Vh(r); },
-                                                          m_z)));
+            m_exch.reset(new excorr::Xc<S>(excorr::ExchHf([this](double r) { return Vh(r); }, m_z)));
         }
         //else {
         //    throw std::invalid_argument("Unknown exchange type");
@@ -339,9 +338,13 @@ namespace ks {
             m_corr.reset(new excorr::Xc<S>(excorr::ExCorrLDA([this](double r) { return GetRhoTilde(r); }, XC_LDA_C_VWN)));
         }
         else if (corr == "pbe") {
-            m_corr.reset(new excorr::Xc<S>(excorr::ExCorrGGA([this](double r) { return GetRhoTilde(r); },
-                [this](double r) { return GetRhoTildeDeriv(r); },
-                [this](double r) { return GetRhoTildeLapl(r); }, XC_GGA_C_PBE)));
+            m_corr.reset(
+                new excorr::Xc<S>(
+                    excorr::ExCorrGGA(
+                        [this](double r) { return GetRhoTilde(r); },
+                        [this](double r) { return GetRhoTildeDeriv(r); },
+                        [this](double r) { return GetRhoTildeLapl(r); },
+                        XC_GGA_C_PBE)));
         }
         //else if (strcmp(corr, "pbe") == 0) {
         //    m_corr.reset(new CorrPbe(std::bind(&Pot::GetRhoTilde, std::ref(*this),
@@ -368,38 +371,8 @@ namespace ks {
     {
         auto out = m_db->OpenFile("pot", "wt");
 
-        //m_exch.reset(new ExCorrLDA(std::bind(&Pot::GetRhoTilde, std::ref(*this),
-        //	std::placeholders::_1)));
-        //m_corr.reset(new CorrVwn(std::bind(&Pot::GetRhoTilde, std::ref(*this),
-        //	std::placeholders::_1)));
-
-        //m_exch.reset(new ExchPbe(false, std::bind(&Pot::GetRhoTilde, std::ref(*this),
-        //	std::placeholders::_1),
-        //	std::bind(&Pot::GetRhoTildeDeriv, std::ref(*this),
-        //	std::placeholders::_1),
-        //	std::bind(&Pot::GetRhoTildeLapl, std::ref(*this),
-        //	std::placeholders::_1)));
-        //m_corr.reset(new CorrPbe(std::bind(&Pot::GetRhoTilde, std::ref(*this),
-        //	std::placeholders::_1),
-        //	std::bind(&Pot::GetRhoTildeDeriv, std::ref(*this),
-        //	std::placeholders::_1),
-        //	std::bind(&Pot::GetRhoTildeLapl, std::ref(*this),
-        //	std::placeholders::_1)));
-
-        //m_exch.reset(new ExchPbe0(std::bind(&Pot::GetRhoTilde, std::ref(*this),
-        //	std::placeholders::_1),
-        //	std::bind(&Pot::GetRhoTildeDeriv, std::ref(*this),
-        //	std::placeholders::_1),
-        //	std::bind(&Pot::GetRhoTildeLapl, std::ref(*this),
-        //	std::placeholders::_1),
-        //	std::bind(&Pot::Vh, std::ref(*this),
-        //	std::placeholders::_1), m_z));
-        //m_corr.reset(new CorrPbe(std::bind(&Pot::GetRhoTilde, std::ref(*this),
-        //	std::placeholders::_1),
-        //	std::bind(&Pot::GetRhoTildeDeriv, std::ref(*this),
-        //	std::placeholders::_1),
-        //	std::bind(&Pot::GetRhoTildeLapl, std::ref(*this),
-        //	std::placeholders::_1)));
+        m_exch.reset(new excorr::Xc<S>(excorr::ExCorrLDA([this](double r) { return GetRhoTilde(r); }, XC_LDA_X)));
+        m_corr.reset(new excorr::Xc<S>(excorr::ExCorrLDA([this](double r) { return GetRhoTilde(r); }, XC_LDA_C_VWN)));
 
         fprintf(out.get(), "%16s \t %16s \t %16s \t %16s \n", "R", "Hartree potential", "Exchange potential", "Correlation potential");
 

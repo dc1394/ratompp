@@ -92,7 +92,7 @@ namespace excorr {
 
         //! A private member variable (constant).
         /*!
-            電子密度
+            電子密度を与える関数オブジェクト
         */
         std::function<std::pair<double, double> (double)> const rhoTilde_;
 

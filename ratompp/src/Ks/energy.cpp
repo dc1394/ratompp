@@ -10,11 +10,12 @@ namespace ks {
     Energy::Energy(std::pair<std::shared_ptr<const Pot<util::Spin::Alpha>>,
                    std::shared_ptr<const Pot<util::Spin::Beta>>> const & pot,
                    std::shared_ptr<const StateSet> const & ss,
-                   std::shared_ptr<const ParamDb> const & db) :
-        m_pot(pot), m_ss(ss)
+                   std::shared_ptr<const ParamDb> const & db)
+        :   m_gauss(std::make_shared<Int1DGauss>(3 * db->GetLong("Rho_Deg"))),
+            m_pot(pot),
+            m_rc(std::stof(db->Get("Atom_Rc"))),
+            m_ss(ss)
     {
-        m_rc = std::stof(db->Get("Atom_Rc"));
-        m_gauss = std::make_shared<Int1DGauss>(3 * db->GetLong("Rho_Deg"));
     }
 
     // Sets array of nodes needed for approximation of electron density
@@ -103,7 +104,7 @@ namespace ks {
     //
     void Energy::WriteEnergy(FILE* out)
     {
-        double v, ex, ec;
+        double v;
 
         fprintf(out, "\n\n");
         fprintf(out, "==========================================================\n");
@@ -122,10 +123,10 @@ namespace ks {
         v = Nucleus();
         fprintf(out, "\t Eenucl = %15.7lf Ha =  %13.4lf eV\n", v, v * M_EV);
 
-        ex = Exch();
+        auto const ex = Exch();
         fprintf(out, "\t Eexch  = %15.7lf Ha =  %13.4lf eV\n", ex, ex * M_EV);
 
-        ec = Corr();
+        auto const ec = Corr();
         fprintf(out, "\t Ecorr  = %15.7lf Ha =  %13.4lf eV\n", ec, ec * M_EV);
 
         fprintf(out, "\t Exc    = %15.7lf Ha =  %13.4lf eV\n", ex + ec, (ex + ec) * M_EV);

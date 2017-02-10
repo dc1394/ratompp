@@ -19,7 +19,7 @@ namespace excorr {
     /*!
         Represents Hartree-Fock Exchange potential
     */
-    class ExchHf final : public ExCorr {
+    class ExchHf : virtual public ExCorr {
         // #region コンストラクタ・デストラクタ
 
     public:
@@ -54,9 +54,9 @@ namespace excorr {
             交換相関汎関数の名前を返す
             \return 交換相関汎関数の名前
         */
-        std::string name() const override
+        virtual std::string name() const override
         {
-            return "hartree-fock";
+            return "hartree-fock Exchange";
         }
 
         //! A public member function (const).
@@ -71,7 +71,8 @@ namespace excorr {
 
         // #region privateメンバ関数
 
-        //!  private member function (const).
+    private:
+        //! A private member function (const).
         /*! rでの交換相関ポテンシャル（Hartree-Fock）を返す
             \param r 原点からの距離（極座標）
             \return rでの交換相関ポテンシャル（Hartree-Fock）のαスピンとβスピンのstd::pair
@@ -80,31 +81,32 @@ namespace excorr {
 
         // #endregion privateメンバ関数
 
-        // #region メンバ変数
+    protected:
+        // #region protectedメンバ変数
 
-    private:
-        //! A private member variable (constant expression).
+        //! A protected member variable (constant expression).
         /*!
             ゼロ判定用の定数
         */
         static constexpr double ZERO = 1.0E-12;
 
-        //! A private member variable (constant).
+        //! A protected member variable (constant).
         /*!
             Hartreeポテンシャル
         */
         std::function<double(double)> const Vh_;
 
-        //! A private member variable (constant).
+        //! A protected member variable (constant).
         /*!
             原子番号
         */
         double const Z_;
 
-        // #endregion メンバ変数
+        // #endregion protectedメンバ変数
 
         // #region 禁止されたコンストラクタ・メンバ関数
 
+    private:
         //! A private constructor (deleted).
         /*!
             デフォルトコンストラクタ（禁止）

@@ -37,21 +37,21 @@ namespace ks {
         double Integ(size_t type) const;
 
     private:
+        // Gaussa quadratures
+        std::shared_ptr<const Int1DGauss> const m_gauss;
+
+        // Coordinaes of nodes for approximation of electron density
+        std::vector<double> m_node;
+
         // DFT potencial
         std::pair<std::shared_ptr<const Pot<util::Spin::Alpha>>,
                   std::shared_ptr<const Pot<util::Spin::Beta>>> const m_pot;
 
+        // Integration is on the interval [0, rc]
+        double const m_rc;
+
         // Atomic eigenstates
         std::shared_ptr<const StateSet> const m_ss;
-
-        // Integration is on the interval [0, rc]
-        double m_rc;
-
-        // Gaussa quadratures
-        std::shared_ptr<const Int1DGauss> m_gauss;
-
-        // Coordinaes of nodes for approximation of electron density
-        std::vector<double> m_node;
     };
 }
 
