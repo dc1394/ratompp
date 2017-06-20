@@ -37,7 +37,7 @@ namespace ks {
             //fflush(stdout);
             WriteRes(duration_cast<duration<double>>(end - beg));
         }
-        catch (std::exception& e)
+        catch (std::exception const & e)
         {
             printf("\n\nERROR! %s\n\n\n", e.what());
             return 1;
@@ -52,7 +52,7 @@ namespace ks {
         const auto scfMaxIter = m_db->GetSize_t("Scf_MaxIter");
         auto pmix = std::make_pair(std::make_shared<RhoMix>(m_db), std::make_shared<RhoMix>(m_db));
         std::pair<std::shared_ptr<Rho>, std::shared_ptr<Rho>> rhoOld;
-        auto iter = 1U;
+        auto iter = 1UL;
         rhoOld = std::make_pair(std::make_shared<Rho>(m_db), std::make_shared<Rho>(m_db));
         
         m_rho.first->Init<util::Spin::Alpha>();
@@ -100,7 +100,8 @@ namespace ks {
         m_energy->SetNode(node);
         m_energy->WriteEnergy(stdout);
         //// March 31st, 2014	Added by dc1394
-        //m_pot.first->Write();
+        m_pot.second->Write();
+        m_pot.first->Write();
 
         printf("*  SCF-ITERATIONS = %lu\n", static_cast<unsigned long>(iter));
         printf("***********   S C F   L O O P   F I N I S H E D   ***********\n");
@@ -113,12 +114,11 @@ namespace ks {
     //
     bool NonLinKs::IsFinished() const
     {
-        const double scfEnerDiff = std::stof(m_db->Get("Scf_Diff"));
-        static double sumOld = 0; // This variable MUST BE "static"
-        double sumNew, diff;
-
-        sumNew = m_ss_alpha->EigenSum();
-        diff = ::fabs(sumNew - sumOld);
+        auto const scfEnerDiff = std::stof(m_db->Get("Scf_Diff"));
+        static auto sumOld = 0.0; // This variable MUST BE "static"
+        
+        auto const sumNew = m_ss_alpha->EigenSum();
+        auto const diff = std::fabs(sumNew - sumOld);
         sumOld = sumNew;
 
         printf("EigenSum = %18.10lf    Diff = %18.10E\n", sumNew, diff);
@@ -147,6 +147,6 @@ namespace ks {
         m_ss_alpha->WriteSates(out.get());
         m_energy->WriteEnergy(out.get());
 
-        fprintf(out.get(), "\n\nC A L C U L A T I O N   T I M E :   %.3f  [s]\n", sec);
+        fprintf(out.get(), "\n\nC A L C U L A T I O N   T I M E :   %.3f  [s]\n", sec.count());
     }
 }

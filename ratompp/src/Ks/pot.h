@@ -80,7 +80,7 @@ namespace ks {
         //! A property.
         /*!
         */
-        util::Property<std::shared_ptr<OdeProb> &> Hart;
+        util::Property< std::shared_ptr<OdeProb> > Hart;
 
     private:
         // Electron density

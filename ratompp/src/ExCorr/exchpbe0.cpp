@@ -46,10 +46,10 @@ namespace excorr {
     ExCorr::dpair ExchPbe0::xc_vxc_impl(double r) const
     {
         if (std::fabs(Z_ - 1.0) < ZERO) {
-            return std::make_pair(0.75 * ExCorrGGA::xc_vxc_impl(r).first - 0.0625 * Vh_(r), 0.0);
+            return std::make_pair(0.75 * ExCorrGGA::xc_vxc_impl(r).first - 0.25 * Vh_(r), 0.75 * ExCorrGGA::xc_vxc_impl(r).second);
         }
         else if (std::fabs(Z_ - 2.0) < ZERO) {
-            return std::make_pair(0.75 * ExCorrGGA::xc_vxc_impl(r).first - 0.03125 * Vh_(r), 0.75 * ExCorrGGA::xc_vxc_impl(r).second - 0.03125 * Vh_(r));
+            return std::make_pair(0.75 * ExCorrGGA::xc_vxc_impl(r).first - 0.125 * Vh_(r), 0.75 * ExCorrGGA::xc_vxc_impl(r).second - 0.125 * Vh_(r));
         }
         else {
             return std::make_pair(NAN, NAN);

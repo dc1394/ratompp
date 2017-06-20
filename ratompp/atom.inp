@@ -5,9 +5,9 @@ Atom_Proton 1
 Atom_Rc 30
 XC_Exch pbe
 XC_Corr pbe
-Rho0_Default No
-Rho0_c 0.318309886
-Rho0_Alpha 2.0
+Rho0_Default Yes
+Rho0_c 0.0
+Rho0_Alpha 0.0
 
 
 Solver_EigAdapt Yes
@@ -18,7 +18,7 @@ Solver_EigAbsTol 1E-14
 
 
 Solver_PsnAdapt Yes
-Solver_PsnNode 5
+Solver_PsnNode 100
 Solver_PsnDeg 8
 Solver_PsnAbsMaxCoef 1E-4
 
@@ -27,10 +27,10 @@ Rho_Deg 8
 Rho_Delta 1E-9
 
 
-Scf_MaxIter 100
+Scf_MaxIter 200
 Scf_Mix 0.3
-Scf_Diff 1E-12
+Scf_Diff 1E-15
 
 
-Out_RhoNode 10
+Out_RhoNode 2000
 Out_EigNode 10

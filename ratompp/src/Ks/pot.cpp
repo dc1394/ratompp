@@ -18,7 +18,7 @@ namespace ks {
     //
     template <util::Spin S>
     Pot<S>::Pot(std::shared_ptr<ParamDb> const & db)
-        :   Hart([this] { return std::ref(m_hart); }, [this](std::shared_ptr<OdeProb> const & hart) { return m_hart = hart; }),
+        :   Hart([this] { return m_hart; }, [this](std::shared_ptr<OdeProb> const & hart) { return m_hart = hart; }),
             m_db(db),
             m_hart(std::make_shared<OdeProb>())
     {
@@ -371,8 +371,41 @@ namespace ks {
     {
         auto out = m_db->OpenFile("pot", "wt");
 
-        m_exch.reset(new excorr::Xc<S>(excorr::ExCorrLDA([this](double r) { return GetRhoTilde(r); }, XC_LDA_X)));
-        m_corr.reset(new excorr::Xc<S>(excorr::ExCorrLDA([this](double r) { return GetRhoTilde(r); }, XC_LDA_C_VWN)));
+        //m_exch.reset(new excorr::Xc<S>(excorr::ExCorrLDA([this](double r) { return GetRhoTilde(r); }, XC_LDA_X)));
+        //m_corr.reset(new excorr::Xc<S>(excorr::ExCorrLDA([this](double r) { return GetRhoTilde(r); }, XC_LDA_C_VWN)));
+        //m_exch.reset(
+        //    new excorr::Xc<S>(
+        //        excorr::ExCorrGGA(
+        //            [this](double r) { return GetRhoTilde(r); },
+        //            [this](double r) { return GetRhoTildeDeriv(r); },
+        //            [this](double r) { return GetRhoTildeLapl(r); },
+        //            XC_GGA_X_PBE)));
+
+        //m_corr.reset(
+        //    new excorr::Xc<S>(
+        //        excorr::ExCorrGGA(
+        //            [this](double r) { return GetRhoTilde(r); },
+        //            [this](double r) { return GetRhoTildeDeriv(r); },
+        //            [this](double r) { return GetRhoTildeLapl(r); },
+        //            XC_GGA_C_PBE)));
+        
+        //m_exch.reset(
+        //    new excorr::Xc<S>(
+        //        excorr::ExchPbe0(
+        //            [this](double r) { return GetRhoTilde(r); },
+        //            [this](double r) { return GetRhoTildeDeriv(r); },
+        //            [this](double r) { return GetRhoTildeLapl(r); },
+        //            [this](double r) { return Vh(r); },
+        //            XC_GGA_X_PBE,
+        //            m_z)));
+
+        //m_corr.reset(
+        //    new excorr::Xc<S>(
+        //        excorr::ExCorrGGA(
+        //            [this](double r) { return GetRhoTilde(r); },
+        //            [this](double r) { return GetRhoTildeDeriv(r); },
+        //            [this](double r) { return GetRhoTildeLapl(r); },
+        //            XC_GGA_C_PBE)));
 
         fprintf(out.get(), "%16s \t %16s \t %16s \t %16s \n", "R", "Hartree potential", "Exchange potential", "Correlation potential");
 
