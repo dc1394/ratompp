@@ -38,7 +38,7 @@ namespace ks {
             }
         public:
             //util::Fun1D* m_rho;
-            std::pair<std::shared_ptr<util::Fun1D>, std::shared_ptr<util::Fun1D>> m_rho;
+            std::pair<std::shared_ptr<util::Fun1D>, std::shared_ptr<util::Fun1D> > m_rho;
         };
 
 
@@ -80,7 +80,7 @@ namespace ks {
         //! A property.
         /*!
         */
-        util::Property< std::shared_ptr<OdeProb> > Hart;
+        util::Property< std::shared_ptr<OdeProb> &> Hart;
 
     private:
         // Electron density

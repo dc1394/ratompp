@@ -98,10 +98,11 @@ namespace ks {
 
         auto const node = m_rho.first->GetNode();
         m_energy->SetNode(node);
-        m_energy->WriteEnergy(stdout);
-        //// March 31st, 2014	Added by dc1394
-        m_pot.second->Write();
-        m_pot.first->Write();
+		
+		m_pot.second->Write();
+		m_pot.first->Write();
+
+		m_energy->WriteEnergy(stdout);
 
         printf("*  SCF-ITERATIONS = %lu\n", static_cast<unsigned long>(iter));
         printf("***********   S C F   L O O P   F I N I S H E D   ***********\n");

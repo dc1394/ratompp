@@ -1,10 +1,10 @@
 
 
 
-Atom_Proton 1
+Atom_Proton 2
 Atom_Rc 30
-XC_Exch pbe
-XC_Corr pbe
+XC_Exch hf
+XC_Corr hf
 Rho0_Default Yes
 Rho0_c 0.0
 Rho0_Alpha 0.0
@@ -27,9 +27,9 @@ Rho_Deg 8
 Rho_Delta 1E-9
 
 
-Scf_MaxIter 200
+Scf_MaxIter 2000
 Scf_Mix 0.3
-Scf_Diff 1E-15
+Scf_Diff 5E-14
 
 
 Out_RhoNode 2000
