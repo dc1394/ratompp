@@ -1,8 +1,0 @@
-clpmtxband.o: clpmtxband.cpp stdafx.h ../Util/util.h ../Util/bisection.h \
- ../Util/fun1D.h ../Util/vec.h ../Util/fun2D.h ../Util/fun3D.h \
- ../Util/helpfun.h ../Util/point3D.h ../Util/lobatto.h ../Util/mtx.h \
- ../Util/shreal.h clpmtxband.h clpmtx.h
-clpmtx.o: clpmtx.cpp stdafx.h ../Util/util.h ../Util/bisection.h \
- ../Util/fun1D.h ../Util/vec.h ../Util/fun2D.h ../Util/fun3D.h \
- ../Util/helpfun.h ../Util/point3D.h ../Util/lobatto.h ../Util/mtx.h \
- ../Util/shreal.h clpmtx.h

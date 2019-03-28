@@ -1,0 +1,7 @@
+excorrlda.o: excorrlda.cpp excorrlda.h excorr.h ../Util/spin.h \
+ xcfunc_deleter.h
+exchhf.o: exchhf.cpp exchhf.h excorr.h ../Util/spin.h
+excorrgga.o: excorrgga.cpp excorrgga.h excorr.h ../Util/spin.h \
+ xcfunc_deleter.h
+exchpbe0.o: exchpbe0.cpp exchpbe0.h exchhf.h excorr.h ../Util/spin.h \
+ excorrgga.h xcfunc_deleter.h
