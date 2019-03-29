@@ -18,7 +18,7 @@ namespace ks {
     //
     template <util::Spin S>
     Pot<S>::Pot(std::shared_ptr<ParamDb> const & db)
-        :   Hart([this] { return std::cref(m_hart); }, [this](std::shared_ptr<OdeProb> const & hart) { m_hart = hart; return std::cref(m_hart); }),
+        :   Hart([this] { return std::ref(m_hart); }, [this](std::shared_ptr<OdeProb> const & hart) { return m_hart = hart; }),
             m_db(db),
             m_hart(std::make_shared<OdeProb>())
     {

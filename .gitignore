@@ -47,7 +47,7 @@ build/
 *.scc
 *.pot
 
-# gcc
+# g++ object files
 ratompp
 *.o
 *.d

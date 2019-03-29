@@ -33,7 +33,7 @@ public:
     bool GetBool(std::string const & param) const;
     
     std::unique_ptr<FILE, decltype(&std::fclose)> OpenFile(const char* ext, const char* mode) const;
-    std::ifstream OpenFile() const;
+    std::ifstream ParamDb::OpenFile() const;
 
 	void GetPath(std::string& path) const { path = m_path; }
 
