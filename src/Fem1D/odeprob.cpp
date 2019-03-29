@@ -1,44 +1,21 @@
 #include "stdafx.h"
 #include "odeprob.h"
 
-//
-// Constructor
-//
-OdeProb::OdeProb()
-{
-	m_s = NULL;
-	m_b = NULL;
-	m_y = NULL;
-}
 
 //
 // Constructor
 //
-OdeProb::OdeProb(Bndr left, Bndr right, double gamma, const util::Fun1D* g, const util::Fun1D* f)
+OdeProb::OdeProb(Bndr left, Bndr right, double gamma, std::shared_ptr<util::Fun1D> const & g, std::shared_ptr<util::Fun1D> const & f)
 	: Prob(left, right, gamma, g, f)
 {
 	assert(g);
 	assert(f);
-
-	m_s = NULL;
-	m_b = NULL;
-	m_y = NULL;
-}
-
-//
-// Destructor
-//
-OdeProb::~OdeProb(void)
-{
-	delete m_s;
-	delete m_b;
-	delete m_y;
 }
 
 //
 // Defines the ODE problem
 //
-void OdeProb::Define(Bndr left, Bndr right, double gamma, const util::Fun1D* g, const util::Fun1D* f)
+void OdeProb::Define(Bndr left, Bndr right, double gamma, std::shared_ptr<util::Fun1D> const & g, std::shared_ptr<util::Fun1D> const & f)
 {
 	DefineProb(left, right, gamma, g, f);
 }
@@ -128,16 +105,16 @@ void OdeProb::Malloc(void)
 const size_t M = Dim();
 const size_t band = GetBand();
 
-	delete m_s;
-	m_s = new ClpMtxBand(M, band, 0);
+	m_s.reset();
+	m_s = std::make_shared<ClpMtxBand>(M, band, 0);
 	m_s->Zero();
 
-	delete m_b;
-	m_b = new Vec(M);
+	m_b.reset();
+	m_b = std::make_shared<Vec>(M);
 	m_b->Zero();
 
-	delete m_y;
-	m_y = new Vec(M);
+	m_y.reset();
+	m_y = std::make_shared<Vec>(M);
 	m_y->Zero();
 }
 

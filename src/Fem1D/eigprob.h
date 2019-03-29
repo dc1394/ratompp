@@ -18,11 +18,11 @@
 class EigProb : public Prob
 {
 public:
-	EigProb();
-	EigProb(double gamma, const util::Fun1D* g);
-	~EigProb(void);
+	EigProb() = default;
+	EigProb(double gamma, std::shared_ptr<util::Fun1D> const & g);
+	~EigProb() = default;
 
-	void Define(double gamma, const util::Fun1D* g);
+	void Define(double gamma, std::shared_ptr<util::Fun1D> const & g);
 
 	void Solve(size_t eigNo, double abstol);
 	void SolveAdapt(size_t eigNo, double abstol, double absMaxCoef);
@@ -46,16 +46,16 @@ private:
 
 private:
 	// Stifness matrix
-	ClpMtxBand* m_s;
+	std::shared_ptr<ClpMtxBand> m_s;
 
 	// Vector with calculated eigenvalues
-	Vec* m_w;
+	std::shared_ptr<Vec> m_w;
 
-        // Matrix with calculated eignvectors
-	ClpMtx* m_z;
+    // Matrix with calculated eignvectors
+	std::shared_ptr<ClpMtx> m_z;
 
 	// Overlap matrix
-	ClpMtxBand* m_o;
+	std::shared_ptr<ClpMtxBand> m_o;
 };
 
 #endif

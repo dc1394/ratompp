@@ -15,16 +15,16 @@
 
 
 #include "mesh.h"
-
+#include <memory>   // for std::shared_ptr
 
 class Prob : protected Mesh, protected Lobatto
 {
 public:
 	Prob();
-	Prob(Bndr left, Bndr right, double gamma, const util::Fun1D* g, const util::Fun1D* f);
-	~Prob(void);
+	Prob(Bndr left, Bndr right, double gamma, std::shared_ptr<util::Fun1D> const & g, std::shared_ptr<util::Fun1D> const & f);
+	virtual ~Prob() = default;
 
-	void DefineProb(Bndr left, Bndr right, double gamma, const util::Fun1D* g, const util::Fun1D* f);
+	void DefineProb(Bndr left, Bndr right, double gamma, std::shared_ptr<util::Fun1D> const & g, std::shared_ptr<util::Fun1D> const & f);
 
 	void GenMeshLin(double a, double b, size_t nodeNo, size_t degree);
 	void GenLinExp(double a, double b, int m, size_t degree);
@@ -49,10 +49,10 @@ protected:
 
 private:
 	// Right hand side, function f(x). USED only for ODE
-	const util::Fun1D* m_f;
+	std::shared_ptr<util::Fun1D> m_f;
 
 	// Function $g(x)$
-	const util::Fun1D* m_g;
+	std::shared_ptr<util::Fun1D> m_g;
 
 	// Constant \gamma 
 	double m_gamma;

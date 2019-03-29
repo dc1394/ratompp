@@ -5,42 +5,16 @@
 //
 // Constructor
 //
-EigProb::EigProb()
-{
-	m_s = NULL;
-	m_w = NULL;
-	m_z = NULL;
-	m_o = NULL;
-}
-
-//
-// Constructor
-//
-EigProb::EigProb(double gamma, const util::Fun1D* g) : Prob(Bndr(BndrType_Dir, 0), Bndr(BndrType_Dir, 0), gamma, g, NULL)
+EigProb::EigProb(double gamma, std::shared_ptr<util::Fun1D> const & g) : Prob(Bndr(BndrType_Dir, 0), Bndr(BndrType_Dir, 0), gamma, g, NULL)
 {
 	assert(g);
 
-	m_s = NULL;
-	m_w = NULL;
-	m_z = NULL;
-	m_o = NULL;
-}
-
-//
-// Destructor
-//
-EigProb::~EigProb(void)
-{
-	delete m_s;
-	delete m_w;
-	delete m_z;
-	delete m_o;
 }
 
 //
 // Defines the problem
 //
-void EigProb::Define(double gamma, const util::Fun1D* g)
+void EigProb::Define(double gamma, std::shared_ptr<util::Fun1D> const & g)
 {
 	DefineProb(Bndr(BndrType_Dir, 0), Bndr(BndrType_Dir, 0), gamma, g, NULL);
 }
@@ -133,18 +107,18 @@ void EigProb::Malloc(void)
 const size_t M = Dim();
 const size_t band = GetBand();
 
-	delete m_s;
-	m_s = new ClpMtxBand(M, band, 0);
+	m_s.reset();
+	m_s = std::make_shared<ClpMtxBand>(M, band, 0);
 	m_s->Zero();
 
-	delete m_w;
-	m_w = new Vec(M);
+	m_w.reset();
+	m_w = std::make_shared<Vec>(M);
 
-	delete m_z;
-	m_z = new ClpMtx(M, M);
+	m_z.reset();
+	m_z = std::make_shared<ClpMtx>(M, M);
 
-	delete m_o;
-	m_o = new ClpMtxBand(M, band, 0);
+	m_o.reset();
+	m_o = std::make_shared<ClpMtxBand>(M, band, 0);
 }
 
 //

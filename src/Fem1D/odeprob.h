@@ -18,11 +18,11 @@
 class OdeProb : public Prob
 {
 public:
-	OdeProb();
-	OdeProb(Bndr left, Bndr right, double gamma, const util::Fun1D* g, const util::Fun1D* f);
-	~OdeProb(void);
+	OdeProb() = default;
+	OdeProb(Bndr left, Bndr right, double gamma, std::shared_ptr<util::Fun1D> const & g, std::shared_ptr<util::Fun1D> const & f);
+	~OdeProb() = default;
 
-	void Define(Bndr left, Bndr right, double gamma, const util::Fun1D* g, const util::Fun1D* f);
+	void Define(Bndr left, Bndr right, double gamma, std::shared_ptr<util::Fun1D> const & g, std::shared_ptr<util::Fun1D> const & f);
 
 	void Solve();
 	void SolveAdapt(double absMaxCoef);
@@ -37,13 +37,13 @@ private:
 
 private:
 	//! Stifness matrix
-	ClpMtxBand* m_s;
+	std::shared_ptr<ClpMtxBand> m_s;
 
-        //! Right hand side vektor for equation Sy = b
-	Vec* m_b;
+    //! Right hand side vektor for equation Sy = b
+	std::shared_ptr<Vec> m_b;
 
-        //! Coefficient vector y.
-	Vec* m_y;
+    //! Coefficient vector y.
+	std::shared_ptr<Vec> m_y;
 };
 
 #endif

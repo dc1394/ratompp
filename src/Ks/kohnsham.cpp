@@ -20,7 +20,7 @@ namespace ks {
         m_eigProb.resize(Lmax);
         for (auto l = 0U; l < Lmax; l++)
         {
-            m_eigProb[l].Define(gamma, &m_radPot);
+            m_eigProb[l].Define(gamma, std::make_shared<PotRad>(m_radPot));
             m_eigProb[l].GenMeshLin(0, rc, eigNode, eigDeg);
         }
 

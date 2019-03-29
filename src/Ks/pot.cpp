@@ -134,7 +134,7 @@ namespace ks {
         m_rho = rho;
         m_rhoHelp.m_rho = rho;
 
-        m_hart->Define(left, right, gamma, NULL, &m_rhoHelp);
+        m_hart->Define(left, right, gamma, nullptr, std::make_shared<RhoHelp>(m_rhoHelp));
         m_hart->GenMeshLin(0, rc, psnNode, psnDeg);
     }
 
