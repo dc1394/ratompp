@@ -90,7 +90,7 @@ namespace ks {
         // March 7th, 2014	Modified by dc1394 
         // Exchenge potential
         //Xc* m_exch;
-        std::shared_ptr<excorr::Xc<S>> m_exch;
+        std::unique_ptr<excorr::Xc<S>> m_exch;
         // Correlation potential
         //Xc* m_corr;
         std::unique_ptr<excorr::Xc<S>> m_corr;

@@ -7,6 +7,7 @@
 
 
 #include "exchpbe0.h"
+#include <cmath>        // for std::fabs
 
 namespace excorr {
     // #region コンストラクタ
