@@ -37,13 +37,13 @@ private:
 
 private:
 	//! Stifness matrix
-	std::shared_ptr<ClpMtxBand> m_s;
+	std::unique_ptr<ClpMtxBand> m_s;
 
     //! Right hand side vektor for equation Sy = b
-	std::shared_ptr<Vec> m_b;
+	std::unique_ptr<Vec> m_b;
 
     //! Coefficient vector y.
-	std::shared_ptr<Vec> m_y;
+	std::unique_ptr<Vec> m_y;
 };
 
 #endif

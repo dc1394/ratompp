@@ -35,11 +35,14 @@ namespace fem1d {
         M = M - 1;
         m_M = M;
 
-        m_b.reset(new Vec(M));
+        m_b.reset();
+        m_b = std::make_unique<Vec>(M);
 
-        m_c.reset(new Vec(M));
+        m_c.reset();
+        m_c = std::make_unique<Vec>(M);
 
-        m_K.reset(new ClpMtxBand(M, DIAG, 0));
+        m_K.reset();
+        m_K = std::make_unique<ClpMtxBand>(M, DIAG, 0);
 
         size_t i, j;
         for (i = 0; i < M; i++)
@@ -70,7 +73,7 @@ namespace fem1d {
         for (i = 0; i < m_M; i++)
             m_b->Set(i) = CalcB(elt, i + 2, fa, fb);
 
-        m_K->SolveSymPos(*m_b, *m_c);
+        m_K->SolveSymPos(m_b, m_c);
 
         //	m_K->Write("K.mtx");
         //	m_b->Write("b.vec");

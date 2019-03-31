@@ -4,6 +4,13 @@
 
 namespace ks {
     template <util::Spin S>
+    KohnSham<S>::KohnSham(std::shared_ptr<ParamDb> const & db, std::shared_ptr<StateSet> const & stateSet)
+        :   m_db(db),
+            m_radPot(std::make_shared<PotRad>()),
+            m_stateSet(stateSet)
+    {}
+
+    template <util::Spin S>
     void KohnSham<S>::Config(std::shared_ptr<util::Fun1D> const & pot)
     {
         const auto rc = m_db->GetDouble("Atom_Rc");
@@ -15,12 +22,12 @@ namespace ks {
 
         // May 25th, 2014 Modified by dc1394
         //m_radPot.m_pot = pot;
-        m_radPot.getPot() = pot;
+        m_radPot->getPot() = pot;
 
         m_eigProb.resize(Lmax);
         for (auto l = 0U; l < Lmax; l++)
         {
-            m_eigProb[l].Define(gamma, std::make_shared<PotRad>(m_radPot));
+            m_eigProb[l].Define(gamma, m_radPot);
             m_eigProb[l].GenMeshLin(0, rc, eigNode, eigDeg);
         }
 
@@ -41,7 +48,7 @@ namespace ks {
         auto const size = m_eigProb.size();
         for (auto l = 0U; l < size; l++)
         {
-            m_radPot.m_l = l;
+            m_radPot->m_l = l;
 
             if (adapt)
                 m_eigProb[l].SolveAdapt(m_eigNo[l], abstol, absMaxCoef);
@@ -60,7 +67,7 @@ namespace ks {
     template <util::Spin S>
     double KohnSham<S>::Get(double r) const
     {
-        // ƒXƒsƒ“‚É‰‚¶‚½ŠÖ”‚ğŒÄ‚Ño‚·
+        // ã‚¹ãƒ”ãƒ³ã«å¿œã˜ãŸé–¢æ•°ã‚’å‘¼ã³å‡ºã™
         return Get(r, boost::mpl::int_<static_cast<std::int32_t>(S)>());
 
         //const double rc = m_db->GetDouble("Atom_Rc");
@@ -133,16 +140,16 @@ namespace ks {
             {
                 auto const occ = m_stateSet->Occ(l, n);
                 //if (occ > 0)
-                // occ‚É‚Íƒ¿ƒXƒsƒ“‚Ì“dq‚Ì‚İ
+                // occã«ã¯Î±ã‚¹ãƒ”ãƒ³ã®é›»å­ã®ã¿
                 if (occ > 0.0 && occ <= static_cast<double>(2 * l + 1)) {
                     auto const rnl = m_eigProb[l].GetEigFun(n, r); // R_{n, \ell}(r)
-                    // occ‚ª2 * l + 1‚Ü‚Å‚Íƒ¿ƒXƒsƒ“‚Ì“dq”‚Íocc‚Æ“™‚µ‚¢
+                    // occãŒ2 * l + 1ã¾ã§ã¯Î±ã‚¹ãƒ”ãƒ³ã®é›»å­æ•°ã¯occã¨ç­‰ã—ã„
                     rhoL += occ * rnl * rnl;
                 }
-                // occ‚ÉƒÀƒXƒsƒ“‚Ì“dq‚ªŠÜ‚Ü‚ê‚é
+                // occã«Î²ã‚¹ãƒ”ãƒ³ã®é›»å­ãŒå«ã¾ã‚Œã‚‹
                 else {
                     auto const rnl = m_eigProb[l].GetEigFun(n, r); // R_{n, \ell}(r)
-                    // ƒ¿ƒXƒsƒ“‚Ì“dq”‚Í2 * l + 1‚Æ“™‚µ‚¢
+                    // Î±ã‚¹ãƒ”ãƒ³ã®é›»å­æ•°ã¯2 * l + 1ã¨ç­‰ã—ã„
                     rhoL += static_cast<double>(2 * l + 1) * rnl * rnl;
                 }
             }
@@ -175,10 +182,10 @@ namespace ks {
             {
                 auto const occ = m_stateSet->Occ(l, n);
                 //if (occ > 0)
-                // occ‚ª2 * l + 1‚æ‚è‘å‚«‚¯‚ê‚ÎAocc‚ÉƒÀƒXƒsƒ“‚Ì“dq‚ªŠÜ‚Ü‚ê‚é
+                // occãŒ2 * l + 1ã‚ˆã‚Šå¤§ãã‘ã‚Œã°ã€occã«Î²ã‚¹ãƒ”ãƒ³ã®é›»å­ãŒå«ã¾ã‚Œã‚‹
                 if (occ > static_cast<double>(2 * l + 1)) {
                     auto const rnl = m_eigProb[l].GetEigFun(n, r); // R_{n, \ell}(r)
-                    // ƒÀƒXƒsƒ“‚Ì“dq”‚ÍAocc‚©‚ç2 * l + 1•ª·‚µˆø‚¢‚½‚à‚Ì
+                    // Î²ã‚¹ãƒ”ãƒ³ã®é›»å­æ•°ã¯ã€occã‹ã‚‰2 * l + 1åˆ†å·®ã—å¼•ã„ãŸã‚‚ã®
                     rhoL += (occ - static_cast<double>(2 * l + 1)) * rnl * rnl;
                 }
             }

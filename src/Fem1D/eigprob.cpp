@@ -5,10 +5,9 @@
 //
 // Constructor
 //
-EigProb::EigProb(double gamma, std::shared_ptr<util::Fun1D> const & g) : Prob(Bndr(BndrType_Dir, 0), Bndr(BndrType_Dir, 0), gamma, g, NULL)
+EigProb::EigProb(double gamma, std::shared_ptr<util::Fun1D> const & g) : Prob(Bndr(BndrType_Dir, 0), Bndr(BndrType_Dir, 0), gamma, g, nullptr)
 {
 	assert(g);
-
 }
 
 //
@@ -16,7 +15,7 @@ EigProb::EigProb(double gamma, std::shared_ptr<util::Fun1D> const & g) : Prob(Bn
 //
 void EigProb::Define(double gamma, std::shared_ptr<util::Fun1D> const & g)
 {
-	DefineProb(Bndr(BndrType_Dir, 0), Bndr(BndrType_Dir, 0), gamma, g, NULL);
+	DefineProb(Bndr(BndrType_Dir, 0), Bndr(BndrType_Dir, 0), gamma, g, nullptr);
 }
 
 

@@ -255,7 +255,7 @@ int *iwork, *ifail, info;
 // $A$ jest macierza symetryczna, dodatnia okreslona.
 // $A$ jest przechowywana jako trojkatna gorna.
 //
-void ClpMtxBand::SolveSymPos(const Vec& b, Vec& x)
+void ClpMtxBand::SolveSymPos(std::unique_ptr<Vec> const & b, std::unique_ptr<Vec> & x)
 {
 char fact = 'N';  // The matrix A will be copied to AFB and factored.
 char equed = 'N'; // Specifies the form of equilibration that was done.   
@@ -292,9 +292,9 @@ double berr[1]; // The componentwise relative backward error
 	dpbsvx_(&fact, &uplo, &n, &kd, 
 		&nrhs, m_mtx.m_array.get(), &ldab, afb, &ldafb, 
 		&equed, NULL, 
-		(double*)(&b.front()), 
+		(double*)(&b->front()), 
 		&ldb, 
-		&x.front(), 
+		&x->front(), 
 		&ldx, 
 		&rcond, ferr, berr, work, iwork, 
 		&info);

@@ -39,19 +39,19 @@ namespace ks {
     //
     double FunEner::GetTotal(double r) const
     {
-        // ƒ¿ƒXƒsƒ“–§“x
+        // Î±ã‚¹ãƒ”ãƒ³å¯†åº¦
         auto const rhoalpha = m_pot.first->GetRho(r);
-        // ƒÀƒXƒsƒ“–§“x
+        // Î²ã‚¹ãƒ”ãƒ³å¯†åº¦
         auto const rhobeta = m_pot.second->GetRho(r);
         //const double rhoT = RhoTilde(r, rho);
 
         // March 7th, 2014	Modified by dc1394 
         //ex = m_pot->m_exch->EdiffV(rhoT, 0);
-        auto const exalpha = m_pot.first->m_exch->EdiffV(r);
-        auto const exbeta = m_pot.second->m_exch->EdiffV(r);
+        auto const exalpha = m_pot.first->Exch()->EdiffV(r);
+        auto const exbeta = m_pot.second->Exch()->EdiffV(r);
         //co = m_pot->m_corr->EdiffV(rhoT, 0);
-        auto const coalpha = m_pot.first->m_corr->EdiffV(r);
-        auto const cobeta = m_pot.second->m_corr->EdiffV(r);
+        auto const coalpha = m_pot.first->Corr()->EdiffV(r);
+        auto const cobeta = m_pot.second->Corr()->EdiffV(r);
         auto const vh = m_pot.first->Vh(r);
 
         return (exalpha + coalpha - 0.5 * vh) * rhoalpha + (exbeta + cobeta - 0.5 * vh) * rhobeta;
@@ -62,7 +62,7 @@ namespace ks {
     //
     double FunEner::GetNucleus(double r) const
     {
-        // ƒ¿ƒXƒsƒ“‚ÆƒÀƒXƒsƒ“‚Ì–§“x‚Ì‡Œv
+        // Î±ã‚¹ãƒ”ãƒ³ã¨Î²ã‚¹ãƒ”ãƒ³ã®å¯†åº¦ã®åˆè¨ˆ
         auto const rho = m_pot.first->GetRho(r) + m_pot.second->GetRho(r);
 
         auto const vn = m_pot.first->Vn(r);
@@ -75,7 +75,7 @@ namespace ks {
     //
     double FunEner::GetHartree(double r) const
     {
-        // ƒ¿ƒXƒsƒ“‚ÆƒÀƒXƒsƒ“‚Ì–§“x‚Ì‡Œv
+        // Î±ã‚¹ãƒ”ãƒ³ã¨Î²ã‚¹ãƒ”ãƒ³ã®å¯†åº¦ã®åˆè¨ˆ
         auto const rho = m_pot.first->GetRho(r) + m_pot.second->GetRho(r);
         auto const vh = m_pot.first->Vh(r);
 
@@ -87,9 +87,9 @@ namespace ks {
     //
     double FunEner::GetExch(double r) const
     {
-        // ƒ¿ƒXƒsƒ“–§“x
+        // Î±ã‚¹ãƒ”ãƒ³å¯†åº¦
         auto const rhoalpha = m_pot.first->GetRho(r);
-        // ƒÀƒXƒsƒ“–§“x
+        // Î²ã‚¹ãƒ”ãƒ³å¯†åº¦
         auto const rhobeta = m_pot.second->GetRho(r);
         //const double rhoT = RhoTilde(r, rho);
 
@@ -106,9 +106,9 @@ namespace ks {
     //
     double FunEner::GetCorr(double r) const
     {
-        // ƒ¿ƒXƒsƒ“–§“x
+        // Î±ã‚¹ãƒ”ãƒ³å¯†åº¦
         auto const rhoalpha = m_pot.first->GetRho(r);
-        // ƒÀƒXƒsƒ“–§“x
+        // Î²ã‚¹ãƒ”ãƒ³å¯†åº¦
         auto const rhobeta = m_pot.second->GetRho(r);
         //const double rhoT = RhoTilde(r, rho);
 
@@ -126,11 +126,11 @@ namespace ks {
     //
     double FunEner::GetKinetic(double r) const
     {
-        // ƒ¿ƒXƒsƒ“–§“x
+        // Î±ã‚¹ãƒ”ãƒ³å¯†åº¦
         auto const rhoalpha = m_pot.first->GetRho(r);
-        // ƒÀƒXƒsƒ“–§“x
+        // Î²ã‚¹ãƒ”ãƒ³å¯†åº¦
         auto const rhobeta = m_pot.second->GetRho(r);
-        // ƒ¿ƒXƒsƒ“‚ÆƒÀƒXƒsƒ“‚Ì–§“x‚Ì‡Œv
+        // Î±ã‚¹ãƒ”ãƒ³ã¨Î²ã‚¹ãƒ”ãƒ³ã®å¯†åº¦ã®åˆè¨ˆ
         auto const rho = rhoalpha + rhobeta;
         //const double rhoT = RhoTilde(r, rho);
 

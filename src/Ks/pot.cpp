@@ -18,9 +18,12 @@ namespace ks {
     //
     template <util::Spin S>
     Pot<S>::Pot(std::shared_ptr<ParamDb> const & db)
-        :   Hart([this] { return std::ref(m_hart); }, [this](std::shared_ptr<OdeProb> const & hart) { m_hart = hart; return std::ref(m_hart); }),
+        :   Corr([this] { return std::ref(m_corr); }, nullptr),
+            Exch([this] { return std::ref(m_exch); }, nullptr),
+            Hart([this] { return std::ref(m_hart); }, [this](std::shared_ptr<OdeProb> const & hart) { m_hart = hart; return std::ref(m_hart); }),
             m_db(db),
-            m_hart(std::make_shared<OdeProb>())
+            m_hart(std::make_shared<OdeProb>()),
+            m_rhoHelp(std::make_shared<RhoHelp>())
     {
         // March 28th, 2014 Modified by dc1394
         m_z = db->GetDouble("Atom_Proton");
@@ -60,7 +63,7 @@ namespace ks {
 
 
     /*! Returns effective potential for radial Kohn-Sham equation for radius "r"
-    @param[in]      r    å¥ì_Ç©ÇÁÇÃãóó£Åiã…ç¿ïWÅj
+    @param[in]      r    ÂéüÁÇπ„Åã„Çâ„ÅÆË∑ùÈõ¢ÔºàÊ•µÂ∫ßÊ®ôÔºâ
     @return         effective potential for radial Kohn-Sham equation for radius "r"
     @exception      none
     */
@@ -91,7 +94,7 @@ namespace ks {
     }
 
     /*! Defines electron density for solving Poisson equation
-    @param[in]      rho    ÉøÉXÉsÉìñßìxÇ∆É¿ÉXÉsÉìñßìxÇÃpair
+    @param[in]      rho    Œ±„Çπ„Éî„É≥ÂØÜÂ∫¶„Å®Œ≤„Çπ„Éî„É≥ÂØÜÂ∫¶„ÅÆpair
     @exception      none
     */
     //void Pot::SetRho(util::Fun1D* rho)
@@ -132,9 +135,9 @@ namespace ks {
 
         //assert(rho);
         m_rho = rho;
-        m_rhoHelp.m_rho = rho;
+        m_rhoHelp->m_rho = rho;
 
-        m_hart->Define(left, right, gamma, nullptr, std::make_shared<RhoHelp>(m_rhoHelp));
+        m_hart->Define(left, right, gamma, nullptr, m_rhoHelp);
         m_hart->GenMeshLin(0, rc, psnNode, psnDeg);
     }
 
@@ -142,7 +145,7 @@ namespace ks {
     void Pot<S>::SetRho(std::pair<std::shared_ptr<util::Fun1D>, std::shared_ptr<util::Fun1D>> const & rho, boost::mpl::int_<static_cast<std::int32_t>(util::Spin::Beta)>)
     {
         m_rho = rho;
-        m_rhoHelp.m_rho = rho;
+        m_rhoHelp->m_rho = rho;
     }
 
 
@@ -152,7 +155,7 @@ namespace ks {
     template <util::Spin S>
     void Pot<S>::SolvePoisson(void)
     {
-        const double absMaxCoef = m_db->GetDouble("Solver_PsnAbsMaxCoef");
+        const double absMaxCoef = m_db->GetDouble("Solver_Psn:AbsMaxCoef");
         const bool adapt = m_db->GetBool("Solver_PsnAdapt");
 
         if (adapt)
@@ -169,7 +172,7 @@ namespace ks {
     //
 
     /*! Electrostatic potential of atomic core
-    @param[in]      r    å¥ì_Ç©ÇÁÇÃãóó£Åiã…ç¿ïWÅj
+    @param[in]      r    ÂéüÁÇπ„Åã„Çâ„ÅÆË∑ùÈõ¢ÔºàÊ•µÂ∫ßÊ®ôÔºâ
     @return         Electrostatic potential of atomic core
     @exception      none
     */
@@ -190,7 +193,7 @@ namespace ks {
     //	return m_exch->V(rho, rhoDer);
     //}
     /*! Exchange potential for radius "r"
-    @param[in]      r    å¥ì_Ç©ÇÁÇÃãóó£Åiã…ç¿ïWÅj
+    @param[in]      r    ÂéüÁÇπ„Åã„Çâ„ÅÆË∑ùÈõ¢ÔºàÊ•µÂ∫ßÊ®ôÔºâ
     @return         Exchange potential for radius "r"
     @exception      none
     */
@@ -296,55 +299,58 @@ namespace ks {
     {
         // March 7th, 2014	Modified by dc1394
         if (exch == "slater") {
-            m_exch.reset(new excorr::Xc<S>(excorr::ExCorrLDA([this](double r) { return GetRhoTilde(r); }, XC_LDA_X)));
+            m_exch.reset();
+            m_exch = std::make_unique< excorr::Xc<S> >(excorr::ExCorrLDA([this](double r) { return GetRhoTilde(r); }, XC_LDA_X));
         }
         else if (exch == "b88") {
-            m_exch.reset(
-                new excorr::Xc<S>(
+            m_exch.reset();
+            m_exch = std::make_unique< excorr::Xc<S> >(
                     excorr::ExCorrGGA(
                         [this](double r) { return GetRhoTilde(r); },
                         [this](double r) { return GetRhoTildeDeriv(r); },
                         [this](double r) { return GetRhoTildeLapl(r); },
-                        XC_GGA_X_B88)));
+                        XC_GGA_X_B88));
         }
         else if (exch == "pbe") {
-            m_exch.reset(
-                new excorr::Xc<S>(
+            m_exch.reset();
+            m_exch = std::make_unique< excorr::Xc<S> >(
                     excorr::ExCorrGGA(
                         [this](double r) { return GetRhoTilde(r); },
                         [this](double r) { return GetRhoTildeDeriv(r); },
                         [this](double r) { return GetRhoTildeLapl(r); },
-                        XC_GGA_X_PBE)));
+                        XC_GGA_X_PBE));
         }
         else if (exch == "pbe0") {
-            m_exch.reset(
-                new excorr::Xc<S>(
+            m_exch.reset();
+            m_exch = std::make_unique< excorr::Xc<S> >(
                     excorr::ExchPbe0(
                         [this](double r) { return GetRhoTilde(r); },
                         [this](double r) { return GetRhoTildeDeriv(r); },
                         [this](double r) { return GetRhoTildeLapl(r); },
                         [this](double r) { return Vh(r); },
                         XC_GGA_X_PBE,
-                        m_z)));
+                        m_z));
         }
         else if (exch == "hf") {
-            m_exch.reset(new excorr::Xc<S>(excorr::ExchHf([this](double r) { return Vh(r); }, m_z)));
+            m_exch.reset();
+            m_exch = std::make_unique< excorr::Xc<S> >(excorr::ExchHf([this](double r) { return Vh(r); }, m_z));
         }
         //else {
         //    throw std::invalid_argument("Unknown exchange type");
         //}
 
         if (corr == "vwn") {
-            m_corr.reset(new excorr::Xc<S>(excorr::ExCorrLDA([this](double r) { return GetRhoTilde(r); }, XC_LDA_C_VWN)));
+            m_corr.reset();
+            m_corr = std::make_unique< excorr::Xc<S> >(excorr::ExCorrLDA([this](double r) { return GetRhoTilde(r); }, XC_LDA_C_VWN));
         }
         else if (corr == "pbe") {
-            m_corr.reset(
-                new excorr::Xc<S>(
+            m_corr.reset();
+            m_corr = std::make_unique< excorr::Xc<S> >(
                     excorr::ExCorrGGA(
                         [this](double r) { return GetRhoTilde(r); },
                         [this](double r) { return GetRhoTildeDeriv(r); },
                         [this](double r) { return GetRhoTildeLapl(r); },
-                        XC_GGA_C_PBE)));
+                        XC_GGA_C_PBE));
         }
         //else if (strcmp(corr, "pbe") == 0) {
         //    m_corr.reset(new CorrPbe(std::bind(&Pot::GetRhoTilde, std::ref(*this),
@@ -355,7 +361,8 @@ namespace ks {
         //        std::placeholders::_1)));
         //}
         else if (corr == "hf") {
-            m_corr.reset(new excorr::Xc<S>(excorr::CorrHf()));
+            m_corr.reset();
+            m_corr = std::make_unique< excorr::Xc<S> >(excorr::CorrHf());
         }
         //else
         //    throw std::invalid_argument("Unknown correlation type");

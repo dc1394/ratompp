@@ -31,7 +31,7 @@ void OdeProb::Solve()
 
 	Malloc();
 	Assemble();
-	m_s->SolveSymPos(*m_b, *m_y);
+	m_s->SolveSymPos(m_b, m_y);
 	// m_y->Write("Ysol.dat");
 }
 
@@ -106,15 +106,15 @@ const size_t M = Dim();
 const size_t band = GetBand();
 
 	m_s.reset();
-	m_s = std::make_shared<ClpMtxBand>(M, band, 0);
+	m_s = std::make_unique<ClpMtxBand>(M, band, 0);
 	m_s->Zero();
 
 	m_b.reset();
-	m_b = std::make_shared<Vec>(M);
+	m_b = std::make_unique<Vec>(M);
 	m_b->Zero();
 
 	m_y.reset();
-	m_y = std::make_shared<Vec>(M);
+	m_y = std::make_unique<Vec>(M);
 	m_y->Zero();
 }
 

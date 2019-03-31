@@ -23,7 +23,7 @@ namespace fem1d {
         {
         public:
             FunF2(std::shared_ptr<const util::Fun1D> const & f, const Element& e, double fa, double fb) : m_f(f), m_e(e), m_fa(fa), m_fb(fb) { }
-            virtual ~FunF2() = default;
+            ~FunF2() override = default;
             virtual double Get(double r) const
             {
                 double s = m_e.Xinv(r);
@@ -40,7 +40,7 @@ namespace fem1d {
     public:
         Approx();
         Approx(size_t M, std::shared_ptr<const util::Fun1D> && f);
-        virtual ~Approx() = default;
+        ~Approx() override = default;
 
         void Define(size_t M, std::shared_ptr<const util::Fun1D> && f);
         double Get(double x) const override;

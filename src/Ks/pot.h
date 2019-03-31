@@ -44,7 +44,7 @@ namespace ks {
 
     public:
         Pot(std::shared_ptr<ParamDb> const & db);
-        virtual ~Pot() = default;
+        ~Pot() override = default;
 
         // May 23rd, 2014 Modified by dc1394
         //void SetRho(util::Fun1D* rho);
@@ -79,23 +79,37 @@ namespace ks {
 
         //! A property.
         /*!
+            相関ポテンシャルへのプロパティ
+        */
+        util::Property< std::unique_ptr< excorr::Xc<S> > &> Corr;
+
+        //! A property.
+        /*!
+            交換ポテンシャルへのプロパティ
+        */
+        util::Property< std::unique_ptr< excorr::Xc<S> > &> Exch;
+
+        //! A property.
+        /*!
+            Hartreeポテンシャルへのプロパティ
         */
         util::Property< std::shared_ptr<OdeProb> &> Hart;
 
     private:
+        // Database of parameters
+        std::shared_ptr<ParamDb> const m_db;
+
         // Electron density
         std::pair<std::shared_ptr<util::Fun1D>, std::shared_ptr<util::Fun1D>> m_rho;
 
-    public:
         // March 7th, 2014	Modified by dc1394 
         // Exchenge potential
         //Xc* m_exch;
-        std::unique_ptr<excorr::Xc<S>> m_exch;
+        std::unique_ptr< excorr::Xc<S> > m_exch;
         // Correlation potential
         //Xc* m_corr;
-        std::unique_ptr<excorr::Xc<S>> m_corr;
+        std::unique_ptr< excorr::Xc<S> > m_corr;
 
-    private:
         // Number of protons in atom
         double m_z;
 
@@ -106,10 +120,7 @@ namespace ks {
         std::shared_ptr<OdeProb> m_hart;
 
         // Helper funtion required to solve Poisson equation
-        RhoHelp m_rhoHelp;
-
-        // Database of parameters
-        std::shared_ptr<ParamDb> const m_db;
+        std::shared_ptr<RhoHelp> m_rhoHelp;
 
         static auto constexpr MAX = 10.0;
         static auto constexpr DR = 1.0E-3;

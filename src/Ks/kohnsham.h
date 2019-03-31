@@ -29,13 +29,13 @@ namespace ks {
             \param db パラメータへのスマートポインタ
             \param m_stateSet 
         */
-        KohnSham(std::shared_ptr<ParamDb> const & db, std::shared_ptr<StateSet> const & stateSet) : m_db(db), m_stateSet(stateSet) {}
+        KohnSham(std::shared_ptr<ParamDb> const & db, std::shared_ptr<StateSet> const & stateSet);
 
         //! A destructor.
         /*!
             デフォルトデストラクタ
         */
-        ~KohnSham() = default;
+        ~KohnSham() override = default;
 
         // #endregion コンストラクタ・デストラクタ
 
@@ -133,7 +133,7 @@ namespace ks {
         /*!
             Effective interaction potential used in radial Kohn-Sham equation
         */
-        PotRad m_radPot;
+        std::shared_ptr<PotRad> m_radPot;
 
         //! A private member variable.
         /*!

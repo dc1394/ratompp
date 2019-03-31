@@ -23,7 +23,7 @@ public:
 	void Eigen(size_t eigNo, double abstol, Vec& w, ClpMtx& z);
 	void EigenGen(size_t eigNo, double abstol, Vec& w, ClpMtx& z, ClpMtxBand& b);
 
-	void SolveSymPos(const Vec& b, Vec& x);
+	void SolveSymPos(std::unique_ptr<Vec> const & b, std::unique_ptr<Vec> & x);
 
 	size_t ColNo() const;
 
