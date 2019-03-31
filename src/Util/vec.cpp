@@ -30,13 +30,6 @@ Vec::Vec(size_t n) : std::vector<double>(n)
 }
 
 //
-// Destructor
-//
-Vec::~Vec()
-{
-}
-
-//
 // Set all elements to zero
 //
 void Vec::Zero()

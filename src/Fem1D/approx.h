@@ -32,8 +32,8 @@ namespace fem1d {
                 return fTilde * fTilde;
             }
         public:
-            const std::shared_ptr<const util::Fun1D> m_f;
-            const Element& m_e;
+            std::shared_ptr<const util::Fun1D> const m_f;
+            Element const & m_e;
             double m_fa, m_fb;
         };
 

@@ -41,13 +41,6 @@ ClpMtxBand::ClpMtxBand(size_t n, size_t ku, size_t kl) : m_mtx(kl + ku + 1, n), 
 }
 
 //
-// Destructor
-//
-ClpMtxBand::~ClpMtxBand(void)
-{
-}
-
-//
 // Returns element (row, col)
 //
 double ClpMtxBand::Get(size_t row, size_t col) const
@@ -148,10 +141,10 @@ int *iwork, *ifail, info;
 	iwork = reinterpret_cast<int*>(mkl_malloc(5 * n * sizeof(int), 64));
 	ifail = reinterpret_cast<int*>(mkl_malloc(n * sizeof(int), 64));
 
-	dsbevx_(&jobz, &range, &uplo, &n, &ku, m_mtx.m_array.get(), &ldab, q, &ldq, 
+	dsbevx_(&jobz, &range, &uplo, &n, &ku, m_mtx.m_array, &ldab, q, &ldq, 
 		&vl, &vu, &il, &iu, &abstol, &m, 
-		&w.front(), 
-		z.m_array.get(), &ldz, work, iwork, ifail, &info);
+		w.data(), 
+		z.m_array, &ldz, work, iwork, ifail, &info);
 
 	// March 22nd, 2014 Modified by dc1394
 	//free(work);
@@ -225,11 +218,11 @@ int *iwork, *ifail, info;
 	iwork = reinterpret_cast<int*>(mkl_malloc(5 * n * sizeof(int), 64));
 	ifail = reinterpret_cast<int*>(mkl_malloc(iu * sizeof(int), 64));
 
-	dsbgvx_(&jobz, &range, &uplo, &n, &ka, &kb, m_mtx.m_array.get(), &ldab, 
-		b.m_mtx.m_array.get(), &ldbb, q, &ldq, &vl, 
+	dsbgvx_(&jobz, &range, &uplo, &n, &ka, &kb, m_mtx.m_array, &ldab, 
+		b.m_mtx.m_array, &ldbb, q, &ldq, &vl, 
 		&vu, &il, &iu, &abstol, &m, 
-		&w.front(), 
-		z.m_array.get(), &ldz, work, iwork, ifail, &info);
+		w.data(), 
+		z.m_array, &ldz, work, iwork, ifail, &info);
 
 	// March 22nd, 2014 Modified by dc1394
 	//free(work);
@@ -275,8 +268,8 @@ int ldafb = kd + 1; // The leading dimension of the array AFB.
 double rcond; // The estimate of the reciprocal condition number
 double *afb, *work;
 int* iwork;
-double ferr[1]; // The estimated forward error bound
-double berr[1]; // The componentwise relative backward error
+double ferr[10]; // The estimated forward error bound
+double berr[10]; // The componentwise relative backward error
 
 	// Macierz musi byc trojkatna gorna
 	assert(m_kl == 0);
@@ -285,27 +278,43 @@ double berr[1]; // The componentwise relative backward error
 	//afb = (double*)malloc(ldafb * n * sizeof(double));
 	//work = (double*)malloc(3 * n * sizeof(double));
 	//iwork = (int*)malloc(n * sizeof(int));
-	afb = reinterpret_cast<double*>(mkl_malloc(ldafb * n * sizeof(double), 64));
-	work = reinterpret_cast<double*>(mkl_malloc(3 * n * sizeof(double), 64));
-	iwork = reinterpret_cast<int*>(mkl_malloc(n * sizeof(int), 64));
+	afb = reinterpret_cast<double*>(mkl_malloc(ldafb * n * sizeof(double), 256));
+	work = reinterpret_cast<double*>(mkl_malloc(3 * n * sizeof(double), 256));
+	iwork = reinterpret_cast<int*>(mkl_malloc(n * sizeof(int), 256));
 
-	dpbsvx_(&fact, &uplo, &n, &kd, 
-		&nrhs, m_mtx.m_array.get(), &ldab, afb, &ldafb, 
-		&equed, NULL, 
-		(double*)(&b->front()), 
-		&ldb, 
-		&x->front(), 
-		&ldx, 
-		&rcond, ferr, berr, work, iwork, 
+    dpbsvx_(
+            &fact, 
+            &uplo, 
+            &n, 
+            &kd, 
+		    &nrhs,
+            m_mtx.m_array,
+            &ldab,
+            afb,
+            &ldafb, 
+		    &equed,
+            nullptr, 
+		    b->data(), 
+		    &ldb, 
+		    x->data(), 
+		    &ldx, 
+		    &rcond,
+            ferr,
+            berr,
+            work,
+            iwork, 
 		&info);
-
+    
 	// March 22nd, 2014 Modified by dc1394
 	//free(afb);
 	//free(work);
 	//free(iwork);
 	mkl_free(afb);
+    afb = nullptr;
 	mkl_free(work);
+    work = nullptr;
 	mkl_free(iwork);
+    iwork = nullptr;
 
 	if(info != 0)
 		throw std::invalid_argument("Error in 'ClpMtxBand::Solve'");

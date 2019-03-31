@@ -10,13 +10,13 @@
 
 
 
-class Vec : public std::vector<double>
+class Vec final : public std::vector<double>
 {
 public:
 	Vec();
 	Vec(const Vec& v);
 	Vec(size_t n);
-        ~Vec();
+    ~Vec() = default;
 
 	double  Get(size_t i) const { return (*this)[i]; }
 	double& Set(size_t i) { return (*this)[i]; }

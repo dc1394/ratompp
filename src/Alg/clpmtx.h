@@ -11,13 +11,16 @@
 */
 
 
-class ClpMtx
+class ClpMtx final
 {
 	friend class ClpMtxBand;
 public:
 	ClpMtx();
 	ClpMtx(size_t rowNo, size_t colNo);
-	~ClpMtx(void);
+	~ClpMtx()
+    {
+        delete[] m_array;
+    }
 
 	void SetSize(size_t rowNo, size_t colNo);
 
@@ -47,7 +50,7 @@ private:
         // Array with data
 	// Arranged by dc1394 - Jan/14/2014
 	//double* m_array;
-	std::unique_ptr<double[]> m_array;
+	double* m_array;
 };
 
 #endif

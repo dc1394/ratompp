@@ -22,7 +22,7 @@ ClpMtx::ClpMtx()
 	m_rowNo = 0;
 	m_colNo = 0;
 	// comment out by dc1394 - Jan/14/2014
-	//m_array = NULL;
+	m_array = nullptr;
 }
 
 
@@ -33,20 +33,13 @@ ClpMtx::ClpMtx()
 //!
 ClpMtx::ClpMtx(size_t rowNo, size_t colNo)
 {
+    delete[] m_array;
 	m_rowNo = rowNo;
 	m_colNo = colNo;
-	//m_array = new double[rowNo * colNo];
-	m_array.reset(new double[rowNo * colNo]);
+	m_array = new double[rowNo * colNo];
+	//m_array.resize(rowNo * colNo);
 
 	Zero();
-}
-
-//!
-//! Destruktor
-//!
-ClpMtx::~ClpMtx(void)
-{
-	//delete [] m_array;
 }
 
 //!
@@ -56,11 +49,11 @@ ClpMtx::~ClpMtx(void)
 //!
 void ClpMtx::SetSize(size_t rowNo, size_t colNo)
 {
-	//delete [] m_array;
+    delete[] m_array;
 	m_rowNo = rowNo;
 	m_colNo = colNo;
-	//m_array = new double[rowNo * colNo];
-	m_array.reset(new double[rowNo * colNo]);
+	m_array = new double[rowNo * colNo];
+	//m_array.resize(rowNo * colNo);
 
 	Zero();
 }
@@ -115,7 +108,7 @@ int info, ret;
 	x = b;
 
 	ipiv = (int*)malloc(n * sizeof(int));
-	ret = dgesv_(&n, &nrhs, m_array.get(), &lda, ipiv, &x.front(), &ldb, &info);
+	ret = dgesv_(&n, &nrhs, m_array, &lda, ipiv, &x.front(), &ldb, &info);
 	free(ipiv);
 	
 	if(!(ret == 0 && info == 0))
@@ -148,13 +141,13 @@ int info, ret;
 
 	// Zapytanie o wymagana pamiec
 	lwork = -1;
-	dsysv_(&uplo, &n, &nrhs, m_array.get(), &lda, ipiv, &x.front(), &ldb, tmp, &lwork, &info);
+	dsysv_(&uplo, &n, &nrhs, m_array, &lda, ipiv, x.data(), &ldb, tmp, &lwork, &info);
 	lwork = static_cast<int>(tmp[0]);
 
 	work = (double*)malloc(lwork * sizeof(double));
 	ipiv = (int*)malloc(n * sizeof(int));
 
-	ret = dsysv_(&uplo, &n, &nrhs, m_array.get(), &lda, ipiv, &x.front(), &ldb, work, &lwork, &info);
+	ret = dsysv_(&uplo, &n, &nrhs, m_array, &lda, ipiv, x.data(), &ldb, work, &lwork, &info);
 
 	free(ipiv);
 	free(work);

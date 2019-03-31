@@ -11,11 +11,11 @@
 #include "clpmtx.h"
 
 
-class ClpMtxBand
+class ClpMtxBand final
 {
 public:
 	ClpMtxBand(size_t n, size_t ku, size_t kl);
-	~ClpMtxBand(void);
+	~ClpMtxBand() = default;
 
 	double Get(size_t row, size_t col) const;
 	double& Set(size_t row, size_t col);
