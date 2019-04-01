@@ -155,7 +155,7 @@ namespace ks {
     template <util::Spin S>
     void Pot<S>::SolvePoisson(void)
     {
-        const double absMaxCoef = m_db->GetDouble("Solver_Psn:AbsMaxCoef");
+        const double absMaxCoef = m_db->GetDouble("Solver_PsnAbsMaxCoef");
         const bool adapt = m_db->GetBool("Solver_PsnAdapt");
 
         if (adapt)
