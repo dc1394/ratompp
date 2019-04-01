@@ -274,8 +274,8 @@ double berr[1]; // The componentwise relative backward error
 	//work = (double*)malloc(3 * n * sizeof(double));
 	//iwork = (int*)malloc(n * sizeof(int));
 	auto afb = reinterpret_cast<double*>(mkl_malloc(2 * ldafb * n * sizeof(double), 64));
-	auto work = reinterpret_cast<double*>(mkl_malloc(6 * n * sizeof(double), 64));
-	auto iwork = reinterpret_cast<int*>(mkl_malloc(2 * n * sizeof(int), 64));
+	auto work = reinterpret_cast<double*>(mkl_malloc(2 * 3 * n * sizeof(double), 64));
+	auto iwork = reinterpret_cast<int*>(mkl_malloc(n * sizeof(int), 64));
 
     dpbsvx_(
             &fact, 

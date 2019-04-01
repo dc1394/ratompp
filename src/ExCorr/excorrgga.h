@@ -13,7 +13,7 @@
 #include "xcfunc_deleter.h"
 #include <cstdint>          // for std::uint32_t
 #include <functional>       // for std::function
-#include <memory>           // for std::unique_ptr
+#include <memory>           // for std::shared_ptr
 #include <string>           // for std::string
 
 namespace excorr {
