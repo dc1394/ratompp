@@ -3,23 +3,23 @@
 
 Atom_Proton 2
 Atom_Rc 30
-XC_Exch hf
-XC_Corr hf
+XC_Exch pbe
+XC_Corr pbe
 Rho0_Default Yes
 Rho0_c 0.0
 Rho0_Alpha 0.0
 
 
 Solver_EigAdapt Yes
-Solver_EigNode 5
-Solver_EigDeg 10
+Solver_EigNode 4
+Solver_EigDeg 6
 Solver_EigAbsMaxCoef 1E-4
 Solver_EigAbsTol 1E-14
 
 
 Solver_PsnAdapt Yes
-Solver_PsnNode 100
-Solver_PsnDeg 8
+Solver_PsnNode 4
+Solver_PsnDeg 6
 Solver_PsnAbsMaxCoef 1E-4
 
 

@@ -1,9 +1,6 @@
 #include "stdafx.h"
 #include "clpmtxband.h"
 
-// March 22nd, 2014 Added by dc1394
-#include <mkl.h>
-
 // March 22nd, 2014 Modified by dc1394
 //extern "C"
 //{
@@ -141,10 +138,10 @@ int *iwork, *ifail, info;
 	iwork = reinterpret_cast<int*>(mkl_malloc(5 * n * sizeof(int), 64));
 	ifail = reinterpret_cast<int*>(mkl_malloc(n * sizeof(int), 64));
 
-	dsbevx_(&jobz, &range, &uplo, &n, &ku, m_mtx.m_array, &ldab, q, &ldq, 
+	dsbevx_(&jobz, &range, &uplo, &n, &ku, m_mtx.m_array.data(), &ldab, q, &ldq, 
 		&vl, &vu, &il, &iu, &abstol, &m, 
 		w.data(), 
-		z.m_array, &ldz, work, iwork, ifail, &info);
+		z.m_array.data(), &ldz, work, iwork, ifail, &info);
 
 	// March 22nd, 2014 Modified by dc1394
 	//free(work);
@@ -218,11 +215,11 @@ int *iwork, *ifail, info;
 	iwork = reinterpret_cast<int*>(mkl_malloc(5 * n * sizeof(int), 64));
 	ifail = reinterpret_cast<int*>(mkl_malloc(iu * sizeof(int), 64));
 
-	dsbgvx_(&jobz, &range, &uplo, &n, &ka, &kb, m_mtx.m_array, &ldab, 
-		b.m_mtx.m_array, &ldbb, q, &ldq, &vl, 
+	dsbgvx_(&jobz, &range, &uplo, &n, &ka, &kb, m_mtx.m_array.data(), &ldab, 
+		b.m_mtx.m_array.data(), &ldbb, q, &ldq, &vl, 
 		&vu, &il, &iu, &abstol, &m, 
 		w.data(), 
-		z.m_array, &ldz, work, iwork, ifail, &info);
+		z.m_array.data(), &ldz, work, iwork, ifail, &info);
 
 	// March 22nd, 2014 Modified by dc1394
 	//free(work);
@@ -266,10 +263,8 @@ int ldab = kd + 1; // The leading dimension of the array AB.  LDAB >= KA+1.
 int ldafb = kd + 1; // The leading dimension of the array AFB.
 
 double rcond; // The estimate of the reciprocal condition number
-double *afb, *work;
-int* iwork;
-double ferr[10]; // The estimated forward error bound
-double berr[10]; // The componentwise relative backward error
+double ferr[1]; // The estimated forward error bound
+double berr[1]; // The componentwise relative backward error
 
 	// Macierz musi byc trojkatna gorna
 	assert(m_kl == 0);
@@ -278,9 +273,9 @@ double berr[10]; // The componentwise relative backward error
 	//afb = (double*)malloc(ldafb * n * sizeof(double));
 	//work = (double*)malloc(3 * n * sizeof(double));
 	//iwork = (int*)malloc(n * sizeof(int));
-	afb = reinterpret_cast<double*>(mkl_malloc(ldafb * n * sizeof(double), 256));
-	work = reinterpret_cast<double*>(mkl_malloc(3 * n * sizeof(double), 256));
-	iwork = reinterpret_cast<int*>(mkl_malloc(n * sizeof(int), 256));
+	auto afb = reinterpret_cast<double*>(mkl_malloc(10 * ldafb * n * sizeof(double), 64));
+	auto work = reinterpret_cast<double*>(mkl_malloc(30 * n * sizeof(double), 64));
+	auto iwork = reinterpret_cast<int*>(mkl_malloc(10 * n * sizeof(int), 64));
 
     dpbsvx_(
             &fact, 
@@ -288,7 +283,7 @@ double berr[10]; // The componentwise relative backward error
             &n, 
             &kd, 
 		    &nrhs,
-            m_mtx.m_array,
+            m_mtx.m_array.data(),
             &ldab,
             afb,
             &ldafb, 

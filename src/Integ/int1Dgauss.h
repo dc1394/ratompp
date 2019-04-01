@@ -42,16 +42,15 @@
 * \version 10-Mar-2005 (romz) - utworzenie
 */
 
-
 #include "int1D.h"
 
-class Int1DGauss : public Int1D
+class Int1DGauss final : public Int1D
 {
 public:
 	Int1DGauss(size_t deg);
-	virtual ~Int1DGauss(void);
+	~Int1DGauss() override = default;
 
-	virtual double Calc(const util::Fun1D& f, double a, double b) const;
+	double Calc(const util::Fun1D& f, double a, double b) const override;
 	double Adapt(const util::Fun1D& f, double a, double b, double errAbs) const;
 
 	// static void gauleg(double x1, double x2, Vec& x, Vec& w, size_t n);

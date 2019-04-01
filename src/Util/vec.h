@@ -8,12 +8,13 @@
 *
 */
 
+#include "mkl_allocator.h"
+#include <vector>
 
-
-class Vec final : public std::vector<double>
+class Vec final : public std::vector<double, util::mkl_allocator<double> >
 {
 public:
-	Vec();
+	Vec() = default;
 	Vec(const Vec& v);
 	Vec(size_t n);
     ~Vec() = default;

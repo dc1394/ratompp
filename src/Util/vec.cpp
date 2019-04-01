@@ -7,15 +7,7 @@
 //
 // Constructor
 //
-Vec::Vec()
-{
-}
-
-
-//
-// Constructor
-//
-Vec::Vec(const Vec& v) : std::vector<double>(v.size())
+Vec::Vec(const Vec& v) : std::vector<double, util::mkl_allocator<double> >(v.size())
 {
 	// resize(v.size());
 	for(size_t i = 0; i < v.size(); i++)
@@ -25,7 +17,7 @@ Vec::Vec(const Vec& v) : std::vector<double>(v.size())
 //
 // Constructor
 //
-Vec::Vec(size_t n) : std::vector<double>(n)
+Vec::Vec(size_t n) : std::vector<double, util::mkl_allocator<double> >(n)
 {
 }
 

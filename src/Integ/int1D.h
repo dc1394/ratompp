@@ -14,8 +14,8 @@
 class Int1D
 {
 public:
-	Int1D(void) { }
-	virtual ~Int1D(void) { }
+	Int1D() = default;
+	virtual ~Int1D() = default;
 
 	// Zwraca wartosc calki z funkcji $f$ na prezdziale $[a, b]$.
 	virtual double Calc(const util::Fun1D& f, double a, double b) const = 0;

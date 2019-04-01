@@ -3,7 +3,7 @@
 // #include "Except.h"
 
 
-extern "C"
+/*extern "C"
 {
     int dgesv_(int *n, int *nrhs, double *a, int *lda, 
          int *ipiv, double *b, int *ldb, int *info);
@@ -11,7 +11,7 @@ extern "C"
     int dsysv_(char *uplo, int *n, int *nrhs, double *a, 
 	int *lda, int *ipiv, double *b, int *ldb, 
 		double *work, int *lwork, int *info);
-}
+}*/
 
 
 //!
@@ -22,7 +22,7 @@ ClpMtx::ClpMtx()
 	m_rowNo = 0;
 	m_colNo = 0;
 	// comment out by dc1394 - Jan/14/2014
-	m_array = nullptr;
+	//m_array = nullptr;
 }
 
 
@@ -33,11 +33,11 @@ ClpMtx::ClpMtx()
 //!
 ClpMtx::ClpMtx(size_t rowNo, size_t colNo)
 {
-    delete[] m_array;
+    //delete[] m_array;
 	m_rowNo = rowNo;
 	m_colNo = colNo;
-	m_array = new double[rowNo * colNo];
-	//m_array.resize(rowNo * colNo);
+	//m_array = new double[rowNo * colNo];
+	m_array.resize(rowNo * colNo);
 
 	Zero();
 }
@@ -49,11 +49,10 @@ ClpMtx::ClpMtx(size_t rowNo, size_t colNo)
 //!
 void ClpMtx::SetSize(size_t rowNo, size_t colNo)
 {
-    delete[] m_array;
-	m_rowNo = rowNo;
+    m_rowNo = rowNo;
 	m_colNo = colNo;
-	m_array = new double[rowNo * colNo];
-	//m_array.resize(rowNo * colNo);
+	//m_array = new double[rowNo * colNo];
+	m_array.resize(rowNo * colNo);
 
 	Zero();
 }
@@ -100,19 +99,21 @@ int nrhs = 1;
 int lda = n;
 int *ipiv;
 int ldb = n;
-int info, ret;
+int info;
 
 	assert(m_colNo == m_rowNo);
 
 	// Kopiowanie. Rozwiazanie zwracane jest na wekotrze "x"
 	x = b;
 
-	ipiv = (int*)malloc(n * sizeof(int));
-	ret = dgesv_(&n, &nrhs, m_array, &lda, ipiv, &x.front(), &ldb, &info);
-	free(ipiv);
+	ipiv = reinterpret_cast<int *>(mkl_malloc(n * sizeof(int), 64));
+	dgesv_(&n, &nrhs, m_array.data(), &lda, ipiv, x.data(), &ldb, &info);
+	mkl_free(ipiv);
 	
-	if(!(ret == 0 && info == 0))
+	if (info != 0)
+    {
 		throw std::invalid_argument("Error in 'ClpMtx::Solve'");
+    }
 //	assert(ret == 0);
 //	assert(info == 0);
 }
@@ -133,7 +134,7 @@ int *ipiv = NULL;
 int ldb = n;
 double *work = NULL, tmp[2];
 int lwork;
-int info, ret;
+int info;
 
 	// Kopiowanie. Rozwiazanie zwracane jest na wekotrze "x"
 	x = b;
@@ -141,20 +142,21 @@ int info, ret;
 
 	// Zapytanie o wymagana pamiec
 	lwork = -1;
-	dsysv_(&uplo, &n, &nrhs, m_array, &lda, ipiv, x.data(), &ldb, tmp, &lwork, &info);
+	dsysv_(&uplo, &n, &nrhs, m_array.data(), &lda, ipiv, x.data(), &ldb, tmp, &lwork, &info);
 	lwork = static_cast<int>(tmp[0]);
 
-	work = (double*)malloc(lwork * sizeof(double));
-	ipiv = (int*)malloc(n * sizeof(int));
+	work = reinterpret_cast<double *>(mkl_malloc(lwork * sizeof(double), 64));
+	ipiv = reinterpret_cast<int *>(mkl_malloc(n * sizeof(int), 64));
 
-	ret = dsysv_(&uplo, &n, &nrhs, m_array, &lda, ipiv, x.data(), &ldb, work, &lwork, &info);
+	dsysv_(&uplo, &n, &nrhs, m_array.data(), &lda, ipiv, x.data(), &ldb, work, &lwork, &info);
 
-	free(ipiv);
-	free(work);
+	mkl_free(ipiv);
+	mkl_free(work);
 
-	if(!(ret == 0 && info == 0))
+	if (info != 0)
+    {
 		throw std::invalid_argument("Error in 'ClpMtx::Dsysv'");
-
+    }
 }
 
 

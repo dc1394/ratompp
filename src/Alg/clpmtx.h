@@ -1,6 +1,7 @@
 #ifndef __RATOM_CLPMTX_H__
 #define __RATOM_CLPMTX_H__
 
+#include "../Util/vec.h"
 // added by dc1394 - Jan/14/2014
 #include <memory>
 
@@ -19,7 +20,7 @@ public:
 	ClpMtx(size_t rowNo, size_t colNo);
 	~ClpMtx()
     {
-        delete[] m_array;
+        //delete[] m_array;
     }
 
 	void SetSize(size_t rowNo, size_t colNo);
@@ -50,7 +51,7 @@ private:
         // Array with data
 	// Arranged by dc1394 - Jan/14/2014
 	//double* m_array;
-	double* m_array;
+    std::vector<double, util::mkl_allocator<double> > m_array;
 };
 
 #endif

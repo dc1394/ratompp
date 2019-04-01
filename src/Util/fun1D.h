@@ -13,8 +13,8 @@ namespace util {
     class Fun1D
     {
     public:
-        Fun1D(void) { }
-        virtual ~Fun1D(void) { }
+        Fun1D() = default;
+        virtual ~Fun1D() = default;
 
         virtual double Get(double x) const = 0;
 
