@@ -273,9 +273,9 @@ double berr[1]; // The componentwise relative backward error
 	//afb = (double*)malloc(ldafb * n * sizeof(double));
 	//work = (double*)malloc(3 * n * sizeof(double));
 	//iwork = (int*)malloc(n * sizeof(int));
-	auto afb = reinterpret_cast<double*>(mkl_malloc(10 * ldafb * n * sizeof(double), 64));
-	auto work = reinterpret_cast<double*>(mkl_malloc(30 * n * sizeof(double), 64));
-	auto iwork = reinterpret_cast<int*>(mkl_malloc(10 * n * sizeof(int), 64));
+	auto afb = reinterpret_cast<double*>(mkl_malloc(2 * ldafb * n * sizeof(double), 64));
+	auto work = reinterpret_cast<double*>(mkl_malloc(6 * n * sizeof(double), 64));
+	auto iwork = reinterpret_cast<int*>(mkl_malloc(2 * n * sizeof(int), 64));
 
     dpbsvx_(
             &fact, 
@@ -305,12 +305,9 @@ double berr[1]; // The componentwise relative backward error
 	//free(work);
 	//free(iwork);
 	mkl_free(afb);
-    afb = nullptr;
-	mkl_free(work);
-    work = nullptr;
-	mkl_free(iwork);
-    iwork = nullptr;
-
+    mkl_free(work);
+    mkl_free(iwork);
+    
 	if(info != 0)
 		throw std::invalid_argument("Error in 'ClpMtxBand::Solve'");
 //	assert(ret == 0);

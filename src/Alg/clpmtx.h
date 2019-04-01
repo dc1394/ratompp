@@ -18,10 +18,7 @@ class ClpMtx final
 public:
 	ClpMtx();
 	ClpMtx(size_t rowNo, size_t colNo);
-	~ClpMtx()
-    {
-        //delete[] m_array;
-    }
+	~ClpMtx() = default;
 
 	void SetSize(size_t rowNo, size_t colNo);
 

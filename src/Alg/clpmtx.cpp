@@ -3,16 +3,15 @@
 // #include "Except.h"
 
 
-/*extern "C"
-{
-    int dgesv_(int *n, int *nrhs, double *a, int *lda, 
-         int *ipiv, double *b, int *ldb, int *info);
-	
-    int dsysv_(char *uplo, int *n, int *nrhs, double *a, 
-	int *lda, int *ipiv, double *b, int *ldb, 
-		double *work, int *lwork, int *info);
-}*/
-
+//extern "C"
+//{
+//    int dgesv_(int *n, int *nrhs, double *a, int *lda, 
+//         int *ipiv, double *b, int *ldb, int *info);
+//	
+//    int dsysv_(char *uplo, int *n, int *nrhs, double *a, 
+//	int *lda, int *ipiv, double *b, int *ldb, 
+//		double *work, int *lwork, int *info);
+//}
 
 //!
 //! Konstruktor 
@@ -49,7 +48,8 @@ ClpMtx::ClpMtx(size_t rowNo, size_t colNo)
 //!
 void ClpMtx::SetSize(size_t rowNo, size_t colNo)
 {
-    m_rowNo = rowNo;
+    //delete[] m_array;
+	m_rowNo = rowNo;
 	m_colNo = colNo;
 	//m_array = new double[rowNo * colNo];
 	m_array.resize(rowNo * colNo);
@@ -97,7 +97,6 @@ void ClpMtx::Dgesv(const Vec& b, Vec& x)
 int n = static_cast<int>(m_colNo);
 int nrhs = 1;
 int lda = n;
-int *ipiv;
 int ldb = n;
 int info;
 
@@ -106,7 +105,7 @@ int info;
 	// Kopiowanie. Rozwiazanie zwracane jest na wekotrze "x"
 	x = b;
 
-	ipiv = reinterpret_cast<int *>(mkl_malloc(n * sizeof(int), 64));
+	auto ipiv = reinterpret_cast<int *>(mkl_malloc(n * sizeof(int), 64));
 	dgesv_(&n, &nrhs, m_array.data(), &lda, ipiv, x.data(), &ldb, &info);
 	mkl_free(ipiv);
 	
@@ -130,22 +129,21 @@ char uplo = 'U';  // Upper triangle of A is stored
 int n = static_cast<int>(m_colNo); // The number of linear equations, i.e., the order of the matrix A.
 int nrhs = 1; 
 int lda = n;
-int *ipiv = NULL;
+int * ipiv = nullptr;
 int ldb = n;
-double *work = NULL, tmp[2];
+double tmp[2];
 int lwork;
 int info;
 
 	// Kopiowanie. Rozwiazanie zwracane jest na wekotrze "x"
 	x = b;
 
-
 	// Zapytanie o wymagana pamiec
 	lwork = -1;
 	dsysv_(&uplo, &n, &nrhs, m_array.data(), &lda, ipiv, x.data(), &ldb, tmp, &lwork, &info);
 	lwork = static_cast<int>(tmp[0]);
 
-	work = reinterpret_cast<double *>(mkl_malloc(lwork * sizeof(double), 64));
+	auto work = reinterpret_cast<double *>(mkl_malloc(lwork * sizeof(double), 64));
 	ipiv = reinterpret_cast<int *>(mkl_malloc(n * sizeof(int), 64));
 
 	dsysv_(&uplo, &n, &nrhs, m_array.data(), &lda, ipiv, x.data(), &ldb, work, &lwork, &info);
