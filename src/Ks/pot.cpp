@@ -70,8 +70,6 @@ namespace ks {
     template <util::Spin S>
     double Pot<S>::Get(double r) const
     {
-        double rho, vx, vc, vn, vh;
-
         assert(r > 0);
 
         //	// For testing purpose - hydrogen atom
@@ -83,10 +81,10 @@ namespace ks {
         //assert(rho >= 0);
 
         // March 7th, 2014	Modified by dc1394
-        vn = Vn(r);
-        vx = Vx(r);
-        vc = Vc(r);
-        vh = Vh(r);
+        auto const vn = Vn(r);
+        auto const vx = Vx(r);
+        auto const vc = Vc(r);
+        auto const vh = Vh(r);
         // vl = m_l * (m_l + 1) / (2 * r * r);  // Dependency on angular quantum number
 
         // printf("%lf   %lf  %lf   %lf   %lf\n", rho, vx, vc, vn, ve);
@@ -300,11 +298,11 @@ namespace ks {
         // March 7th, 2014	Modified by dc1394
         if (exch == "slater") {
             m_exch.reset();
-            m_exch = std::make_unique< excorr::Xc<S> >(excorr::ExCorrLDA([this](double r) { return GetRhoTilde(r); }, XC_LDA_X));
+            m_exch = std::make_unique< typename excorr::Xc<S> >(excorr::ExCorrLDA([this](double r) { return GetRhoTilde(r); }, XC_LDA_X));
         }
         else if (exch == "b88") {
             m_exch.reset();
-            m_exch = std::make_unique< excorr::Xc<S> >(
+            m_exch = std::make_unique< typename excorr::Xc<S> >(
                     excorr::ExCorrGGA(
                         [this](double r) { return GetRhoTilde(r); },
                         [this](double r) { return GetRhoTildeDeriv(r); },
@@ -313,7 +311,7 @@ namespace ks {
         }
         else if (exch == "pbe") {
             m_exch.reset();
-            m_exch = std::make_unique< excorr::Xc<S> >(
+            m_exch = std::make_unique< typename excorr::Xc<S> >(
                     excorr::ExCorrGGA(
                         [this](double r) { return GetRhoTilde(r); },
                         [this](double r) { return GetRhoTildeDeriv(r); },
@@ -322,7 +320,7 @@ namespace ks {
         }
         else if (exch == "pbe0") {
             m_exch.reset();
-            m_exch = std::make_unique< excorr::Xc<S> >(
+            m_exch = std::make_unique< typename excorr::Xc<S> >(
                     excorr::ExchPbe0(
                         [this](double r) { return GetRhoTilde(r); },
                         [this](double r) { return GetRhoTildeDeriv(r); },
@@ -333,41 +331,33 @@ namespace ks {
         }
         else if (exch == "hf") {
             m_exch.reset();
-            m_exch = std::make_unique< excorr::Xc<S> >(excorr::ExchHf([this](double r) { return Vh(r); }, m_z));
+            m_exch = std::make_unique< typename excorr::Xc<S> >(excorr::ExchHf([this](double r) { return Vh(r); }, m_z));
         }
-        //else {
-        //    throw std::invalid_argument("Unknown exchange type");
-        //}
+        else {
+            throw std::invalid_argument("Unknown exchange type");
+        }
 
         if (corr == "vwn") {
             m_corr.reset();
-            m_corr = std::make_unique< excorr::Xc<S> >(excorr::ExCorrLDA([this](double r) { return GetRhoTilde(r); }, XC_LDA_C_VWN));
+            m_corr = std::make_unique< typename excorr::Xc<S> >(excorr::ExCorrLDA([this](double r) { return GetRhoTilde(r); }, XC_LDA_C_VWN));
         }
         else if (corr == "pbe") {
             m_corr.reset();
-            m_corr = std::make_unique< excorr::Xc<S> >(
+            m_corr = std::make_unique< typename excorr::Xc<S> >(
                     excorr::ExCorrGGA(
                         [this](double r) { return GetRhoTilde(r); },
                         [this](double r) { return GetRhoTildeDeriv(r); },
                         [this](double r) { return GetRhoTildeLapl(r); },
                         XC_GGA_C_PBE));
         }
-        //else if (strcmp(corr, "pbe") == 0) {
-        //    m_corr.reset(new CorrPbe(std::bind(&Pot::GetRhoTilde, std::ref(*this),
-        //        std::placeholders::_1),
-        //        std::bind(&Pot::GetRhoTildeDeriv, std::ref(*this),
-        //        std::placeholders::_1),
-        //        std::bind(&Pot::GetRhoTildeLapl, std::ref(*this),
-        //        std::placeholders::_1)));
-        //}
         else if (corr == "hf") {
             m_corr.reset();
-            m_corr = std::make_unique< excorr::Xc<S> >(excorr::CorrHf());
+            m_corr = std::make_unique< typename excorr::Xc<S> >(excorr::CorrHf());
         }
-        //else
-        //    throw std::invalid_argument("Unknown correlation type");
+        else {
+            throw std::invalid_argument("Unknown correlation type");
+        }
     }
-
 
     //
     // Writes potential int file

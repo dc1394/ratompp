@@ -47,7 +47,7 @@ build/
 *.scc
 *.pot
 
-# g++ object files
+# clang++ execute and object files
 ratompp
 *.o
 *.d
@@ -168,9 +168,11 @@ $RECYCLE.BIN/
 # =========================
 
 *.bak
-*.out
-*.rho
-*.app
+atom.inp.out
+*.inp.pot
+*.inp.rho
+*.inp.rho.app
+
 =======
 /.vs/ratompp/v15/Browse.VC.db
 /ratompp/atom.inp.pot

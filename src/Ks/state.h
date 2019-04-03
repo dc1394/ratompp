@@ -14,10 +14,10 @@ namespace ks {
     class State final
     {
      public:
-        State(void);
+        State();
         //explicit State(const char* name);
         explicit State(std::string const & name);
-        ~State(void);
+        ~State() = default;
 
         std::string Name(void) const { return m_name; };
         size_t Occ(void) const { return m_occ; }

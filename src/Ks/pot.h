@@ -23,12 +23,12 @@ namespace ks {
 
     private:
         // May 23rd, 2014 Added by dc1394
-        class RhoHelp : public util::Fun1D
+        class RhoHelp final : public util::Fun1D
         {
         public:
-            RhoHelp() /*: m_rho(NULL)*/ {}
-            virtual ~RhoHelp() {}
-            virtual double Get(double r) const
+            RhoHelp() = default;/*: m_rho(NULL)*/
+            ~RhoHelp() override = default;
+            double Get(double r) const override
             {
                 //assert(m_rho); 
                 // return 4 * util::HelpFun::M_PI * r * m_rho->Get(r); 
@@ -53,7 +53,7 @@ namespace ks {
         void SetRho(std::pair<std::shared_ptr<util::Fun1D>, std::shared_ptr<util::Fun1D>> const & rho, boost::mpl::int_<static_cast<std::int32_t>(util::Spin::Beta)>);
         void SolvePoisson(void);
 
-        virtual double Get(double r) const;
+        double Get(double r) const override;
         double GetRho(double r) const;
         double GetRho(double r, boost::mpl::int_<static_cast<std::int32_t>(util::Spin::Alpha)>) const;
         double GetRho(double r, boost::mpl::int_<static_cast<std::int32_t>(util::Spin::Beta)>) const;
@@ -81,13 +81,13 @@ namespace ks {
         /*!
             相関ポテンシャルへのプロパティ
         */
-        util::Property< std::unique_ptr< excorr::Xc<S> > &> Corr;
+        util::Property< std::unique_ptr< typename excorr::Xc<S> > &> Corr;
 
         //! A property.
         /*!
             交換ポテンシャルへのプロパティ
         */
-        util::Property< std::unique_ptr< excorr::Xc<S> > &> Exch;
+        util::Property< std::unique_ptr< typename excorr::Xc<S> > &> Exch;
 
         //! A property.
         /*!

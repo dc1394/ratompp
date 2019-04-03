@@ -43,8 +43,8 @@ namespace excorr {
 
         //! A public member function (const). 
         /*!
-        交換相関汎関数の名前を返す
-        \return 交換相関汎関数の名前
+            交換相関汎関数の名前を返す
+            \return 交換相関汎関数の名前
         */
         std::string name() const override
         {
@@ -53,11 +53,10 @@ namespace excorr {
 
         //! A public member function (const).
         /*!
-            rでの交換相関エネルギー密度を返す関数
-            \param r 原点からの距離（極座標）
+            交換相関エネルギー密度を返す関数
             \return rでの交換エネルギー密度
         */
-        double xc_exc(double r) const override
+        double xc_exc(double) const override
         {
             return 0.0;
         }
@@ -69,10 +68,9 @@ namespace excorr {
 
         //!  private member function (const).
         /*! rでの交換相関ポテンシャル（Hartree-Fock）を返す
-        \param r 原点からの距離（極座標）
-        \return rでの交換相関ポテンシャル（Hartree-Fock）のαスピンとβスピンのstd::pair
+            \return rでの交換相関ポテンシャル（Hartree-Fock）のαスピンとβスピンのstd::pair
         */
-        dpair xc_vxc_impl(double r) const override
+        dpair xc_vxc_impl(double) const override
         {
             return std::make_pair(0.0, 0.0);
         }

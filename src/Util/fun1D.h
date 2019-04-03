@@ -19,11 +19,11 @@ namespace util {
         virtual double Get(double x) const = 0;
 
         // April 3rd, 2014 Added by dc1394
-        virtual double GetDeriv(double r) const
+        virtual double GetDeriv(double) const
         {
             return 0.0;
         }
-        virtual double Get2ndDeriv(double r) const
+        virtual double Get2ndDeriv(double) const
         {
             return 0.0;
         }

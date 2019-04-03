@@ -31,18 +31,18 @@ DEPS = $(OBJS:.o=.d)
 #
 # C++コンパイラの指定
 #
-CXX = icpc
+CXX = clang++
 
 #
 # C++コンパイラに与える、（最適化等の）オプション
 #
-CXXFLAGS = -Wall -Wextra -std=c++17 -xHOST -g3 -O0 -ipo -no-prec-div -pipe -I${MKLROOT}/include 
+CXXFLAGS = -Wall -Wextra -std=c++17 -O3 -m64 -I${MKLROOT}/include 
 
 #
 # リンク対象に含めるライブラリの指定
 #
-LDFLAGS = -L${MKLROOT}/lib/intel64 \
-		  -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lpthread -ldl -lxc
+LDFLAGS = -L${MKLROOT}/lib/intel64 -Wl,--no-as-needed -lmkl_gf_lp64 -lmkl_intel_thread -lmkl_core \
+		  -liomp5 -lpthread -lm -ldl -lxc
 #
 # makeの動作
 #

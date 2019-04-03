@@ -2,6 +2,8 @@
 #define __RATOM_HEAP_H__
 
 
+#include <vector>   // for std::vector
+
 /** \brief Heap. Used by adaptive algorithm.
 *
 * \author Zbigniew Romanowski [ROMZ@wp.pl]
@@ -18,7 +20,7 @@ public:
 
 	void Push(const T& e)
 	{
-		push_back(e);
+		this->push_back(e);
 		push_heap(this->begin(), this->end());
 	}
 

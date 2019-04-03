@@ -21,7 +21,7 @@ Element::~Element(void)
 //
 // Write the element to file
 //
-void Element::Write(FILE* out) const
+void Element::Write(FILE* /*out*/) const
 {
 //	fprintf(out, "p = %ld, vertDir={%ld, %ld}, vertDof={%ld, %ld}, bubbDof={", 
 //		m_p, m_vertBnd[0], m_vertBnd[1], m_vertDof[0], m_vertDof[1]);

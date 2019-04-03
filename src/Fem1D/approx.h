@@ -24,7 +24,7 @@ namespace fem1d {
         public:
             FunF2(std::shared_ptr<const util::Fun1D> const & f, const Element& e, double fa, double fb) : m_f(f), m_e(e), m_fa(fa), m_fb(fb) { }
             ~FunF2() override = default;
-            virtual double Get(double r) const
+            double Get(double r) const override
             {
                 double s = m_e.Xinv(r);
                 double b0 = 0.5 * (1 - s), b1 = 0.5 * (1 + s);

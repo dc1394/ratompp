@@ -1,9 +1,7 @@
 #include "stdafx.h"
 #include "state.h"
-#include <stdexcept>
-#include <cstdint>
-#include <boost/cast.hpp>
-#include <boost/assert.hpp>
+#include <cstdint>      // for std::int32_t
+#include <stdexcept>    // for std::invalid_argument
 
 namespace ks {
     //
@@ -17,7 +15,6 @@ namespace ks {
         m_occ = 0;
     }
 
-
     //
     // Constructor
     //
@@ -26,8 +23,7 @@ namespace ks {
         std::int32_t ee, nn;
         char ll;
 
-        //assert(name.empty());
-        BOOST_ASSERT(!name.empty());
+        assert(!name.empty());
         if (std::sscanf(name.c_str(), "%d%c%d", &nn, &ll, &ee) == EOF)
         {
             throw std::invalid_argument("name (str) is incorrect!");
@@ -36,21 +32,13 @@ namespace ks {
         // printf("nn = %d, ll = %c, ee = %d\n", nn, ll, ee);
 
         m_l = GetL(ll);
-        //m_n = static_cast<size_t>(nn - m_l - 1);
-        m_n = boost::numeric_cast<std::size_t>(nn - m_l - 1);
+        m_n = static_cast<size_t>(nn - m_l - 1);
         m_eigVal = 0.0;
-        auto const occ = boost::numeric_cast<std::size_t>(ee);
+        //auto const occ = static_cast<std::size_t>(ee);
         m_occ = static_cast<std::size_t>(ee);
 
         // printf("name = %s, n = %lu, l = %lu, occ = %lu\n", name, (unsigned long)m_n, (unsigned long)m_l, (unsigned long)m_occ);
         // fflush(stdout);
-    }
-
-    //
-    // Destructor
-    //
-    State::~State(void)
-    {
     }
 
     size_t State::GetL(char ll) const
@@ -66,7 +54,6 @@ namespace ks {
         }
         return ret;
     }
-
 
     //
     // Comparision operator

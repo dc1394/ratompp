@@ -54,7 +54,7 @@ namespace ks {
             Returns value of electron density for radius "r"
             \param r 動径方向の値r
         */
-        double Get(double r) const;
+        double Get(double r) const override;
 
         //! A public member function (const).
         /*!
@@ -99,7 +99,7 @@ namespace ks {
             std::shared_ptr<util::Fun1D> m_pot;
 
         public:
-            PotRad(void) : m_l(0) {}
+            PotRad() : m_l(0) {}
             PotRad(std::shared_ptr<util::Fun1D> const & pot) : m_pot(pot), m_l(0) {}
             ~PotRad() override = default;
 
@@ -125,6 +125,12 @@ namespace ks {
 
         //! A private member variable.
         /*!
+            database of parameters
+        */
+        std::shared_ptr<const ParamDb> const m_db;
+
+        //! A private member variable.
+        /*!
             One solver for each angular quantum number L
         */
         std::vector<EigProb> m_eigProb;
@@ -140,12 +146,6 @@ namespace ks {
             Number of calculated eigenvalues for each angular quantum number L
         */
         std::vector<size_t> m_eigNo;
-
-        //! A private member variable.
-        /*!
-            database of parameters
-        */
-        std::shared_ptr<const ParamDb> const m_db;
 
         //! A private member variable.
         /*!
