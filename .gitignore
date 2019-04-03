@@ -168,7 +168,6 @@ $RECYCLE.BIN/
 # =========================
 
 *.bak
-atom.inp.out
 *.inp.pot
 *.inp.rho
 *.inp.rho.app
