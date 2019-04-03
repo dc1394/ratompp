@@ -11,15 +11,15 @@ Rho0_Alpha 0.0
 
 
 Solver_EigAdapt Yes
-Solver_EigNode 4
-Solver_EigDeg 6
+Solver_EigNode 5
+Solver_EigDeg 10
 Solver_EigAbsMaxCoef 1E-4
 Solver_EigAbsTol 1E-14
 
 
 Solver_PsnAdapt Yes
-Solver_PsnNode 4
-Solver_PsnDeg 6
+Solver_PsnNode 100
+Solver_PsnDeg 8
 Solver_PsnAbsMaxCoef 1E-4
 
 
