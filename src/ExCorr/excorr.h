@@ -45,7 +45,7 @@ namespace excorr {
         /*!
             デフォルトデストラクタ
         */
-        ~ExCorr() = default;
+        virtual ~ExCorr() = default;
 
         // #endregion コンストラクタ・デストラクタ
 

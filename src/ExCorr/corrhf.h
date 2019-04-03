@@ -9,14 +9,13 @@
 #define __RATOM_CORRHF_H__
 
 #include "excorr.h"
-#include "../Util/spin.h"
 
 namespace excorr {
     //! A class.
     /*!
         Represents Hartree-Fock Correlation potential
     */
-    class CorrHf final : public ExCorr {
+    class CorrHf final : public virtual ExCorr {
         // #region コンストラクタ・デストラクタ
 
     public:
@@ -36,7 +35,7 @@ namespace excorr {
         /*!
         デフォルトデストラクタ
         */
-        ~CorrHf() = default;
+        ~CorrHf() override = default;
 
         // #endregion コンストラクタ・デストラクタ
 
@@ -65,6 +64,7 @@ namespace excorr {
 
         // #endregion publicメンバ関数
 
+    private:
         // #region privateメンバ関数
 
         //!  private member function (const).
@@ -79,15 +79,16 @@ namespace excorr {
 
         // #endregion privateメンバ関数
 
+    public:
         // #region 禁止されたコンストラクタ・メンバ関数
 
         //! A private member function (deleted).
         /*!
             operator=()の宣言（禁止）
-            \param コピー元のオブジェクト（未使用）
+            \param dummy コピー元のオブジェクト（未使用）
             \return コピー元のオブジェクト
         */
-        CorrHf& operator=(CorrHf const &) = delete;
+        CorrHf& operator=(CorrHf const & dummy) = delete;
 
         // #endregion 禁止されたコンストラクタ・メンバ関数
     };

@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "vec.h"
-#include <stdio.h>
-
+#include <cstdio>   // for std::fopen
+#include <memory>   // for std::unique_ptr
 
 
 //
@@ -44,11 +44,11 @@ void Vec::Extrap()
 //
 void Vec::Write(const char* path) const
 {
-FILE* out = fopen(path, "wt");
+    auto out = std::unique_ptr<FILE, decltype(&std::fclose)>(std::fopen(path, "wt"), std::fclose);
 
 	assert(out);
-	for(size_t i = 0; i < size(); i++)
-		fprintf(out, "%4lu %lf\n", static_cast<unsigned long>(i), Get(i));
-
-	fclose(out);
+    for (size_t i = 0; i < size(); i++)
+    {
+        fprintf(out.get(), "%4lu %lf\n", static_cast<unsigned long>(i), Get(i));
+    }
 }

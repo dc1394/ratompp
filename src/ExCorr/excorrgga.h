@@ -21,7 +21,7 @@ namespace excorr {
     /*!
         Represents GGA Exchange potential
     */
-    class ExCorrGGA : virtual public ExCorr {
+    class ExCorrGGA : public virtual ExCorr {
         // #region コンストラクタ・デストラクタ
 
     public:
@@ -56,7 +56,7 @@ namespace excorr {
             交換相関汎関数の名前を返す
             \return 交換相関汎関数の名前
         */
-        virtual std::string name() const override
+        std::string name() const override
         {
             return std::string(pxcfunc_->info->name);
         }
@@ -67,7 +67,7 @@ namespace excorr {
             \param r 原点からの距離（極座標）
             \return rでの交換エネルギー密度（Slater）
         */
-        virtual double xc_exc(double r) const override;
+        double xc_exc(double r) const override;
 
         // #endregion publicメンバ関数
 
@@ -79,7 +79,7 @@ namespace excorr {
             \param r 原点からの距離（極座標）
             \return rでの交換相関ポテンシャル（Slater）のαスピンとβスピンのstd::pair
         */
-        virtual dpair xc_vxc_impl(double r) const override;
+        dpair xc_vxc_impl(double r) const override;
 
         // #endregion protectedメンバ関数
 
@@ -112,7 +112,7 @@ namespace excorr {
 
         // #region privateメンバ変数
         
-    private:
+    public:
         // #region 禁止されたコンストラクタ・メンバ関数
 
         //! A private constructor (deleted).
@@ -124,10 +124,10 @@ namespace excorr {
         //! A private member function (deleted).
         /*!
             operator=()の宣言（禁止）
-            \param コピー元のオブジェクト（未使用）
+            \param dummy コピー元のオブジェクト（未使用）
             \return コピー元のオブジェクト
         */
-        ExCorrGGA & operator=(ExCorrGGA const &) = delete;
+        ExCorrGGA & operator=(ExCorrGGA const & dummy) = delete;
 
         // #endregion 禁止されたコンストラクタ・メンバ関数
     };        

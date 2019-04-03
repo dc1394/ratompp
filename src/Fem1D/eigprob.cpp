@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "eigprob.h"
-#include <boost/format.hpp>     // for boost::format
+#include <memory>           // for std::unique_ptr    
+#include <boost/format.hpp> // for boost::format
 
 //
 // Constructor
@@ -367,10 +368,10 @@ double EigProb::GetEigVal(size_t eig) const
 //
 void EigProb::WriteEigFun(const char* path, size_t eig, size_t pointNo) const
 {
-double x;
-FILE* out;
+    double x;
+    FILE* out;
 
-	out = fopen(path, "wt");
+	out = std::unique()fopen(path, "wt");
 	if(!out)
 	{
         throw std::invalid_argument((boost::format("Cannot open file '%s' for write.") % path).str());

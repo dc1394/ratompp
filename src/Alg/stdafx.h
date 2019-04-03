@@ -6,9 +6,10 @@
 #pragma once
 
 
-#include <assert.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cassert>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
 #include <stdexcept>
 
 

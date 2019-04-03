@@ -173,7 +173,7 @@ void ClpMtx::Zero()
 //!
 void ClpMtx::Write(const char* path, bool rowId) const
 {
-    auto out = std::unique_ptr<FILE, decltype(&std::fclose)>(fopen(path, "wt"), std::fclose);
+    auto out = std::unique_ptr<FILE, decltype(&std::fclose)>(std::fopen(path, "wt"), std::fclose);
 	for (auto row = 0U; row < RowNo(); row++)
 	{
 		if(rowId)

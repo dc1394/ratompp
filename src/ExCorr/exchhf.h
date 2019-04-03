@@ -19,7 +19,7 @@ namespace excorr {
     /*!
         Represents Hartree-Fock Exchange potential
     */
-    class ExchHf : virtual public ExCorr {
+    class ExchHf : public virtual ExCorr {
         // #region コンストラクタ・デストラクタ
 
     public:
@@ -43,7 +43,7 @@ namespace excorr {
         /*!
             デフォルトデストラクタ
         */
-        ~ExchHf() = default;
+        ~ExchHf() override = default;
 
         // #endregion コンストラクタ・デストラクタ
 

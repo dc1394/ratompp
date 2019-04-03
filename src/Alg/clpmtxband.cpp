@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "clpmtxband.h"
+#include <memory>       // for std::unique_ptr
 
 // March 22nd, 2014 Modified by dc1394
 //extern "C"
@@ -121,8 +122,7 @@ char jobz = 'V';  // Compute eigenvalues and eigenvectors
 char range = 'I'; // the IL-th through IU-th eigenvalues will be found
 char uplo = 'U';  // Upper triangles of A and B are stored;
 
-double *q, *work;
-int *iwork, *ifail, info;
+int info;
 
 
 	// Tylko "trojkatna gorna" jest zdefiniowana
@@ -133,10 +133,10 @@ int *iwork, *ifail, info;
 	//work = (double*)malloc(7 * n * sizeof(double));
 	//iwork = (int*)malloc(5 * n * sizeof(int));
 	//ifail = (int*)malloc(n * sizeof(int));
-	q = reinterpret_cast<double*>(mkl_malloc(n * n * sizeof(double), 64));
-	work = reinterpret_cast<double*>(mkl_malloc(7 * n * sizeof(double), 64));
-	iwork = reinterpret_cast<int*>(mkl_malloc(5 * n * sizeof(int), 64));
-	ifail = reinterpret_cast<int*>(mkl_malloc(n * sizeof(int), 64));
+	auto const q = reinterpret_cast<double*>(mkl_malloc(n * n * sizeof(double), 64));
+	auto const work = reinterpret_cast<double*>(mkl_malloc(7 * n * sizeof(double), 64));
+	auto const iwork = reinterpret_cast<int*>(mkl_malloc(5 * n * sizeof(int), 64));
+	auto const ifail = reinterpret_cast<int*>(mkl_malloc(n * sizeof(int), 64));
 
 	dsbevx_(&jobz, &range, &uplo, &n, &ku, m_mtx.m_array.data(), &ldab, q, &ldq, 
 		&vl, &vu, &il, &iu, &abstol, &m, 
@@ -148,9 +148,9 @@ int *iwork, *ifail, info;
 	//free(iwork);
 	//free(ifail);
 	//free(q);
+    mkl_free(ifail);
+    mkl_free(iwork);
 	mkl_free(work);
-	mkl_free(iwork);
-	mkl_free(ifail);
 	mkl_free(q);
 
 	if(info != 0)
@@ -199,8 +199,7 @@ char jobz = 'V';  // Compute eigenvalues and eigenvectors
 char range = 'I'; // the IL-th through IU-th eigenvalues will be found
 char uplo = 'U';  // Upper triangles of A and B are stored;
 
-double *q, *work;
-int *iwork, *ifail, info;
+std::int32_t info;
 
 // Tylko "trojkatna gorna" jest zdefiniowana
 	assert(m_kl == 0);
@@ -210,10 +209,10 @@ int *iwork, *ifail, info;
 	//work = (double*)malloc(7 * n * sizeof(double));
 	//iwork = (int*)malloc(5 * n * sizeof(int));
 	//ifail = (int*)malloc(iu * sizeof(int));
-	q = reinterpret_cast<double*>(mkl_malloc(n * n * sizeof(double), 64));
-	work = reinterpret_cast<double*>(mkl_malloc(7 * n * sizeof(double), 64));
-	iwork = reinterpret_cast<int*>(mkl_malloc(5 * n * sizeof(int), 64));
-	ifail = reinterpret_cast<int*>(mkl_malloc(iu * sizeof(int), 64));
+	auto const q = reinterpret_cast<double*>(mkl_malloc(n * n * sizeof(double), 64));
+	auto const work = reinterpret_cast<double*>(mkl_malloc(7 * n * sizeof(double), 64));
+	auto const iwork = reinterpret_cast<int*>(mkl_malloc(5 * n * sizeof(int), 64));
+	auto const ifail = reinterpret_cast<int*>(mkl_malloc(iu * sizeof(int), 64));
 
 	dsbgvx_(&jobz, &range, &uplo, &n, &ka, &kb, m_mtx.m_array.data(), &ldab, 
 		b.m_mtx.m_array.data(), &ldbb, q, &ldq, &vl, 
@@ -226,9 +225,9 @@ int *iwork, *ifail, info;
 	//free(iwork);
 	//free(ifail);
 	//free(q);
-	mkl_free(work);
-	mkl_free(iwork);
-	mkl_free(ifail);
+    mkl_free(ifail);
+    mkl_free(iwork);
+    mkl_free(work);
 	mkl_free(q);
 
 	if(info != 0)
@@ -273,9 +272,9 @@ double berr[1]; // The componentwise relative backward error
 	//afb = (double*)malloc(ldafb * n * sizeof(double));
 	//work = (double*)malloc(3 * n * sizeof(double));
 	//iwork = (int*)malloc(n * sizeof(int));
-	auto afb = reinterpret_cast<double*>(mkl_malloc(2 * ldafb * n * sizeof(double), 64));
-	auto work = reinterpret_cast<double*>(mkl_malloc(2 * 3 * n * sizeof(double), 64));
-	auto iwork = reinterpret_cast<int*>(mkl_malloc(n * sizeof(int), 64));
+	auto const afb = reinterpret_cast<double*>(mkl_malloc(2 * ldafb * n * sizeof(double), 64));
+	auto const work = reinterpret_cast<double*>(mkl_malloc(2 * 3 * n * sizeof(double), 64));
+	auto const iwork = reinterpret_cast<int*>(mkl_malloc(n * sizeof(int), 64));
 
     dpbsvx_(
             &fact, 
@@ -327,35 +326,27 @@ void ClpMtxBand::Zero()
 //
 void ClpMtxBand::Write(const char* path) const
 {
-FILE* out;
-size_t kl, row, ku;
-
-	out = fopen(path, "wt");
-	fprintf(out, "DIAGONAL\n");
-	for(row = 0; row < ColNo(); row++)
-		fprintf(out, "%4lu %lf\n", static_cast<unsigned long>(row), Get(row, row));
+	auto out = std::unique_ptr<FILE, decltype(&std::fclose)>(std::fopen(path, "wt"), std::fclose);
+	fprintf(out.get(), "DIAGONAL\n");
+	for (std::size_t row = 0UL; row < ColNo(); row++)
+		fprintf(out.get(), "%4lu %lf\n", static_cast<unsigned long>(row), Get(row, row));
 
 	// Subdiagonals
-	for(kl = 1; kl <= m_kl; kl++)
+	for (std::size_t kl = 1UL; kl <= m_kl; kl++)
 	{
-		fprintf(out, "SUB-DIAGONAL %lu\n", static_cast<unsigned long>(kl));
-		for(row = kl; row < ColNo(); row++)
-			fprintf(out, "%4lu %lf\n", static_cast<unsigned long>(row), Get(row, row - kl));
+		fprintf(out.get(), "SUB-DIAGONAL %lu\n", static_cast<unsigned long>(kl));
+		for (std::size_t row = kl; row < ColNo(); row++)
+			fprintf(out.get(), "%4lu %lf\n", static_cast<unsigned long>(row), Get(row, row - kl));
 	}
 
 	// Superdiagonals
-	for(ku = 1; ku <= m_ku; ku++)
+	for (std::size_t ku = 1UL; ku <= m_ku; ku++)
 	{
-		fprintf(out, "SUPER-DIAGONAL %lu\n", static_cast<unsigned long>(ku));
-		for(row = 0; row < ColNo(); row++)
+		fprintf(out.get(), "SUPER-DIAGONAL %lu\n", static_cast<unsigned long>(ku));
+		for (std::size_t row = 0; row < ColNo(); row++)
 		{
 			if(row + ku < ColNo())
-				fprintf(out, "%4lu %lf\n", static_cast<unsigned long>(row), Get(row, row + ku));
+				fprintf(out.get(), "%4lu %lf\n", static_cast<unsigned long>(row), Get(row, row + ku));
 		}
 	}
-
-	fclose(out);
 }
-
-
-

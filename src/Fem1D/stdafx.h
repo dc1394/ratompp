@@ -8,9 +8,9 @@
 
 // #include <iostream>
 // #include <tchar.h>
-#include <stdio.h>
-#include <assert.h>
-#include <float.h>
+#include <cstdio>
+#include <cassert>
+#include <cfloat>
 
 #include <vector>
 #include <algorithm>
