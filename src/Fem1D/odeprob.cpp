@@ -353,23 +353,18 @@ int m1;
 //
 void OdeProb::WriteSol(const char* path, size_t pointNo) const
 {
-const double dx = (XBack() - XFront()) / (pointNo -1);
-double x;
-FILE* out;
+    auto const dx = (XBack() - XFront()) / (pointNo -1);
 
-	out = fopen(path, "wt");
-	assert(out);
+	auto out = std::unique_ptr<FILE, decltype(&std::fclose)>(std::fopen(path, "wt"), std::fclose);
 
-	x = XFront();
-	for(size_t i = 0; i < pointNo - 1; i++)
+	auto x = XFront();
+	for (std::size_t i = 0UL; i < pointNo - 1; i++)
 	{
-		fprintf(out, "%20lf\t%20lf\n", x, GetSol(x));
+		std::fprintf(out.get(), "%20lf\t%20lf\n", x, GetSol(x));
 		x += dx;
 	}
 
 	// The last point must be written (to avoid the rounding errors)
 	x = XBack();
-	fprintf(out, "%20lf\t%20lf\n", x, GetSol(x));
-
-	fclose(out);
+	std::fprintf(out.get(), "%20lf\t%20lf\n", x, GetSol(x));
 }

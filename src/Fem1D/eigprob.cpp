@@ -369,31 +369,28 @@ double EigProb::GetEigVal(size_t eig) const
 void EigProb::WriteEigFun(const char* path, size_t eig, size_t pointNo) const
 {
     double x;
-    FILE* out;
 
-	out = std::unique()fopen(path, "wt");
-	if(!out)
+	auto out = std::unique_ptr<FILE, decltype(&std::fclose)>(std::fopen(path, "wt"), std::fclose);
+	if (!out)
 	{
         throw std::invalid_argument((boost::format("Cannot open file '%s' for write.") % path).str());
 	}
 
 
-	for(size_t n = 0; n < XNo() - 1; n++)
+	for (std::size_t n = 0UL; n < XNo() - 1; n++)
 	{
 		x = X(n);
-		const double dx = (X(n + 1) - X(n)) / (pointNo + 1);
-		for(size_t i = 0; i < pointNo + 1; i++)
+		auto const dx = (X(n + 1) - X(n)) / (pointNo + 1);
+		for (std::size_t i = 0UL; i < pointNo + 1; i++)
 		{
-			fprintf(out, "%20lf\t%20lf\n", x, GetEigFun(eig, x));
+			std::fprintf(out.get(), "%20lf\t%20lf\n", x, GetEigFun(eig, x));
 			x += dx;
 		}
 	}
 
 	// The last point must be written (to avoid the rounding errors)
 	x = XBack();
-	fprintf(out, "%20lf\t%20lf\n", x, GetEigFun(eig, x));
-
-	fclose(out);
+	std::fprintf(out.get(), "%20lf\t%20lf\n", x, GetEigFun(eig, x));
 }
 
 
@@ -406,25 +403,24 @@ void EigProb::WriteEigFun(const char* path, size_t eig, size_t pointNo) const
 //
 void EigProb::WriteEigFunEx(const char* path, size_t ll,  size_t eig, size_t pointNo) const
 {
-double x, rad, radr, radD1, radD2;
-FILE* out;
-
-	out = fopen(path, "wt");
+	auto out = std::unique_ptr<FILE, decltype(&std::fclose)>(std::fopen(path, "wt"), std::fclose);
 	if(!out)
 	{
         throw std::invalid_argument((boost::format("Cannot open file '%s' for write.") % path).str());
 	}
 
-	fprintf(out, "# %14s %18s %18s %18s %18s\n", "r = radius", "R(r)", "R(r)/r", "R'(r)", "R''(r)");
-	for(size_t n = 0; n < XNo() - 1; n++)
+	std::fprintf(out.get(), "# %14s %18s %18s %18s %18s\n", "r = radius", "R(r)", "R(r)/r", "R'(r)", "R''(r)");
+    
+    double radr;
+	for (std::size_t n = 0; n < XNo() - 1; n++)
 	{
-		x = X(n);
-		const double dx = (X(n + 1) - X(n)) / (pointNo + 1);
-		for(size_t i = 0; i < pointNo + 1; i++)
+		auto x = X(n);
+		auto const dx = (X(n + 1) - X(n)) / (pointNo + 1);
+		for (std::size_t i = 0; i < pointNo + 1; i++)
 		{
-			rad = GetEigFun(eig, x);
-			radD1 = GetEigFunD1(eig, x);
-			radD2 = GetEigFunD2(eig, x);
+			auto const rad = GetEigFun(eig, x);
+			auto const radD1 = GetEigFunD1(eig, x);
+			auto const radD2 = GetEigFunD2(eig, x);
 
 			if(x == 0) // Extrapolacja liniowa w x == 0
 			{
@@ -439,16 +435,14 @@ FILE* out;
 				radr = rad / x;
 			}
 
-			fprintf(out, "%18.8E %18.8E %18.8E %18.8E %18.8E\n", x, rad, radr, radD1, radD2);
+			std::fprintf(out.get(), "%18.8E %18.8E %18.8E %18.8E %18.8E\n", x, rad, radr, radD1, radD2);
 			x += dx;
 		}
 	}
 
 	// The last point must be written (to avoid the rounding errors)
-	x = XBack();
-	fprintf(out, "%18.8E %18.8E %18.8E %18.8E %18.8E\n", x, GetEigFun(eig, x), GetEigFun(eig, x) / x, GetEigFunD1(eig, x), GetEigFunD2(eig, x));
-
-	fclose(out);
+	auto const x = XBack();
+	std::fprintf(out.get(), "%18.8E %18.8E %18.8E %18.8E %18.8E\n", x, GetEigFun(eig, x), GetEigFun(eig, x) / x, GetEigFunD1(eig, x), GetEigFunD2(eig, x));
 }
 
 
@@ -457,43 +451,53 @@ FILE* out;
 //
 void EigProb::WriteEigCoef(const char* path, size_t eigNo) const
 {
-FILE* out;
-size_t row, i;
+    auto out = std::unique_ptr<FILE, decltype(&std::fclose)>(std::fopen(path, "wt"), std::fclose);
 
-	out = fopen(path, "wt");
-	assert(out);
-
-	fprintf(out, "EIGENVALUES:\n");
-	for(i = 0; i < eigNo; i++)
-		fprintf(out, "Lambda[%2lu] = %20.11E\n", static_cast<unsigned long>(i), (*m_w)[i]);
-
+    std::fprintf(out.get(), "EIGENVALUES:\n");
+    for (std::size_t i = 0UL; i < eigNo; i++)
+    {
+       std::fprintf(out.get(), "Lambda[%2lu] = %20.11E\n", static_cast<unsigned long>(i), (*m_w)[i]);
+    }
 	//////////////////////////////////////////////////////////////////////////////////////////
-	fprintf(out, "\n\nEIGENVECTOR COEFFICIENTS\n");	
-	fprintf(out, "   DOF"); 
-	for(i = 0; i < eigNo; i++) { fprintf(out, "     Eig[%2lu]      ", static_cast<unsigned long>(i)); } fprintf(out, "\n");
-	fprintf(out, "======");
-	for(i = 0; i < eigNo; i++) { fprintf(out, "==================");	 } fprintf(out, "\n");
-
-
-	row = 0;
-	for(size_t n = 0; n < EltNo(); n++) // For each element
+	std::fprintf(out.get(), "\n\nEIGENVECTOR COEFFICIENTS\n");	
+	std::fprintf(out.get(), "   DOF"); 
+	for (std::size_t i = 0UL; i < eigNo; i++)
 	{
-		const Element& e = Elt(n);
+	    std::fprintf(out.get(), "     Eig[%2lu]      ", static_cast<unsigned long>(i));
+	}
+    
+    std::fprintf(out.get(), "\n");
+	std::fprintf(out.get(), "======");
+	
+    for (std::size_t i = 0UL; i < eigNo; i++)
+    {
+        std::fprintf(out.get(), "==================");
+    }
+    std::fprintf(out.get(), "\n");
 
-		fprintf(out, "Elt:%06lu = [ %14.6E, %14.6E ]\n", static_cast<unsigned long>(n), e.X(-1), e.X(1));
+
+	std::size_t row = 0;
+	for (std::size_t n = 0UL; n < EltNo(); n++) // For each element
+	{
+		auto const & e = Elt(n);
+
+		std::fprintf(out.get(), "Elt:%06lu = [ %14.6E, %14.6E ]\n", static_cast<unsigned long>(n), e.X(-1), e.X(1));
 		
 		for(size_t j = 0; j < e.DofNo(); j++) // For each DOF in elemt
 		{
-			const int dof = e.m_dof[j];
+			auto const dof = e.m_dof[j];
 			if(dof < 0)
 				continue;
-			fprintf(out, "%6d", dof);
-			for(i = 0; i < eigNo; i++)
-				fprintf(out, "%18.6E", m_z->Get(dof, i));
-			fprintf(out, "\n");
+			std::fprintf(out.get(), "%6d", dof);
+            for (std::size_t i = 0UL; i < eigNo; i++)
+            {
+                std::fprintf(out.get(), "%18.6E", m_z->Get(dof, i));
+            }
+			
+		    std::fprintf(out.get(), "\n");
 			row++;
 		}
-		fprintf(out, "\n");
+		std::fprintf(out.get(), "\n");
 
 	}
 /*
@@ -507,22 +511,34 @@ size_t row, i;
 */
 	//////////////////////////////////////////////////////////////////////////////////////////
 	size_t coefNo = EltBack().P();
-	fprintf(out, "\n\nABSOLUTE SUM OF LAST '%lu' COEFFICIENTS\n", static_cast<unsigned long>(coefNo));
-	for(i = 0; i < eigNo; i++) { fprintf(out, "     Eig[%2lu]      ", static_cast<unsigned long>(i)); } fprintf(out, "\n");
-	for(i = 0; i < eigNo; i++) { fprintf(out, "==================");	 } fprintf(out, "\n");
+	std::fprintf(out.get(), "\n\nABSOLUTE SUM OF LAST '%lu' COEFFICIENTS\n", static_cast<unsigned long>(coefNo));
+	
+    for(std::size_t i = 0UL; i < eigNo; i++)
+    {
+        std::fprintf(out.get(), "     Eig[%2lu]      ", static_cast<unsigned long>(i));
+    }
+    std::fprintf(out.get(), "\n");
+	
+    for (std::size_t i = 0; i < eigNo; i++)
+	{
+	    std::fprintf(out.get(), "==================");
+	}
+    std::fprintf(out.get(), "\n");
 
 	std::vector<double> sum(eigNo);
-	for(i = 0; i < eigNo; i++)
+	for (std::size_t i = 0UL; i < eigNo; i++)
 	{
-		for(row = m_z->RowNo() - coefNo; row < m_z->RowNo(); row++)
-			sum[i] += fabs(m_z->Get(row, i));
+        for (row = m_z->RowNo() - coefNo; row < m_z->RowNo(); row++)
+        {
+            sum[i] += fabs(m_z->Get(row, i));
+        }
 	}
-	for(i = 0; i < eigNo; i++)
-		fprintf(out, "%18.6E", sum[i]);
-	fprintf(out, "\n");
-
-
-	fclose(out);
+    
+    for (std::size_t i = 0UL; i < eigNo; i++)
+    {
+        std::fprintf(out.get(), "%18.6E", sum[i]);
+    }
+	std::fprintf(out.get(), "\n");
 }
 
 //
