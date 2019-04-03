@@ -36,7 +36,7 @@ CXX = icpc
 #
 # C++コンパイラに与える、（最適化等の）オプション
 #
-CXXFLAGS = -Wall -Wextra -std=c++17 -xHOST -O3 -ipo -no-prec-div -pipe -I${MKLROOT}/include 
+CXXFLAGS = -Wall -Wextra -std=c++17 -xHOST -g3 -O0 -ipo -no-prec-div -pipe -I${MKLROOT}/include 
 
 #
 # リンク対象に含めるライブラリの指定

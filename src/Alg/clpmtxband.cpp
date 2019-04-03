@@ -210,13 +210,13 @@ void ClpMtxBand::EigenGen(size_t eigNo, double abstol, Vec& w, ClpMtx& z, ClpMtx
     //work = (double*)malloc(7 * n * sizeof(double));
     //iwork = (int*)malloc(5 * n * sizeof(int));
     //ifail = (int*)malloc(iu * sizeof(int));
-    auto const q = reinterpret_cast<double*>(mkl_malloc(n * n * sizeof(double), 64));
+    auto q = std::vector<double, util::mkl_allocator<double> >(n * n);
     auto const work = reinterpret_cast<double*>(mkl_malloc(7 * n * sizeof(double), 64));
     auto const iwork = reinterpret_cast<int*>(mkl_malloc(5 * n * sizeof(int), 64));
     auto const ifail = reinterpret_cast<int*>(mkl_malloc(iu * sizeof(int), 64));
 
     dsbgvx_(&jobz, &range, &uplo, &n, &ka, &kb, m_mtx.m_array.data(), &ldab,
-        b.m_mtx.m_array.data(), &ldbb, q, &ldq, &vl,
+        b.m_mtx.m_array.data(), &ldbb, q.data(), &ldq, &vl,
         &vu, &il, &iu, &abstol, &m,
         w.data(),
         z.m_array.data(), &ldz, work, iwork, ifail, &info);
@@ -229,8 +229,7 @@ void ClpMtxBand::EigenGen(size_t eigNo, double abstol, Vec& w, ClpMtx& z, ClpMtx
     mkl_free(ifail);
     mkl_free(iwork);
     mkl_free(work);
-    mkl_free(q);
-
+    
     if (info != 0)
         throw std::invalid_argument("Error in 'ClpMtxBand::EigenGen'");
     //	assert(ret == 0);
