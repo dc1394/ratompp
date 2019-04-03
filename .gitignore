@@ -47,6 +47,11 @@ build/
 *.scc
 *.pot
 
+# g++ object files
+ratompp
+*.o
+*.d
+
 # Visual C++ cache files
 ipch/
 *.aps
