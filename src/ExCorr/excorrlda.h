@@ -10,11 +10,11 @@
 
 #include "excorr.h"
 #include "../Util/spin.h"
-#include "xcfunc_deleter.h"
 #include <cstdint>          // for std::uint32_t
 #include <functional>       // for std::function
-#include <memory>           // for std::unique_ptr
+#include <memory>           // for std::shared_ptr
 #include <string>           // for std::string
+#include <xc.h>             // for xc_func_type
 
 namespace excorr {
     //! A class.

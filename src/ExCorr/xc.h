@@ -29,10 +29,9 @@ namespace excorr {
         */
         template <typename T>
         Xc(const T & obj)
-            :   E_([obj](double r) { return obj.xc_exc(r); }),
-                Name_([obj]() { return obj.name(); }),
+            :   E_([&obj](double r) { return obj.xc_exc(r); }),
+                Name_([&obj]() { return obj.name(); }),
                 V_([obj](double r) { return obj.template xc_vxc<S>(r); })
-                
         {}
 
         //! A destructor.

@@ -6,7 +6,8 @@
 */
 
 #include "excorrlda.h"
-#include <array>        // for std::array
+#include "xcfunc_deleter.h"
+#include <array>            // for std::array
 
 namespace excorr {
     // #region コンストラクタ
