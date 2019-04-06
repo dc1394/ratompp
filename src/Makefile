@@ -41,7 +41,7 @@ CXX = clang++
 #
 # C++コンパイラに与える、（最適化等の）オプション
 #
-CXXFLAGS = -Wall -Wextra -std=c++17 -g3 -O0
+CXXFLAGS = -Wall -Wextra -std=c++17 -O3 -mtune=native -march=native
 
 #
 # リンク対象に含めるライブラリの指定
@@ -81,5 +81,4 @@ install: $(PROG)
 # make cleanの動作
 #
 clean:
-		rm $(DESTDIR)$(PROG)
 		rm -f $(PROG) $(OBJS) $(DEPS)

@@ -106,13 +106,13 @@ void ClpMtxBand::Eigen(size_t eigNo, double abstol, Vec& w, ClpMtx& z)
 {
     int m;
 
-    int n = static_cast<int>(m_mtx.m_colNo);
+    auto n = static_cast<std::int32_t>(m_mtx.m_colNo);
     int ldz = n; // The leading dimension of the array Z.  LDZ >= 1, and if JOBZ = 'V', LDZ >= max(1,N).
     int ldq = n; // The leading dimension of the array Q.  If JOBZ = 'N', LDQ >= 1. If JOBZ = 'V', LDQ >= max(1,N).
-    int ku = static_cast<int>(m_ku);
+    auto ku = static_cast<std::int32_t>(m_ku);
     int ldab = ku + 1; // The leading dimension of the array AB.  LDAB >= KA+1.
     int il = 1; // If RANGE='I', the indice of the smallest eigenvalues to be returned.
-    int iu = static_cast<int>(eigNo);
+    auto iu = static_cast<std::int32_t>(eigNo);
 
     double vl = 0, vu = 0; // Not referenced if RANGE = 'A' or 'I'.
 
@@ -120,42 +120,26 @@ void ClpMtxBand::Eigen(size_t eigNo, double abstol, Vec& w, ClpMtx& z)
     char range = 'I'; // the IL-th through IU-th eigenvalues will be found
     char uplo = 'U';  // Upper triangles of A and B are stored;
 
-    int info;
-
+    std::int32_t info;
 
     // Tylko "trojkatna gorna" jest zdefiniowana
     assert(m_kl == 0);
 
     // March 22nd, 2014 Modified by dc1394
-    auto q = (double*)malloc(n * n * sizeof(double));
-    auto work = (double*)malloc(7 * n * sizeof(double));
-    auto iwork = (int*)malloc(5 * n * sizeof(int));
-    auto ifail = (int*)malloc(n * sizeof(int));
-    /*auto const q = reinterpret_cast<double*>(mkl_malloc(n * n * sizeof(double), 64));
-    auto const work = reinterpret_cast<double*>(mkl_malloc(7 * n * sizeof(double), 64));
-    auto const iwork = reinterpret_cast<int*>(mkl_malloc(5 * n * sizeof(int), 64));
-    auto const ifail = reinterpret_cast<int*>(mkl_malloc(n * sizeof(int), 64));*/
-
-    dsbevx_(&jobz, &range, &uplo, &n, &ku, m_mtx.m_array.data(), &ldab, q, &ldq,
+    std::vector<double> q(n * n);
+    std::vector<double> work(7 * n);
+    std::vector<std::int32_t> iwork(5 * n);
+    std::vector<std::int32_t> ifail(n);
+    
+    dsbevx_(&jobz, &range, &uplo, &n, &ku, m_mtx.m_array.data(), &ldab, q.data(), &ldq,
         &vl, &vu, &il, &iu, &abstol, &m,
         w.data(),
-        z.m_array.data(), &ldz, work, iwork, ifail, &info);
+        z.m_array.data(), &ldz, work.data(), iwork.data(), ifail.data(), &info);
 
     // March 22nd, 2014 Modified by dc1394
-    free(work);
-    free(iwork);
-    free(ifail);
-    free(q);
-    /*mkl_free(ifail);
-    mkl_free(iwork);
-    mkl_free(work);
-    mkl_free(q);*/
 
     if (info != 0)
         throw std::invalid_argument("Error in 'ClpMtxBand::EigenGen'");
-    //	assert(ret == 0);
-    //	assert(info == 0);
-
 }
 
 //
@@ -178,20 +162,20 @@ void ClpMtxBand::EigenGen(size_t eigNo, double abstol, Vec& w, ClpMtx& z, ClpMtx
 {
     int m;
 
-    int n = static_cast<int>(m_mtx.m_colNo);
+    auto n = static_cast<std::int32_t>(m_mtx.m_colNo);
     int ldz = n; // The leading dimension of the array Z.  LDZ >= 1, and if JOBZ = 'V', LDZ >= max(1,N).
     int ldq = n; // The leading dimension of the array Q.  If JOBZ = 'N', LDQ >= 1. If JOBZ = 'V', LDQ >= max(1,N).
 
-    int ka = static_cast<int>(m_ku);
+    auto ka = static_cast<std::int32_t>(m_ku);
     int ldab = ka + 1; // The leading dimension of the array AB.  LDAB >= KA+1.
 
-    int kb = static_cast<int>(b.m_ku);
+    auto kb = static_cast<std::int32_t>(b.m_ku);
     int ldbb = kb + 1; // The leading dimension of the array BB.  LDBB >= KB+1. 
 
     int il = 1; // If RANGE='I', the indice of the smallest eigenvalues to be returned.
 
     double vl = 0, vu = 0; // Not referenced if RANGE = 'A' or 'I'.
-    int iu = static_cast<int>(eigNo);
+    auto iu = static_cast<std::int32_t>(eigNo);
 
     char jobz = 'V';  // Compute eigenvalues and eigenvectors
     char range = 'I'; // the IL-th through IU-th eigenvalues will be found
@@ -202,35 +186,19 @@ void ClpMtxBand::EigenGen(size_t eigNo, double abstol, Vec& w, ClpMtx& z, ClpMtx
     // Tylko "trojkatna gorna" jest zdefiniowana
     assert(m_kl == 0);
 
-    // March 22nd, 2014 Modified by dc1394
-    auto q = (double*)malloc(2 * n * n * sizeof(double));
-    auto work = (double*)malloc(7 * n * sizeof(double));
-    auto iwork = (int*)malloc(5 * n * sizeof(int));
-    auto ifail = (int*)malloc(iu * sizeof(int));
-    /*auto q = std::vector<double, util::mkl_allocator<double> >(n * n);
-    auto const work = reinterpret_cast<double*>(mkl_malloc(7 * n * sizeof(double), 64));
-    auto const iwork = reinterpret_cast<int*>(mkl_malloc(5 * n * sizeof(int), 64));
-    auto const ifail = reinterpret_cast<int*>(mkl_malloc(iu * sizeof(int), 64));*/
-
+    std::vector<double> q(2 * n * n);
+    std::vector<double> work(7 * n);
+    std::vector<std::int32_t> iwork(5 * n);
+    std::vector<std::int32_t> ifail(iu);
+    
     dsbgvx_(&jobz, &range, &uplo, &n, &ka, &kb, m_mtx.m_array.data(), &ldab,
-        b.m_mtx.m_array.data(), &ldbb, q, &ldq, &vl,
+        b.m_mtx.m_array.data(), &ldbb, q.data(), &ldq, &vl,
         &vu, &il, &iu, &abstol, &m,
         w.data(),
-        z.m_array.data(), &ldz, work, iwork, ifail, &info);
-
-    // March 22nd, 2014 Modified by dc1394
-    free(work);
-    free(iwork);
-    free(ifail);
-    free(q);
-    /*mkl_free(ifail);
-    mkl_free(iwork);
-    mkl_free(work);*/
+        z.m_array.data(), &ldz, work.data(), iwork.data(), ifail.data(), &info);
     
     if (info != 0)
         throw std::invalid_argument("Error in 'ClpMtxBand::EigenGen'");
-    //	assert(ret == 0);
-    //	assert(info == 0);
 }
 
 //
@@ -250,11 +218,11 @@ void ClpMtxBand::SolveSymPos(std::unique_ptr<Vec> const & b, std::unique_ptr<Vec
     int nrhs = 1; // The number of right-hand sides
     int info;
 
-    int n = static_cast<int>(m_mtx.m_colNo);
+    auto n = static_cast<std::int32_t>(m_mtx.m_colNo);
     int ldb = n; // The leading dimension of the array B
     int ldx = n; // The leading dimension of the array X
 
-    int kd = static_cast<int>(m_ku);
+    auto kd = static_cast<std::int32_t>(m_ku);
     int ldab = kd + 1; // The leading dimension of the array AB.  LDAB >= KA+1.
     int ldafb = kd + 1; // The leading dimension of the array AFB.
 
@@ -266,13 +234,10 @@ void ClpMtxBand::SolveSymPos(std::unique_ptr<Vec> const & b, std::unique_ptr<Vec
     assert(m_kl == 0);
 
     // March 22nd, 2014 Modified by dc1394
-    auto afb = (double*)malloc(ldafb * n * sizeof(double));
-    auto work = (double*)malloc(3 * n * sizeof(double));
-    auto iwork = (int*)malloc(n * sizeof(int));
-    /*auto afb = std::vector<double, util::mkl_allocator<double> >(ldafb * n);
-    auto work = std::vector<double, util::mkl_allocator<double> >(3 * n);
-    auto const iwork = reinterpret_cast<int*>(mkl_malloc(n * sizeof(int), 64));*/
-
+    std::vector<double> afb(ldafb * n);
+    std::vector<double> work(3 * n);
+    std::vector<std::int32_t> iwork(n);
+    
     dpbsvx_(
         &fact,
         &uplo,
@@ -281,7 +246,7 @@ void ClpMtxBand::SolveSymPos(std::unique_ptr<Vec> const & b, std::unique_ptr<Vec
         &nrhs,
         m_mtx.m_array.data(),
         &ldab,
-        afb,
+        afb.data(),
         &ldafb,
         &equed,
         nullptr,
@@ -292,20 +257,12 @@ void ClpMtxBand::SolveSymPos(std::unique_ptr<Vec> const & b, std::unique_ptr<Vec
         &rcond,
         ferr,
         berr,
-        work,
-        iwork,
+        work.data(),
+        iwork.data(),
         &info);
-
-    // March 22nd, 2014 Modified by dc1394
-    free(afb);
-    free(work);
-    free(iwork);
-    //mkl_free(iwork);
 
     if (info != 0)
         throw std::invalid_argument("Error in 'ClpMtxBand::Solve'");
-    //	assert(ret == 0);
-    //	assert(info == 0);
 }
 
 //
