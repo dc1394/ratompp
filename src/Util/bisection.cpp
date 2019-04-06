@@ -1,16 +1,6 @@
 #include "stdafx.h"
 #include "bisection.h"
 
-
-
-Bisection::Bisection(void)
-{
-}
-
-Bisection::~Bisection(void)
-{
-}
-
 //!
 //! Zwraca miejsce zerowe funkcji "f" na przedziale [a, b].
 //! Obliczenia wykonane z dokladnoscia "eps".
@@ -66,7 +56,7 @@ double va, vb, vc, c;
 //! delta - ograniczenie dolne odleglosci miedzy miejscami zerowymi
 //! xMax - maksymalny argument. Poszukiwania sa przerywane, jezeli argument jest wiekszy niz "xMax".
 //!
-void Bisection::ZeroSeq(const util::Fun1D* f, Vec& zero, double xMin, double xMax, double delta, double eps)
+void Bisection::ZeroSeq(const util::Fun1D* f, Vec& zero, double xMin, double, double delta, double eps)
 {
 double a, va, vb;
 size_t i = 0;

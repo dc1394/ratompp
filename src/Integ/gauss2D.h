@@ -1,6 +1,7 @@
 #ifndef __RATOM_GAUSS2D_H__
 #define __RATOM_GAUSS2D_H__
 
+#pragma once
 
 /**
 *	\brief Oblicza calke w dwoch wymiarach po prostkoacie. 
@@ -18,11 +19,11 @@
 
 
 
-class Gauss2D
+class Gauss2D final
 {
 public:
-	Gauss2D(double epsAbs, size_t order);
-	~Gauss2D(void);
+	Gauss2D(double, size_t order);
+	~Gauss2D() = default;
 
 	double ErrAbs() const;
 	double ErrRel() const;

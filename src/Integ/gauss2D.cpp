@@ -5,7 +5,7 @@
 //!
 //! Konstruktor
 //!
-Gauss2D::Gauss2D(double epsAbs, size_t order)
+Gauss2D::Gauss2D(double, size_t order)
 {
 std::vector<double> w1D(order), x1D(order);
 size_t i, j, k;
@@ -28,13 +28,6 @@ size_t i, j, k;
 			k++;
 		}
 	}
-}
-
-//!
-//! Destruktor
-//!
-Gauss2D::~Gauss2D(void)
-{
 }
 
 

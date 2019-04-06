@@ -1,32 +1,29 @@
 #include "stdafx.h"
 #include "clpmtxband.h"
-#include "../Util/mkl_allocator.h"
-#include <memory>       // for std::unique_ptr
 
 // March 22nd, 2014 Modified by dc1394
-//extern "C"
-//{
-//void dsbevx_(char *jobz, char *range, char *uplo, int *n, 
-//	int *kd, double *ab, int *ldab, double *q, int *
-//	ldq, double *vl, double *vu, int *il, int *iu, 
-//	double *abstol, int *m, double *w, double *z__, 
-//	int *ldz, double *work, int *iwork, int *ifail, 
-//	int *info);
-//	
-//void dsbgvx_(char *jobz, char *range, char *uplo, int *n, 
-//	int *ka, int *kb, double *ab, int *ldab, double *
-//	bb, int *ldbb, double *q, int *ldq, double *vl, 
-//	double *vu, int *il, int *iu, double *abstol, int 
-//	*m, double *w, double *z__, int *ldz, double *work, 
-//	int *iwork, int *ifail, int *info);	
-//	
-//void dpbsvx_(char *fact, char *uplo, int *n, int *kd, 
-//	int *nrhs, double *ab, int *ldab, double *afb, 
-//	int *ldafb, char *equed, double *s, double *b, int *
-//	ldb, double *x, int *ldx, double *rcond, double *ferr,
-//	 double *berr, double *work, int *iwork, int *info);	
-//}
-
+extern "C"
+{
+    void dsbevx_(char *jobz, char *range, char *uplo, int *n, 
+	    int *kd, double *ab, int *ldab, double *q, int *
+	    ldq, double *vl, double *vu, int *il, int *iu, 
+	    double *abstol, int *m, double *w, double *z__, 
+	    int *ldz, double *work, int *iwork, int *ifail, 
+	    int *info);
+	
+    void dsbgvx_(char *jobz, char *range, char *uplo, int *n, 
+	    int *ka, int *kb, double *ab, int *ldab, double *
+	    bb, int *ldbb, double *q, int *ldq, double *vl, 
+	    double *vu, int *il, int *iu, double *abstol, int 
+	    *m, double *w, double *z__, int *ldz, double *work, 
+	    int *iwork, int *ifail, int *info);	
+	
+    void dpbsvx_(char *fact, char *uplo, int *n, int *kd, 
+	    int *nrhs, double *ab, int *ldab, double *afb, 
+	    int *ldafb, char *equed, double *s, double *b, int *
+	    ldb, double *x, int *ldx, double *rcond, double *ferr,
+	    double *berr, double *work, int *iwork, int *info);	
+}
 
 // Constructor
 // n - number of columns
@@ -130,14 +127,14 @@ void ClpMtxBand::Eigen(size_t eigNo, double abstol, Vec& w, ClpMtx& z)
     assert(m_kl == 0);
 
     // March 22nd, 2014 Modified by dc1394
-    //q = (double*)malloc(n * n * sizeof(double));
-    //work = (double*)malloc(7 * n * sizeof(double));
-    //iwork = (int*)malloc(5 * n * sizeof(int));
-    //ifail = (int*)malloc(n * sizeof(int));
-    auto const q = reinterpret_cast<double*>(mkl_malloc(n * n * sizeof(double), 64));
+    auto q = (double*)malloc(n * n * sizeof(double));
+    auto work = (double*)malloc(7 * n * sizeof(double));
+    auto iwork = (int*)malloc(5 * n * sizeof(int));
+    auto ifail = (int*)malloc(n * sizeof(int));
+    /*auto const q = reinterpret_cast<double*>(mkl_malloc(n * n * sizeof(double), 64));
     auto const work = reinterpret_cast<double*>(mkl_malloc(7 * n * sizeof(double), 64));
     auto const iwork = reinterpret_cast<int*>(mkl_malloc(5 * n * sizeof(int), 64));
-    auto const ifail = reinterpret_cast<int*>(mkl_malloc(n * sizeof(int), 64));
+    auto const ifail = reinterpret_cast<int*>(mkl_malloc(n * sizeof(int), 64));*/
 
     dsbevx_(&jobz, &range, &uplo, &n, &ku, m_mtx.m_array.data(), &ldab, q, &ldq,
         &vl, &vu, &il, &iu, &abstol, &m,
@@ -145,14 +142,14 @@ void ClpMtxBand::Eigen(size_t eigNo, double abstol, Vec& w, ClpMtx& z)
         z.m_array.data(), &ldz, work, iwork, ifail, &info);
 
     // March 22nd, 2014 Modified by dc1394
-    //free(work);
-    //free(iwork);
-    //free(ifail);
-    //free(q);
-    mkl_free(ifail);
+    free(work);
+    free(iwork);
+    free(ifail);
+    free(q);
+    /*mkl_free(ifail);
     mkl_free(iwork);
     mkl_free(work);
-    mkl_free(q);
+    mkl_free(q);*/
 
     if (info != 0)
         throw std::invalid_argument("Error in 'ClpMtxBand::EigenGen'");
@@ -206,29 +203,29 @@ void ClpMtxBand::EigenGen(size_t eigNo, double abstol, Vec& w, ClpMtx& z, ClpMtx
     assert(m_kl == 0);
 
     // March 22nd, 2014 Modified by dc1394
-    //q = (double*)malloc(n * n * sizeof(double));
-    //work = (double*)malloc(7 * n * sizeof(double));
-    //iwork = (int*)malloc(5 * n * sizeof(int));
-    //ifail = (int*)malloc(iu * sizeof(int));
-    auto q = std::vector<double, util::mkl_allocator<double> >(n * n);
+    auto q = (double*)malloc(2 * n * n * sizeof(double));
+    auto work = (double*)malloc(7 * n * sizeof(double));
+    auto iwork = (int*)malloc(5 * n * sizeof(int));
+    auto ifail = (int*)malloc(iu * sizeof(int));
+    /*auto q = std::vector<double, util::mkl_allocator<double> >(n * n);
     auto const work = reinterpret_cast<double*>(mkl_malloc(7 * n * sizeof(double), 64));
     auto const iwork = reinterpret_cast<int*>(mkl_malloc(5 * n * sizeof(int), 64));
-    auto const ifail = reinterpret_cast<int*>(mkl_malloc(iu * sizeof(int), 64));
+    auto const ifail = reinterpret_cast<int*>(mkl_malloc(iu * sizeof(int), 64));*/
 
     dsbgvx_(&jobz, &range, &uplo, &n, &ka, &kb, m_mtx.m_array.data(), &ldab,
-        b.m_mtx.m_array.data(), &ldbb, q.data(), &ldq, &vl,
+        b.m_mtx.m_array.data(), &ldbb, q, &ldq, &vl,
         &vu, &il, &iu, &abstol, &m,
         w.data(),
         z.m_array.data(), &ldz, work, iwork, ifail, &info);
 
     // March 22nd, 2014 Modified by dc1394
-    //free(work);
-    //free(iwork);
-    //free(ifail);
-    //free(q);
-    mkl_free(ifail);
+    free(work);
+    free(iwork);
+    free(ifail);
+    free(q);
+    /*mkl_free(ifail);
     mkl_free(iwork);
-    mkl_free(work);
+    mkl_free(work);*/
     
     if (info != 0)
         throw std::invalid_argument("Error in 'ClpMtxBand::EigenGen'");
@@ -269,12 +266,12 @@ void ClpMtxBand::SolveSymPos(std::unique_ptr<Vec> const & b, std::unique_ptr<Vec
     assert(m_kl == 0);
 
     // March 22nd, 2014 Modified by dc1394
-    //afb = (double*)malloc(ldafb * n * sizeof(double));
-    //work = (double*)malloc(3 * n * sizeof(double));
-    //iwork = (int*)malloc(n * sizeof(int));
-    auto afb = std::vector<double, util::mkl_allocator<double> >(ldafb * n);
+    auto afb = (double*)malloc(ldafb * n * sizeof(double));
+    auto work = (double*)malloc(3 * n * sizeof(double));
+    auto iwork = (int*)malloc(n * sizeof(int));
+    /*auto afb = std::vector<double, util::mkl_allocator<double> >(ldafb * n);
     auto work = std::vector<double, util::mkl_allocator<double> >(3 * n);
-    auto const iwork = reinterpret_cast<int*>(mkl_malloc(n * sizeof(int), 64));
+    auto const iwork = reinterpret_cast<int*>(mkl_malloc(n * sizeof(int), 64));*/
 
     dpbsvx_(
         &fact,
@@ -284,7 +281,7 @@ void ClpMtxBand::SolveSymPos(std::unique_ptr<Vec> const & b, std::unique_ptr<Vec
         &nrhs,
         m_mtx.m_array.data(),
         &ldab,
-        afb.data(),
+        afb,
         &ldafb,
         &equed,
         nullptr,
@@ -295,15 +292,15 @@ void ClpMtxBand::SolveSymPos(std::unique_ptr<Vec> const & b, std::unique_ptr<Vec
         &rcond,
         ferr,
         berr,
-        work.data(),
+        work,
         iwork,
         &info);
 
     // March 22nd, 2014 Modified by dc1394
-    //free(afb);
-    //free(work);
-    //free(iwork);
-    mkl_free(iwork);
+    free(afb);
+    free(work);
+    free(iwork);
+    //mkl_free(iwork);
 
     if (info != 0)
         throw std::invalid_argument("Error in 'ClpMtxBand::Solve'");

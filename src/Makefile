@@ -4,9 +4,14 @@
 PROG = ratompp
 
 #
+# プログラムをインストールする場所の指定
+#
+DESTDIR = ../
+
+#
 # ソースコードが存在する相対パス
 #
-VPATH = src/Alg src/ExCorr src/Fem1D src/Integ src/Ks src/Util
+VPATH = Alg ExCorr Fem1D Integ Ks Util
 
 #
 # コンパイル対象のソースファイル群（カレントディレクトリ以下の*.cppファイル）
@@ -36,13 +41,12 @@ CXX = clang++
 #
 # C++コンパイラに与える、（最適化等の）オプション
 #
-CXXFLAGS = -Wall -Wextra -std=c++17 -O3 -m64 -I${MKLROOT}/include 
+CXXFLAGS = -Wall -Wextra -std=c++17 -g3 -O0
 
 #
 # リンク対象に含めるライブラリの指定
 #
-LDFLAGS = -L${MKLROOT}/lib/intel64 -Wl,--no-as-needed -lmkl_gf_lp64 -lmkl_intel_thread -lmkl_core \
-		  -liomp5 -lpthread -lm -ldl -lxc
+LDFLAGS = -lopenblas -lpthread -lm -ldl -lxc
 #
 # makeの動作
 #
@@ -65,8 +69,17 @@ $(PROG): $(OBJS)
 %.o: %.cpp
 		$(CXX) $(CXXFLAGS) -c -MMD -MP $<
 
+
+#
+# プログラムのインストール
+#
+install: $(PROG)
+		strip $(PROG)
+		cp $(PROG) $(DESTDIR)$(PROG)
+
 #
 # make cleanの動作
 #
 clean:
+		rm $(DESTDIR)$(PROG)
 		rm -f $(PROG) $(OBJS) $(DEPS)

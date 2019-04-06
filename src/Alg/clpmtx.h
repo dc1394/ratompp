@@ -2,8 +2,6 @@
 #define __RATOM_CLPMTX_H__
 
 #include "../Util/vec.h"
-// added by dc1394 - Jan/14/2014
-#include <memory>
 
 /** \brief Wrapper for rectangular matrix from LAPACk library
 *
@@ -48,7 +46,7 @@ private:
         // Array with data
 	// Arranged by dc1394 - Jan/14/2014
 	//double* m_array;
-    std::vector<double, util::mkl_allocator<double> > m_array;
+    std::vector<double> m_array;
 };
 
 #endif

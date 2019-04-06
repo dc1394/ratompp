@@ -1,7 +1,6 @@
 #ifndef __RATOM_CLPMTXBAND_H__
 #define __RATOM_CLPMTXBAND_H__
 
-
 /** \brief Wrapper for band matrix from LAPACK library
 *
 * \author Zbigniew Romanowski [ROMZ]
@@ -9,7 +8,7 @@
 */
 
 #include "clpmtx.h"
-
+#include <memory>   // for std::unique_ptr
 
 class ClpMtxBand final
 {

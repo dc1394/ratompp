@@ -1,17 +1,17 @@
 #include "stdafx.h"
 #include "clpmtx.h"
 // #include "Except.h"
+#include <memory>       // for std::unique_ptr
 
-
-//extern "C"
-//{
-//    int dgesv_(int *n, int *nrhs, double *a, int *lda, 
-//         int *ipiv, double *b, int *ldb, int *info);
-//	
-//    int dsysv_(char *uplo, int *n, int *nrhs, double *a, 
-//	int *lda, int *ipiv, double *b, int *ldb, 
-//		double *work, int *lwork, int *info);
-//}
+extern "C"
+{
+    int dgesv_(int *n, int *nrhs, double *a, int *lda, 
+         int *ipiv, double *b, int *ldb, int *info);
+	
+    int dsysv_(char *uplo, int *n, int *nrhs, double *a, 
+	int *lda, int *ipiv, double *b, int *ldb, 
+		double *work, int *lwork, int *info);
+}
 
 //!
 //! Konstruktor 
@@ -36,7 +36,8 @@ ClpMtx::ClpMtx(size_t rowNo, size_t colNo)
 	m_rowNo = rowNo;
 	m_colNo = colNo;
 	//m_array = new double[rowNo * colNo];
-	m_array.resize(rowNo * colNo);
+	m_array.clear();
+    m_array.resize(rowNo * colNo);
 
 	Zero();
 }
@@ -52,7 +53,8 @@ void ClpMtx::SetSize(size_t rowNo, size_t colNo)
 	m_rowNo = rowNo;
 	m_colNo = colNo;
 	//m_array = new double[rowNo * colNo];
-	m_array.resize(rowNo * colNo);
+	m_array.clear();
+    m_array.resize(rowNo * colNo);
 
 	Zero();
 }
@@ -94,26 +96,26 @@ size_t ClpMtx::Elt(size_t row, size_t col) const
 //! 
 void ClpMtx::Dgesv(const Vec& b, Vec& x)
 {
-int n = static_cast<int>(m_colNo);
-int nrhs = 1;
-int lda = n;
-int ldb = n;
-int info;
+    auto n = static_cast<std::int32_t>(m_colNo);
+    int nrhs = 1;
+    int lda = n;
+    int ldb = n;
+    int info;
 
 	assert(m_colNo == m_rowNo);
 
 	// Kopiowanie. Rozwiazanie zwracane jest na wekotrze "x"
 	x = b;
 
-	auto ipiv = reinterpret_cast<int *>(mkl_malloc(n * sizeof(int), 64));
-	dgesv_(&n, &nrhs, m_array.data(), &lda, ipiv, x.data(), &ldb, &info);
-	mkl_free(ipiv);
-	
+    std::vector<std::int32_t> ipiv(n);
+	auto const ret = dgesv_(&n, &nrhs, m_array.data(), &lda, ipiv.data(), x.data(), &ldb, &info);
+
 	if (info != 0)
     {
 		throw std::invalid_argument("Error in 'ClpMtx::Solve'");
     }
-//	assert(ret == 0);
+
+    assert(ret == 0);
 //	assert(info == 0);
 }
 
@@ -124,16 +126,16 @@ int info;
 //  
 void ClpMtx::Dsysv(const Vec& b, Vec& x)
 {
-char uplo = 'U';  // Upper triangle of A is stored
+    char uplo = 'U';  // Upper triangle of A is stored
 
-int n = static_cast<int>(m_colNo); // The number of linear equations, i.e., the order of the matrix A.
-int nrhs = 1; 
-int lda = n;
-int * ipiv = nullptr;
-int ldb = n;
-double tmp[2];
-int lwork;
-int info;
+    auto n = static_cast<std::int32_t>(m_colNo); // The number of linear equations, i.e., the order of the matrix A.
+    int nrhs = 1; 
+    int lda = n;
+    int * ipiv = nullptr;
+    int ldb = n;
+    double tmp[2];
+    int lwork;
+    int info;
 
 	// Kopiowanie. Rozwiazanie zwracane jest na wekotrze "x"
 	x = b;
@@ -141,15 +143,12 @@ int info;
 	// Zapytanie o wymagana pamiec
 	lwork = -1;
 	dsysv_(&uplo, &n, &nrhs, m_array.data(), &lda, ipiv, x.data(), &ldb, tmp, &lwork, &info);
-	lwork = static_cast<int>(tmp[0]);
+	lwork = static_cast<std::int32_t>(tmp[0]);
 
-	auto work = reinterpret_cast<double *>(mkl_malloc(lwork * sizeof(double), 64));
-	ipiv = reinterpret_cast<int *>(mkl_malloc(n * sizeof(int), 64));
-
-	dsysv_(&uplo, &n, &nrhs, m_array.data(), &lda, ipiv, x.data(), &ldb, work, &lwork, &info);
-
-	mkl_free(ipiv);
-	mkl_free(work);
+    std::vector<double> work(lwork);
+    std::vector<std::int32_t> ipiv2(n);
+	
+    dsysv_(&uplo, &n, &nrhs, m_array.data(), &lda, ipiv2.data(), x.data(), &ldb, work.data(), &lwork, &info);
 
 	if (info != 0)
     {
@@ -165,7 +164,9 @@ void ClpMtx::Zero()
 {
 	// Wszystkie elemnty sa rowne zero
 	for(size_t i = 0; i < m_rowNo * m_colNo; i++)
+    {
 		m_array[i] = 0;
+    }
 }
 
 //!

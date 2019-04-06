@@ -28,8 +28,8 @@ Rho_Delta 1E-9
 
 
 Scf_MaxIter 2000
-Scf_Mix 0.3
-Scf_Diff 5E-14
+Scf_Mix 1.0
+Scf_Diff 1E-02
 
 
 Out_RhoNode 2000
