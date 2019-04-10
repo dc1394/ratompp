@@ -9,18 +9,17 @@ namespace ks {
     {
         m_db->ReadParams();
         m_db->WriteParams();
-
+        
         m_pot = std::make_pair(std::make_shared<Pot<util::Spin::Alpha>>(m_db), std::make_shared<Pot<util::Spin::Beta>>(m_db));
 
         m_ss_alpha = std::make_shared<StateSet>(m_db);
         m_ss_beta = std::make_shared<StateSet>(m_db);
         
-        m_ks = std::make_pair(std::make_shared<KohnSham<util::Spin::Alpha>>(m_db, m_ss_alpha), std::make_shared<KohnSham<util::Spin::Beta>>(m_db, m_ss_beta));
+        m_ks = std::make_pair(std::make_shared< KohnSham<util::Spin::Alpha> >(m_db, m_ss_alpha), std::make_shared< KohnSham<util::Spin::Beta> >(m_db, m_ss_beta));
 
         m_energy = std::make_unique<Energy>(m_pot, m_ss_alpha, m_db);
 
         m_rho = std::make_pair(std::make_shared<Rho>(m_db), std::make_shared<Rho>(m_db));
-
     }
     
     int NonLinKs::Run()
@@ -33,8 +32,8 @@ namespace ks {
             Scf();
             auto const end = high_resolution_clock::now();
 
-            //printf("\n\n\n********** WRITING RESULTS TO OUTPUT FILES **********\n");
-            //fflush(stdout);
+            printf("\n\n\n********** WRITING RESULTS TO OUTPUT FILES **********\n");
+            fflush(stdout);
             WriteRes(duration_cast<duration<double>>(end - beg));
         }
         catch (std::exception const & e)
@@ -51,9 +50,8 @@ namespace ks {
     {
         const auto scfMaxIter = m_db->GetSize_t("Scf_MaxIter");
         auto pmix = std::make_pair(std::make_shared<RhoMix>(m_db), std::make_shared<RhoMix>(m_db));
-        std::pair<std::shared_ptr<Rho>, std::shared_ptr<Rho>> rhoOld;
+        auto rhoOld = std::make_pair(std::make_shared<Rho>(m_db), std::make_shared<Rho>(m_db));
         auto iter = 1UL;
-        rhoOld = std::make_pair(std::make_shared<Rho>(m_db), std::make_shared<Rho>(m_db));
         
         m_rho.first->Init<util::Spin::Alpha>();
         m_rho.second->Init<util::Spin::Beta>();
@@ -79,10 +77,6 @@ namespace ks {
             if (iter == scfMaxIter)
                 break;
             {
-                // May 23rd, 2014 Modified by dc1394
-                //Rho *tmp = rhoOld;
-                //rhoOld = m_rho;
-                //m_rho = tmp;
                 std::swap(m_rho, rhoOld);
             }
 
@@ -95,14 +89,12 @@ namespace ks {
 
             iter++;
         }
-
+        
         auto const node = m_rho.first->GetNode();
         m_energy->SetNode(node);
 		
 		m_pot.second->Write();
 		m_pot.first->Write();
-
-		m_energy->WriteEnergy(stdout);
 
         printf("*  SCF-ITERATIONS = %lu\n", static_cast<unsigned long>(iter));
         printf("***********   S C F   L O O P   F I N I S H E D   ***********\n");
@@ -132,6 +124,7 @@ namespace ks {
     {
         WriteInfo(sec);
         m_rho.first->Write();
+        
         //m_ks->WriteEigen();
     }
 
@@ -151,3 +144,4 @@ namespace ks {
         fprintf(out.get(), "\n\nC A L C U L A T I O N   T I M E :   %.3f  [s]\n", sec.count());
     }
 }
+

@@ -6,7 +6,6 @@
 */
 
 #include "excorrlda.h"
-#include "xcfunc_deleter.h"
 #include <array>            // for std::array
 
 namespace excorr {

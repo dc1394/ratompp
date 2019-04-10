@@ -59,7 +59,7 @@ namespace ks {
     }
 
     template <>
-    void Rho::Init<util::Spin::Beta>(void)
+    void Rho::Init<util::Spin::Beta>()
     {
         Calc(std::make_shared<const RhoInit>(0.0, 0.0));
     }
@@ -147,37 +147,36 @@ namespace ks {
     //
     // Writes calculated electron density for each state int file
     //
-    void Rho::Write(void) const
+    void Rho::Write() const
     {
         const size_t outRhoNode = m_db->GetSize_t("Out_RhoNode");
-        double dr, r;
-
+        
         {
             // Nodes coordinates and approximation coefficients for electron density
             auto out = m_db->OpenFile("rho.app", "wt");
-            fprintf(out.get(), "#\n");
-            fprintf(out.get(), "# Orders of intervals is random,\n");
-            fprintf(out.get(), "# You must sord on column 'r_i', in order to get ordered intervals.\n");
-            fprintf(out.get(), "#\n");
+            std::fprintf(out.get(), "#\n");
+            std::fprintf(out.get(), "# Orders of intervals is random,\n");
+            std::fprintf(out.get(), "# You must sord on column 'r_i', in order to get ordered intervals.\n");
+            std::fprintf(out.get(), "#\n");
             m_approx.WriteCoef(out.get());
         }
 
-    {
-        // Storing values of electron densities
-        std::vector<double> node(GetNode());
-        auto out = m_db->OpenFile("rho", "wt");
-        //fprintf(out, "%16s \t %16s \t %16s \n", "R", "Rho", "RhoTilde");
-        for (auto i = 0U; i < node.size() - 1; ++i)
         {
-            dr = (node[i + 1] - node[i]) / outRhoNode;
-            r = node[i];
-            for (auto k = 0U; k < outRhoNode; ++k)
+            // Storing values of electron densities
+            std::vector<double> node(GetNode());
+            auto out = m_db->OpenFile("rho", "wt");
+            //fprintf(out, "%16s \t %16s \t %16s \n", "R", "Rho", "RhoTilde");
+            for (auto i = 0U; i < node.size() - 1; ++i)
             {
-                fprintf(out.get(), "%.15f,%.15f,%.15f\n", r, Get(r), GetRhoTilde(r));
-                r += dr;
+                auto const dr = (node[i + 1] - node[i]) / outRhoNode;
+                auto r = node[i];
+                for (auto k = 0U; k < outRhoNode; ++k)
+                {
+                    std::fprintf(out.get(), "%.15f,%.15f,%.15f\n", r, Get(r), GetRhoTilde(r));
+                    r += dr;
+                }
             }
         }
-    }
     }
 
     // April 3rd, 2014 Added by dc1394

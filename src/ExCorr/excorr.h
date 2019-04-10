@@ -35,12 +35,6 @@ namespace excorr {
         */
         ExCorr() = default;
 
-        //! A copy constructor.
-        /*!
-            デフォルトコピーコンストラクタ
-        */
-        ExCorr(ExCorr const &) = default;
-
         //! A destructor.
         /*!
             デフォルトデストラクタ

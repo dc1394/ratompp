@@ -8,8 +8,9 @@
 #include "stdafx.h"
 #include "pot.h"
 #include "rho.h"
-#include <cstdint>
-#include <boost/cast.hpp>
+#include <cstdint>          // for std::int32_t
+#include <memory>           // for std::shared_ptr
+#include <boost/cast.hpp>   // for boost::numeric_cast  
 
 namespace ks {
     // May 24th, 2014 Modified by dc1394
@@ -97,29 +98,13 @@ namespace ks {
     */
     //void Pot::SetRho(util::Fun1D* rho)
     template <util::Spin S>
-    void Pot<S>::SetRho(std::pair<std::shared_ptr<util::Fun1D>, std::shared_ptr<util::Fun1D>> const & rho)
+    void Pot<S>::SetRho(std::pair< std::shared_ptr<util::Fun1D>, std::shared_ptr<util::Fun1D> > const & rho)
     {
-        //const double rc = m_db->GetDouble("Atom_Rc");
-        //const size_t psnNode = m_db->GetSize_t("Solver_PsnNode");
-        //const size_t psnDeg = m_db->GetSize_t("Solver_PsnDeg");
-
-        //const double gamma = 1;
-
-        //// const Bndr left(BndrType_Dir, 0), right(BndrType_Dir, m_z);
-        //// Zero Dirichlet boundary conditions
-        //const Bndr left(BndrType_Dir, 0), right(BndrType_Dir, 0);
-
-        ////assert(rho);
-        //m_rho = rho;
-        //m_rhoHelp.m_rho = rho;
-
-        //m_hart->Define(left, right, gamma, NULL, &m_rhoHelp);
-        //m_hart->GenMeshLin(0, rc, psnNode, psnDeg);
         SetRho(rho, boost::mpl::int_<static_cast<std::int32_t>(S)>());
     }
 
     template <util::Spin S>
-    void Pot<S>::SetRho(std::pair<std::shared_ptr<util::Fun1D>, std::shared_ptr<util::Fun1D>> const & rho, boost::mpl::int_<static_cast<std::int32_t>(util::Spin::Alpha)>)
+    void Pot<S>::SetRho(std::pair< std::shared_ptr<util::Fun1D>, std::shared_ptr<util::Fun1D> > const & rho, boost::mpl::int_<static_cast<std::int32_t>(util::Spin::Alpha)>)
     {
         const double rc = m_db->GetDouble("Atom_Rc");
         const size_t psnNode = m_db->GetSize_t("Solver_PsnNode");
@@ -132,20 +117,19 @@ namespace ks {
         const Bndr left(BndrType_Dir, 0), right(BndrType_Dir, 0);
 
         //assert(rho);
-        m_rho = rho;
-        m_rhoHelp->m_rho = rho;
-
+        m_rho = std::make_pair(rho.first.get(), rho.second.get());        
+        m_rhoHelp->m_rho = std::make_pair(rho.first.get(), rho.second.get());
+        
         m_hart->Define(left, right, gamma, nullptr, m_rhoHelp);
         m_hart->GenMeshLin(0, rc, psnNode, psnDeg);
     }
 
     template <util::Spin S>
-    void Pot<S>::SetRho(std::pair<std::shared_ptr<util::Fun1D>, std::shared_ptr<util::Fun1D>> const & rho, boost::mpl::int_<static_cast<std::int32_t>(util::Spin::Beta)>)
+    void Pot<S>::SetRho(std::pair< std::shared_ptr<util::Fun1D>, std::shared_ptr<util::Fun1D> > const & rho, boost::mpl::int_<static_cast<std::int32_t>(util::Spin::Beta)>)
     {
-        m_rho = rho;
-        m_rhoHelp->m_rho = rho;
+        m_rho = std::make_pair(rho.first.get(), rho.second.get());
+        m_rhoHelp->m_rho = std::make_pair(rho.first.get(), rho.second.get());
     }
-
 
     /*! Solves Poission equation
     @exception      none
@@ -298,12 +282,12 @@ namespace ks {
         // March 7th, 2014	Modified by dc1394
         if (exch == "slater") {
             m_exch.reset();
-            m_exch = std::make_unique< typename excorr::Xc<S> >(excorr::ExCorrLDA([this](double r) { return GetRhoTilde(r); }, XC_LDA_X));
+            m_exch = std::make_unique< typename excorr::Xc<S> >(std::make_shared<excorr::ExCorrLDA>([this](double r) { return GetRhoTilde(r); }, XC_LDA_X));
         }
         else if (exch == "b88") {
             m_exch.reset();
             m_exch = std::make_unique< typename excorr::Xc<S> >(
-                    excorr::ExCorrGGA(
+                    std::make_shared<excorr::ExCorrGGA>(
                         [this](double r) { return GetRhoTilde(r); },
                         [this](double r) { return GetRhoTildeDeriv(r); },
                         [this](double r) { return GetRhoTildeLapl(r); },
@@ -312,7 +296,7 @@ namespace ks {
         else if (exch == "pbe") {
             m_exch.reset();
             m_exch = std::make_unique< typename excorr::Xc<S> >(
-                    excorr::ExCorrGGA(
+                    std::make_shared<excorr::ExCorrGGA>(
                         [this](double r) { return GetRhoTilde(r); },
                         [this](double r) { return GetRhoTildeDeriv(r); },
                         [this](double r) { return GetRhoTildeLapl(r); },
@@ -321,7 +305,7 @@ namespace ks {
         else if (exch == "pbe0") {
             m_exch.reset();
             m_exch = std::make_unique< typename excorr::Xc<S> >(
-                    excorr::ExchPbe0(
+                    std::make_shared<excorr::ExchPbe0>(
                         [this](double r) { return GetRhoTilde(r); },
                         [this](double r) { return GetRhoTildeDeriv(r); },
                         [this](double r) { return GetRhoTildeLapl(r); },
@@ -331,7 +315,7 @@ namespace ks {
         }
         else if (exch == "hf") {
             m_exch.reset();
-            m_exch = std::make_unique< typename excorr::Xc<S> >(excorr::ExchHf([this](double r) { return Vh(r); }, m_z));
+            m_exch = std::make_unique< typename excorr::Xc<S> >(std::make_shared<excorr::ExchHf>([this](double r) { return Vh(r); }, m_z));
         }
         else {
             throw std::invalid_argument("Unknown exchange type");
@@ -339,12 +323,12 @@ namespace ks {
 
         if (corr == "vwn") {
             m_corr.reset();
-            m_corr = std::make_unique< typename excorr::Xc<S> >(excorr::ExCorrLDA([this](double r) { return GetRhoTilde(r); }, XC_LDA_C_VWN));
+            m_corr = std::make_unique< typename excorr::Xc<S> >(std::make_shared<excorr::ExCorrLDA>([this](double r) { return GetRhoTilde(r); }, XC_LDA_C_VWN));
         }
         else if (corr == "pbe") {
             m_corr.reset();
             m_corr = std::make_unique< typename excorr::Xc<S> >(
-                    excorr::ExCorrGGA(
+                    std::make_shared<excorr::ExCorrGGA>(
                         [this](double r) { return GetRhoTilde(r); },
                         [this](double r) { return GetRhoTildeDeriv(r); },
                         [this](double r) { return GetRhoTildeLapl(r); },
@@ -352,7 +336,7 @@ namespace ks {
         }
         else if (corr == "hf") {
             m_corr.reset();
-            m_corr = std::make_unique< typename excorr::Xc<S> >(excorr::CorrHf());
+            m_corr = std::make_unique< typename excorr::Xc<S> >(std::make_shared<excorr::CorrHf>());
         }
         else {
             throw std::invalid_argument("Unknown correlation type");

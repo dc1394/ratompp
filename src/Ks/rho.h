@@ -31,7 +31,7 @@ namespace ks {
         void Init();
                 
         std::vector<double> GetNode() const;
-        void Write(void) const;
+        void Write() const;
 
     private:
         double Integ() const;
@@ -67,7 +67,7 @@ namespace ks {
         public:
             RhoInit(double c, double alpha) : m_c(c), m_alpha(alpha) { }
             ~RhoInit() override = default;
-            // ‰Šú–§“x
+            // åˆæœŸå¯†åº¦
             double Get(double r) const override
             {
                 return r * r * m_c * exp(-m_alpha * r);

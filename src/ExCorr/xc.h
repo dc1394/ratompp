@@ -8,9 +8,11 @@
 #ifndef __RATOM_XC_H__
 #define __RATOM_XC_H__
 
+#include "excorr.h"
 #include "../Util/spin.h"
-#include <functional>       // for std::function
-#include <string>           // for std::string
+#include <functional>   // for std::function
+#include <memory>       // for std::shared_ptr    
+#include <string>       // for std::string
 
 namespace excorr {
     //! A template class.
@@ -25,13 +27,13 @@ namespace excorr {
         //! A constructor.
         /*!
             唯一のコンストラクタ
-            \param obj オブジェクト
+            \param obj Excorrオブジェクトへのスマートポインタ
         */
-        template <typename T>
-        Xc(const T & obj)
-            :   E_([obj](double r) { return obj.xc_exc(r); }),
-                Name_([&obj]() { return obj.name(); }),
-                V_([obj](double r) { return obj.template xc_vxc<S>(r); })
+        Xc(std::shared_ptr<ExCorr> const & obj)
+            :   E_([this](double r) { return obj_->xc_exc(r); }),
+                Name_([this]() { return obj_->name(); }),
+                obj_(obj),
+                V_([this](double r) { return obj_->template xc_vxc<S>(r); })
         {}
 
         //! A destructor.
@@ -104,6 +106,12 @@ namespace excorr {
             交換相関汎関数の名前を返す関数オブジェクト
         */
         std::function<std::string()> const Name_;
+                
+        //! A private member variable (const).
+        /*!
+            ExCorrオブジェクトへのスマートポインタ
+        */
+        std::shared_ptr<ExCorr> const obj_;
         
         //! A private member variable (const).
         /*!
@@ -115,20 +123,21 @@ namespace excorr {
 
         // #region 禁止されたコンストラクタ・メンバ関数
 
-        //! A private constructor (deleted).
+    public:
+        //! A default constructor (deleted).
         /*!
             デフォルトコンストラクタ（禁止）
         */
         Xc() = delete;
 
-        //! A private copy constructor (deleted).
+        //! A copy constructor (deleted).
         /*!
             コピーコンストラクタ（禁止）
-            \param コピー元のオブジェクト（未使用）
+            \param dummy コピー元のオブジェクト（未使用）
         */
-        Xc(Xc const &) = delete;
+        Xc(Xc const & dummy) = delete;
 
-        //! A private member function (deleted).
+        //! A public member function (deleted).
         /*!
             operator=()の宣言（禁止）
             \param コピー元のオブジェクト（未使用）

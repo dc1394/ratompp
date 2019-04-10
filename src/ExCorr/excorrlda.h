@@ -10,11 +10,11 @@
 
 #include "excorr.h"
 #include "../Util/spin.h"
+#include "xcfunc_deleter.h"
 #include <cstdint>          // for std::uint32_t
 #include <functional>       // for std::function
 #include <memory>           // for std::shared_ptr
 #include <string>           // for std::string
-#include <xc.h>             // for xc_func_type
 
 namespace excorr {
     //! A class.
@@ -33,17 +33,11 @@ namespace excorr {
         */
         ExCorrLDA(std::function<std::pair<double, double>(double)> && rhoTilde, std::uint32_t xc_type);
 
-        //! A copy constructor.
-        /*!
-            デフォルトコピーコンストラクタ
-        */
-        ExCorrLDA(ExCorrLDA const &) = default;
-
         //! A destructor.
         /*!
             デフォルトデストラクタ
         */
-        ~ExCorrLDA() = default;
+        ~ExCorrLDA() override = default;
 
         // #endregion コンストラクタ・デストラクタ
 
@@ -88,7 +82,7 @@ namespace excorr {
         /*!
             libxcへのスマートポインタ
         */
-        std::shared_ptr<xc_func_type> const pxcfunc_;
+        std::unique_ptr<xc_func_type, decltype(xcfunc_deleter)> const pxcfunc_;
 
         //! A private member variable (constant).
         /*!
@@ -100,11 +94,19 @@ namespace excorr {
 
         // #region 禁止されたコンストラクタ・メンバ関数
 
-        //! A private constructor (deleted).
+    public:
+        //! A default constructor (deleted).
         /*!
             デフォルトコンストラクタ（禁止）
         */
         ExCorrLDA() = delete;
+
+        //! A copy constructor (deleted).
+        /*!
+            コピーコンストラクタ（禁止）
+            \param dummy コピー元のオブジェクト（未使用）
+        */
+        ExCorrLDA(ExCorrLDA const & dummy) = delete;
 
         //! A private member function (deleted).
         /*!

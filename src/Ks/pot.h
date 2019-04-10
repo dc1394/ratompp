@@ -11,8 +11,8 @@
 #include "paramdb.h"
 #include "../Util/property.h"
 #include "../ExCorr/xc.h"
-#include <memory>
-#include <utility>
+#include <memory>               // for std::unique_ptr
+#include <utility>              // for std::pair
 #include <boost/mpl/int.hpp>    // for boost::mpl::int_
 
 namespace ks {
@@ -38,9 +38,8 @@ namespace ks {
             }
         public:
             //util::Fun1D* m_rho;
-            std::pair<std::shared_ptr<util::Fun1D>, std::shared_ptr<util::Fun1D> > m_rho;
+            std::pair<util::Fun1D *, util::Fun1D * > m_rho;
         };
-
 
     public:
         Pot(std::shared_ptr<ParamDb> const & db);
@@ -48,10 +47,10 @@ namespace ks {
 
         // May 23rd, 2014 Modified by dc1394
         //void SetRho(util::Fun1D* rho);
-        void SetRho(std::pair<std::shared_ptr<util::Fun1D>, std::shared_ptr<util::Fun1D>> const & rho);
-        void SetRho(std::pair<std::shared_ptr<util::Fun1D>, std::shared_ptr<util::Fun1D>> const & rho, boost::mpl::int_<static_cast<std::int32_t>(util::Spin::Alpha)>);
-        void SetRho(std::pair<std::shared_ptr<util::Fun1D>, std::shared_ptr<util::Fun1D>> const & rho, boost::mpl::int_<static_cast<std::int32_t>(util::Spin::Beta)>);
-        void SolvePoisson(void);
+        void SetRho(std::pair< std::shared_ptr<util::Fun1D>, std::shared_ptr<util::Fun1D> > const & rho);
+        void SetRho(std::pair< std::shared_ptr<util::Fun1D>, std::shared_ptr<util::Fun1D> > const & rho, boost::mpl::int_<static_cast<std::int32_t>(util::Spin::Alpha)>);
+        void SetRho(std::pair< std::shared_ptr<util::Fun1D>, std::shared_ptr<util::Fun1D> > const & rho, boost::mpl::int_<static_cast<std::int32_t>(util::Spin::Beta)>);
+        void SolvePoisson();
 
         double Get(double r) const override;
         double GetRho(double r) const;
@@ -100,7 +99,7 @@ namespace ks {
         std::shared_ptr<ParamDb> const m_db;
 
         // Electron density
-        std::pair<std::shared_ptr<util::Fun1D>, std::shared_ptr<util::Fun1D>> m_rho;
+        std::pair<util::Fun1D *, util::Fun1D *> m_rho;
 
         // March 7th, 2014	Modified by dc1394 
         // Exchenge potential

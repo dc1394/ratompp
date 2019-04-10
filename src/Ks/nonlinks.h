@@ -98,7 +98,7 @@ namespace ks {
         /*!
             Solver for LINER Kohna-Shama equation（αスピンとβスピンのstd::pair）
         */
-        std::pair<std::shared_ptr<KohnSham<util::Spin::Alpha>>, std::shared_ptr<KohnSham<util::Spin::Beta>>> m_ks;
+        std::pair< std::shared_ptr< KohnSham<util::Spin::Alpha> >, std::shared_ptr< KohnSham<util::Spin::Beta> > > m_ks;
 
         //! A private member variable.
         /*!
@@ -128,7 +128,7 @@ namespace ks {
         /*!
             Electron density（αスピンとβスピンのstd::pair）
         */
-        std::pair<std::shared_ptr<Rho>, std::shared_ptr<Rho>> m_rho;
+        std::pair< std::shared_ptr<Rho>, std::shared_ptr<Rho> > m_rho;
         
         // #endregion メンバ変数 
 

@@ -19,17 +19,11 @@ namespace excorr {
         // #region コンストラクタ・デストラクタ
 
     public:
-        //! A constructor.
+        //! A default constructor.
         /*!
             デフォルトコンストラクタ
         */
         CorrHf() = default;
-
-        //! A copy constructor.
-        /*!
-        デフォルトコピーコンストラクタ
-        */
-        CorrHf(CorrHf const &) = default;
 
         //! A destructor.
         /*!
@@ -79,6 +73,13 @@ namespace excorr {
 
     public:
         // #region 禁止されたコンストラクタ・メンバ関数
+        
+        //! A copy constructor (deleted).
+        /*!
+            コピーコンストラクタ（禁止）
+            \param dummy コピー元のオブジェクト（未使用）
+        */
+        CorrHf(CorrHf const & dummy) = delete;
 
         //! A private member function (deleted).
         /*!

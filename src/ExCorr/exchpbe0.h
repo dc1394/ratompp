@@ -31,18 +31,12 @@ namespace excorr {
                  std::function<double(double)> const & Vh,
                  std::uint32_t xc_type,
                  double Z);
-        
-        //! A copy constructor.
-        /*!
-            デフォルトコピーコンストラクタ
-        */
-        ExchPbe0(ExchPbe0 const &) = default;
-
+                
         //! A destructor.
         /*!
             デフォルトデストラクタ
         */
-        ~ExchPbe0() = default;
+        ~ExchPbe0() override = default;
         
         // #endregion コンストラクタ・デストラクタ
 
@@ -70,6 +64,7 @@ namespace excorr {
 
         // #region privateメンバ関数
 
+    private:
         //!  private member function (const).
         /*! rでの交換相関ポテンシャル（Hartree-Fock）を返す
             \param r 原点からの距離（極座標）
@@ -77,8 +72,34 @@ namespace excorr {
         */
         dpair xc_vxc_impl(double r) const override;
 
-    };
+        // #endregion privateメンバ関数
+        
+        // #region 禁止されたコンストラクタ・メンバ関数
 
+    public:
+        //! A private constructor (deleted).
+        /*!
+            デフォルトコンストラクタ（禁止）
+        */
+        ExchPbe0() = delete;
+
+        //! A copy constructor (deleted).
+        /*!
+            コピーコンストラクタ（禁止）
+            \param dummy コピー元のオブジェクト（未使用）
+        */
+        ExchPbe0(ExchPbe0 const & dummy) = delete;
+
+        //! A private member function (deleted).
+        /*!
+            operator=()の宣言（禁止）
+            \param コピー元のオブジェクト（未使用）
+            \return コピー元のオブジェクト
+        */
+        ExchPbe0 & operator=(ExchPbe0 const &) = delete;
+
+        // #endregion 禁止されたコンストラクタ・メンバ関数
+    };
 }
 
 #endif	// __RATOM_EXCHPBE0_H__

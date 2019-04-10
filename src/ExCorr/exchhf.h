@@ -33,12 +33,6 @@ namespace excorr {
         */
         ExchHf(std::function<double(double)> const & Vh, double Z);
 
-        //! A copy constructor.
-        /*!
-            デフォルトコピーコンストラクタ
-        */
-        ExchHf(ExchHf const &) = default;
-
         //! A destructor.
         /*!
             デフォルトデストラクタ
@@ -88,7 +82,7 @@ namespace excorr {
         /*!
             ゼロ判定用の定数
         */
-        static constexpr double ZERO = 1.0E-12;
+        static auto constexpr ZERO = 1.0E-12;
 
         //! A protected member variable (constant).
         /*!
@@ -106,12 +100,19 @@ namespace excorr {
 
         // #region 禁止されたコンストラクタ・メンバ関数
 
-    private:
-        //! A private constructor (deleted).
+    public:
+        //! A default constructor (deleted).
         /*!
             デフォルトコンストラクタ（禁止）
         */
         ExchHf() = delete;
+
+        //! A copy constructor (deleted).
+        /*!
+            コピーコンストラクタ（禁止）
+            \param dummy コピー元のオブジェクト（未使用）
+        */
+        ExchHf(ExchHf const & dummy) = delete;
 
         //! A private member function (deleted).
         /*!
