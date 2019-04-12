@@ -5,7 +5,7 @@
 //
 // Constructor
 //
-OdeProb::OdeProb(Bndr left, Bndr right, double gamma, std::shared_ptr<util::Fun1D> const & g, std::shared_ptr<util::Fun1D> const & f)
+OdeProb::OdeProb(Bndr left, Bndr right, double gamma, std::shared_ptr<const util::Fun1D> const & g, std::shared_ptr<const util::Fun1D> const & f)
 	: Prob(left, right, gamma, g, f)
 {
 	assert(g);
@@ -15,7 +15,7 @@ OdeProb::OdeProb(Bndr left, Bndr right, double gamma, std::shared_ptr<util::Fun1
 //
 // Defines the ODE problem
 //
-void OdeProb::Define(Bndr left, Bndr right, double gamma, std::shared_ptr<util::Fun1D> const & g, std::shared_ptr<util::Fun1D> const & f)
+void OdeProb::Define(Bndr left, Bndr right, double gamma, std::shared_ptr<const util::Fun1D> const & g, std::shared_ptr<const util::Fun1D> const & f)
 {
 	DefineProb(left, right, gamma, g, f);
 }

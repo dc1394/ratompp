@@ -21,23 +21,23 @@ class Prob : protected Mesh, protected Lobatto
 {
 public:
 	Prob();
-	Prob(Bndr left, Bndr right, double gamma, std::shared_ptr<util::Fun1D> const & g, std::shared_ptr<util::Fun1D> const & f);
+	Prob(Bndr left, Bndr right, double gamma, std::shared_ptr<const util::Fun1D> const & g, std::shared_ptr<const util::Fun1D> const & f);
 	virtual ~Prob() = default;
 
-	void DefineProb(Bndr left, Bndr right, double gamma, std::shared_ptr<util::Fun1D> const & g, std::shared_ptr<util::Fun1D> const & f);
+	void DefineProb(Bndr left, Bndr right, double gamma, std::shared_ptr<const util::Fun1D> const & g, std::shared_ptr<const util::Fun1D> const & f);
 
-	void GenMeshLin(double a, double b, size_t nodeNo, size_t degree);
-	void GenLinExp(double a, double b, int m, size_t degree);
-	void SetMesh(const std::vector<double>& x, const std::vector<size_t>& degree);
-	void AddToMesh(const std::vector<size_t>& eltToSplit);
+	void GenMeshLin(double a, double b, std::size_t nodeNo, std::size_t degree);
+	void GenLinExp(double a, double b, int m, std::size_t degree);
+	void SetMesh(const std::vector<double>& x, const std::vector<std::size_t>& degree);
+	void AddToMesh(const std::vector<std::size_t>& eltToSplit);
 
-	size_t Dim() const;
+	std::size_t Dim() const;
 
 	
 protected:
-	double CalcO(const Element& e, size_t i, size_t j) const;
-	double CalcB(const Element& e, size_t i) const;
-	double CalcS(const Element& e, size_t i, size_t j) const;
+	double CalcO(const Element& e, std::size_t i, std::size_t j) const;
+	double CalcB(const Element& e, std::size_t i) const;
+	double CalcS(const Element& e, std::size_t i, std::size_t j) const;
 
 
 protected:
@@ -49,10 +49,10 @@ protected:
 
 private:
 	// Right hand side, function f(x). USED only for ODE
-	std::shared_ptr<util::Fun1D> m_f;
+	std::shared_ptr<const util::Fun1D> m_f;
 
 	// Function $g(x)$
-	std::shared_ptr<util::Fun1D> m_g;
+	std::shared_ptr<const util::Fun1D> m_g;
 
 	// Constant \gamma 
 	double m_gamma;

@@ -10,7 +10,6 @@
 #include "paramdb.h"
 #include "stateset.h"
 #include "../Util/spin.h"
-#include <boost/mpl/int.hpp>    // for boost::mpl::int_
 
 namespace ks {
     //! A template class.
@@ -27,9 +26,17 @@ namespace ks {
         /*!
             唯一のコンストラクタ
             \param db パラメータへのスマートポインタ
-            \param m_stateSet 
+            \param stateSet StateSetオブジェクトへのスマートポインタ
         */
-        KohnSham(std::shared_ptr<ParamDb> const & db, std::shared_ptr<StateSet> const & stateSet);
+        KohnSham(std::shared_ptr<const ParamDb> && db, std::shared_ptr<StateSet> const & stateSet);
+
+        //! A constructor.
+        /*!
+            唯一のコンストラクタ
+            \param db パラメータへのスマートポインタ
+            \param stateSet StateSetオブジェクトへのスマートポインタ
+        */
+        KohnSham(std::shared_ptr<const ParamDb> && db, std::shared_ptr<StateSet> && stateSet);
 
         //! A destructor.
         /*!
@@ -55,22 +62,6 @@ namespace ks {
             \param r 動径方向の値r
         */
         double Get(double r) const override;
-
-        //! A public member function (const).
-        /*!
-            Returns value of electron density for radius "r" for alpha spin
-            \param r 動径方向の値r
-            \param オーバーロード用のダミー引数
-        */
-        double Get(double r, boost::mpl::int_<static_cast<std::int32_t>(util::Spin::Alpha)>) const;
-        
-        //! A public member function (const).
-        /*!
-            Returns value of electron density for radius "r" for beta spin
-            \param r 動径方向の値r
-            \param オーバーロード用のダミー引数
-        */
-        double Get(double r, boost::mpl::int_<static_cast<std::int32_t>(util::Spin::Beta)>) const;
 
         //! A public member function (const).
         /*!
@@ -157,26 +148,27 @@ namespace ks {
 
         // #region 禁止されたコンストラクタ・メンバ関数
 
-        //! A private constructor (deleted).
+    public:
+        //! A default constructor (deleted).
         /*!
             デフォルトコンストラクタ（禁止）
         */
         KohnSham() = delete;
 
-        //! A private copy constructor (deleted).
+        //! A default copy constructor (deleted).
         /*!
             コピーコンストラクタ（禁止）
-            \param コピー元のオブジェクト（未使用）
+            \param dummy コピー元のオブジェクト（未使用）
         */
-        KohnSham(KohnSham const &) = delete;
+        KohnSham(KohnSham const & dummy) = delete;
 
-        //! A private member function (deleted).
+        //! A public member function (deleted).
         /*!
             operator=()の宣言（禁止）
-            \param コピー元のオブジェクト（未使用）
+            \param dummy コピー元のオブジェクト（未使用）
             \return コピー元のオブジェクト
         */
-        KohnSham & operator=(KohnSham const &) = delete;
+        KohnSham & operator=(KohnSham const & dummy) = delete;
 
         // #endregion 禁止されたコンストラクタ・メンバ関数
     };

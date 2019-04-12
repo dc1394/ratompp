@@ -18,7 +18,7 @@ namespace ks {
     // Constructor
     //
     template <util::Spin S>
-    Pot<S>::Pot(std::shared_ptr<ParamDb> const & db)
+    Pot<S>::Pot(std::shared_ptr<const ParamDb> const & db)
         :   Corr([this] { return std::ref(m_corr); }, nullptr),
             Exch([this] { return std::ref(m_exch); }, nullptr),
             Hart([this] { return std::ref(m_hart); }, [this](std::shared_ptr<OdeProb> const & hart) { m_hart = hart; return std::ref(m_hart); }),
@@ -33,19 +33,13 @@ namespace ks {
         //m_z = db->GetDouble("Atom_Proton");
         m_rc = m_db->GetDouble("Atom_Rc");
     }
-    
-    template <util::Spin S>
-    double Pot<S>::GetRho(double r) const
-    {
-        return GetRho(r, boost::mpl::int_<static_cast<std::int32_t>(S)>());
-    }
 
     // May 24th, 2014 Modified by dc1394
     //
     // Returns value of electron density for radius "r"
     //
-    template <util::Spin S>
-    double Pot<S>::GetRho(double r, boost::mpl::int_<static_cast<std::int32_t>(util::Spin::Alpha)>) const
+    template <>
+    double Pot<util::Spin::Alpha>::GetRho(double r) const
     {
     	//return m_rho->Get(r);
         return m_rho.first->Get(r);
@@ -55,8 +49,8 @@ namespace ks {
     //
     // Returns value of electron density for radius "r"
     //
-    template <util::Spin S>
-    double Pot<S>::GetRho(double r, boost::mpl::int_<static_cast<std::int32_t>(util::Spin::Beta)>) const
+    template <>
+    double Pot<util::Spin::Beta>::GetRho(double r) const
     {
         //return m_rho->Get(r);
         return m_rho.second->Get(r);
@@ -96,15 +90,8 @@ namespace ks {
     @param[in]      rho    αスピン密度とβスピン密度のpair
     @exception      none
     */
-    //void Pot::SetRho(util::Fun1D* rho)
-    template <util::Spin S>
-    void Pot<S>::SetRho(std::pair< std::shared_ptr<util::Fun1D>, std::shared_ptr<util::Fun1D> > const & rho)
-    {
-        SetRho(rho, boost::mpl::int_<static_cast<std::int32_t>(S)>());
-    }
-
-    template <util::Spin S>
-    void Pot<S>::SetRho(std::pair< std::shared_ptr<util::Fun1D>, std::shared_ptr<util::Fun1D> > const & rho, boost::mpl::int_<static_cast<std::int32_t>(util::Spin::Alpha)>)
+    template <>
+    void Pot<util::Spin::Alpha>::SetRho(std::pair< std::shared_ptr<util::Fun1D>, std::shared_ptr<util::Fun1D> > const & rho)
     {
         const double rc = m_db->GetDouble("Atom_Rc");
         const size_t psnNode = m_db->GetSize_t("Solver_PsnNode");
@@ -124,8 +111,8 @@ namespace ks {
         m_hart->GenMeshLin(0, rc, psnNode, psnDeg);
     }
 
-    template <util::Spin S>
-    void Pot<S>::SetRho(std::pair< std::shared_ptr<util::Fun1D>, std::shared_ptr<util::Fun1D> > const & rho, boost::mpl::int_<static_cast<std::int32_t>(util::Spin::Beta)>)
+    template <>
+    void Pot<util::Spin::Beta>::SetRho(std::pair< std::shared_ptr<util::Fun1D>, std::shared_ptr<util::Fun1D> > const & rho)
     {
         m_rho = std::make_pair(rho.first.get(), rho.second.get());
         m_rhoHelp->m_rho = std::make_pair(rho.first.get(), rho.second.get());

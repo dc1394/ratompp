@@ -17,7 +17,7 @@ namespace ks {
     class Rho final : public util::Fun1D
     {
     public:
-        Rho(std::shared_ptr<const ParamDb> const & db);
+        Rho(std::shared_ptr<const ParamDb> && db);
         ~Rho() override = default;
 
         double Get(double r) const override;

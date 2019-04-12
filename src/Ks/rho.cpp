@@ -1,14 +1,13 @@
 #include "stdafx.h"
 #include "rho.h"
-
-// March 18th, 2014 Added by dc1394
-#include <utility>
+#include <iostream>         // for std::cout
+#include <boost/format.hpp> // for boost::format
 
 namespace ks {
     //
     // Constructor
     //
-    Rho::Rho(std::shared_ptr<const ParamDb> const & db) : m_db(db)
+    Rho::Rho(std::shared_ptr<const ParamDb> && db) : m_db(std::move(db))
     {
         auto const rhoDeg = m_db->GetSize_t("Rho_Deg");
 
@@ -51,11 +50,11 @@ namespace ks {
 
         //
         // After initialization integral of electron densities shuld be equal to number of electrons
-        printf("+++++++++++++++++++++++++++++++++++++++++++++++++++\n");
+        std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++\n";
         //	printf("+  Number of electrons = %.2lf\n", N);
-        printf("+  Number of protons (electrons) = %.2lf\n", M);
-        printf("+  Applied 'Rho0' gives %.6lf electrons\n", Integ());
-        printf("+++++++++++++++++++++++++++++++++++++++++++++++++++\n\n");
+        std::cout << boost::format("+  Number of protons (electrons) = %.2lf\n") % M;
+        std::cout << boost::format("+  Applied 'Rho0' gives %.6lf electrons\n") % Integ();
+        std::cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++\n\n";
     }
 
     template <>
@@ -69,13 +68,13 @@ namespace ks {
     //
     // \int \rho(r) d \vec{r} = \int_0^{\infty} \rho(r) dr
     //
-    double Rho::Integ(void) const
+    double Rho::Integ() const
     {
         std::vector<double> node(GetNode());
 
-        double val = 0.0;
+        auto val = 0.0;
         auto const loop = node.size() - 1;
-        for (auto i = 0U; i < loop; ++i)
+        for (std::size_t i = 0UL; i < loop; ++i)
             val += m_gauss->Calc(*this, node[i], node[i + 1]);
 
         return val;
@@ -86,9 +85,9 @@ namespace ks {
     //
     void Rho::Calc(std::shared_ptr<const util::Fun1D> && f)
     {
-        const double rc = m_db->GetDouble("Atom_Rc");
-        const size_t rhoDeg = m_db->GetSize_t("Rho_Deg");
-        const double rhoDelta = m_db->GetDouble("Rho_Delta");
+        auto const rc = m_db->GetDouble("Atom_Rc");
+        auto const rhoDeg = m_db->GetSize_t("Rho_Deg");
+        auto const rhoDelta = m_db->GetDouble("Rho_Delta");
 
         m_approx.Define(rhoDeg, std::move(f));
         m_approx.SolveAdapt(0, rc, rhoDelta);
@@ -149,7 +148,7 @@ namespace ks {
     //
     void Rho::Write() const
     {
-        const size_t outRhoNode = m_db->GetSize_t("Out_RhoNode");
+        auto const outRhoNode = m_db->GetSize_t("Out_RhoNode");
         
         {
             // Nodes coordinates and approximation coefficients for electron density
@@ -166,7 +165,7 @@ namespace ks {
             std::vector<double> node(GetNode());
             auto out = m_db->OpenFile("rho", "wt");
             //fprintf(out, "%16s \t %16s \t %16s \n", "R", "Rho", "RhoTilde");
-            for (auto i = 0U; i < node.size() - 1; ++i)
+            for (std::size_t i = 0UL; i < node.size() - 1; ++i)
             {
                 auto const dr = (node[i + 1] - node[i]) / outRhoNode;
                 auto r = node[i];

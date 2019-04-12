@@ -19,10 +19,10 @@ class OdeProb : public Prob
 {
 public:
 	OdeProb() = default;
-	OdeProb(Bndr left, Bndr right, double gamma, std::shared_ptr<util::Fun1D> const & g, std::shared_ptr<util::Fun1D> const & f);
+	OdeProb(Bndr left, Bndr right, double gamma, std::shared_ptr<const util::Fun1D> const & g, std::shared_ptr<const util::Fun1D> const & f);
 	~OdeProb() = default;
 
-	void Define(Bndr left, Bndr right, double gamma, std::shared_ptr<util::Fun1D> const & g, std::shared_ptr<util::Fun1D> const & f);
+	void Define(Bndr left, Bndr right, double gamma, std::shared_ptr<const util::Fun1D> const & g, std::shared_ptr<const util::Fun1D> const & f);
 
 	void Solve();
 	void SolveAdapt(double absMaxCoef);

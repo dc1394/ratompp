@@ -21,7 +21,7 @@ namespace ks {
                std::shared_ptr<const Pot<util::Spin::Beta>>> const & pot,
                std::shared_ptr<const StateSet> const & ss,
                std::shared_ptr<const ParamDb> const & db);
-        virtual ~Energy() = default;
+        ~Energy() = default;
 
         void SetNode(std::vector<double> const & node);
         void WriteEnergy(FILE* out);

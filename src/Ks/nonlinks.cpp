@@ -15,7 +15,7 @@ namespace ks {
         m_ss_alpha = std::make_shared<StateSet>(m_db);
         m_ss_beta = std::make_shared<StateSet>(m_db);
         
-        m_ks = std::make_pair(std::make_shared< KohnSham<util::Spin::Alpha> >(m_db, m_ss_alpha), std::make_shared< KohnSham<util::Spin::Beta> >(m_db, m_ss_beta));
+        m_ks = std::make_pair(std::make_shared< KohnSham<util::Spin::Alpha> >(m_db, m_ss_alpha), std::make_shared< KohnSham<util::Spin::Beta> >(m_db, std::move(m_ss_beta)));
 
         m_energy = std::make_unique<Energy>(m_pot, m_ss_alpha, m_db);
 

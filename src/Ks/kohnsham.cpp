@@ -4,10 +4,17 @@
 
 namespace ks {
     template <util::Spin S>
-    KohnSham<S>::KohnSham(std::shared_ptr<ParamDb> const & db, std::shared_ptr<StateSet> const & stateSet)
-        :   m_db(db),
+    KohnSham<S>::KohnSham(std::shared_ptr<const ParamDb> && db, std::shared_ptr<StateSet> const & stateSet)
+        :   m_db(std::move(db)),
             m_radPot(std::make_shared<PotRad>()),
             m_stateSet(stateSet)
+    {}
+
+    template <util::Spin S>
+    KohnSham<S>::KohnSham(std::shared_ptr<const ParamDb> && db, std::shared_ptr<StateSet> && stateSet)
+        : m_db(std::move(db)),
+        m_radPot(std::make_shared<PotRad>()),
+        m_stateSet(std::move(stateSet))
     {}
 
     template <util::Spin S>
@@ -64,63 +71,8 @@ namespace ks {
         }
     }
 
-    template <util::Spin S>
-    double KohnSham<S>::Get(double r) const
-    {
-        // スピンに応じた関数を呼び出す
-        return Get(r, boost::mpl::int_<static_cast<std::int32_t>(S)>());
-
-        //const double rc = m_db->GetDouble("Atom_Rc");
-        //const size_t Lmax = m_stateSet->GetLmax();
-        //size_t l, n;
-        //double rnl, occ, rhoL, rho = 0;
-
-        //if (r >= rc)
-        //    return 0;
-
-        //// For all quantum angular menetum numbers
-        //for (l = 0; l < Lmax; l++)
-        //{
-        //    rhoL = 0;
-
-        //    // For all states for fixed "L"
-        //    for (n = 0; n < m_eigNo[l]; n++)
-        //    {
-        //        occ = m_stateSet->Occ(l, n);
-        //        //if (occ > 0)
-        //        if (occ > 0.0 && occ <= 2.0 * static_cast<double>(l)+1.0) {
-        //            
-        //            if (AlphaOrBetaFlag) {
-        //                rnl = m_eigProb[l].GetEigFun(n, r); // R_{n, \ell}(r)
-        //                rhoL += occ * rnl * rnl;
-        //            }
-        //            // Beta spin
-        //        {
-        //        }
-        //        }
-        //        else if (occ > 2.0 * static_cast<double>(l)+1.0) {
-        //            // Alpha spin
-        //            if (AlphaOrBetaFlag) {
-        //                rnl = m_eigProb[l].GetEigFun(n, r); // R_{n, \ell}(r)
-        //                rhoL += (2.0 * static_cast<double>(l)+1.0) * rnl * rnl;
-        //            }
-        //            // Beta spin
-        //            else {
-        //                rnl = m_eigProb[l].GetEigFun(n, r); // R_{n, \ell}(r)
-        //                rhoL += (occ - (2.0 * static_cast<double>(l)+1.0)) * rnl * rnl;
-        //            }
-        //        }
-        //    }
-
-        //    // Sum up all constituents
-        //    rho += rhoL;
-        //}
-
-        //return rho;
-    }
-
-    template <util::Spin S>
-    double KohnSham<S>::Get(double r, boost::mpl::int_<static_cast<std::int32_t>(util::Spin::Alpha)>) const
+    template <>
+    double KohnSham<util::Spin::Alpha>::Get(double r) const
     {
         auto const rc = m_db->GetDouble("Atom_Rc");
         auto const Lmax = m_stateSet->GetLmax();
@@ -161,8 +113,8 @@ namespace ks {
         return rho;
     }
 
-    template <util::Spin S>
-    double KohnSham<S>::Get(double r, boost::mpl::int_<static_cast<std::int32_t>(util::Spin::Beta)>) const
+    template <>
+    double KohnSham<util::Spin::Beta>::Get(double r) const
     {
         auto const rc = m_db->GetDouble("Atom_Rc");
         auto const Lmax = m_stateSet->GetLmax();

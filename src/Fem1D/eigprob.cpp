@@ -6,7 +6,7 @@
 //
 // Defines the problem
 //
-void EigProb::Define(double gamma, std::shared_ptr<util::Fun1D> const & g)
+void EigProb::Define(double gamma, std::shared_ptr<const util::Fun1D> const & g)
 {
 	DefineProb(Bndr(BndrType_Dir, 0), Bndr(BndrType_Dir, 0), gamma, g, nullptr);
 }
@@ -15,12 +15,12 @@ void EigProb::Define(double gamma, std::shared_ptr<util::Fun1D> const & g)
 //
 // Solves the eigenproblem, WITHOUT adaptive procedure
 //
-void EigProb::Solve(size_t eigNo, double abstol)
+void EigProb::Solve(std::size_t eigNo, double abstol)
 {
 	Malloc();
 	Assemble();
 	m_s->EigenGen(eigNo, abstol, *m_w, *m_z, *m_o);
-//	for(size_t i = 0; i < eigNo; i++)
+//	for(std::size_t i = 0; i < eigNo; i++)
 //	{
 //		double v = GetEigVal(i);
 //		printf("%ld %.16lf\n", i, v);
@@ -30,14 +30,12 @@ void EigProb::Solve(size_t eigNo, double abstol)
 //
 // Solve the eigenproblem adatively
 //
-void EigProb::SolveAdapt(size_t eigNo, double abstol, double absMaxCoef)
+void EigProb::SolveAdapt(std::size_t eigNo, double abstol, double absMaxCoef)
 {
-std::vector<EltInfo> eltInfo(eigNo);
-std::vector<EltInfo>::iterator ii, newEnd;
-std::vector<size_t> eltToSplit;
-// size_t n,  step = 0;
-size_t i;
-double maxCoef;
+    std::vector<EltInfo> eltInfo(eigNo);
+    std::vector<std::size_t> eltToSplit;
+    // std::size_t n,  step = 0;
+    double maxCoef;
 
 
 	while(true)
@@ -47,10 +45,10 @@ double maxCoef;
 		Solve(eigNo, abstol);
 		MaxMinCoef(eltInfo);
 		std::sort(eltInfo.begin(), eltInfo.end());
-		newEnd = std::unique(eltInfo.begin(), eltInfo.end());
+		auto const newEnd = std::unique(eltInfo.begin(), eltInfo.end());
 
 		maxCoef = 0;
-		for(i = 0; i < eltInfo.size(); ++i)
+		for (auto i = 0U; i < eltInfo.size(); ++i)
 		{
 			if(eltInfo[i].m_maxMinCoef > maxCoef)
 				maxCoef = eltInfo[i].m_maxMinCoef;
@@ -64,7 +62,7 @@ double maxCoef;
 # endif
 		
 		eltToSplit.clear();
-		for(ii = eltInfo.begin(); ii != newEnd; ++ii) 
+		for (auto && ii = eltInfo.begin(); ii != newEnd; ++ii) 
 		{
 # ifdef _DEBUG
 			printf("Eig = %d, EltId = %d, maxMinCoef = %15.6E\n", (*ii).m_eigVal, (*ii).m_eltId, (*ii).m_maxMinCoef);
@@ -96,8 +94,8 @@ double maxCoef;
 //
 void EigProb::Malloc(void)
 {
-const size_t M = Dim();
-const size_t band = GetBand();
+    auto const M = Dim();
+    auto const band = GetBand();
 
 	m_s.reset();
 	m_s = std::make_shared<ClpMtxBand>(M, band, 0);
@@ -118,17 +116,17 @@ const size_t band = GetBand();
 //
 void EigProb::Assemble()
 {
-size_t i, j;
+std::size_t i, j;
 int ni; // row position in matrix S and O
 int nj; // column position in matrix S and O
-// const size_t M = Dim();
-const size_t N = EltNo(); // Number of elements
+// const std::size_t M = Dim();
+const std::size_t N = EltNo(); // Number of elements
 
 	// Element loop
-	for(size_t n = 0; n < N; n++)
+	for(std::size_t n = 0; n < N; n++)
 	{
 		const Element& e = Elt(n);
-		const size_t DofNo = e.DofNo();
+		const std::size_t DofNo = e.DofNo();
 
 		// Loop over basis functions
 		for(i = 0; i < DofNo; i++)
@@ -137,12 +135,12 @@ const size_t N = EltNo(); // Number of elements
 			if(ni < 0)
 				continue;
 
-			const size_t psiI = e.PsiId(i);
+			const std::size_t psiI = e.PsiId(i);
 
 			// Loop over basis functions
 			for(j = i; j < DofNo; j++)
 			{
-				const size_t psiJ = e.PsiId(j);
+				const std::size_t psiJ = e.PsiId(j);
 
 				nj = e.m_dof[j];
 				if(nj > -1)
@@ -164,12 +162,12 @@ const size_t N = EltNo(); // Number of elements
 //!
 void EigProb::Assemble()
 {
-size_t i, j;
+std::size_t i, j;
 int m1; // m1 - row position in matrix S and O
 int m2; // m2 - column position in matrix S and O
-size_t m;
-const size_t N = Dim();
-const size_t M = EltNo(); // Number of elements
+std::size_t m;
+const std::size_t N = Dim();
+const std::size_t M = EltNo(); // Number of elements
 
 	// Element loop
 	for(m = 0; m < M; m++)
@@ -246,14 +244,14 @@ const size_t M = EltNo(); // Number of elements
 //
 // Returns the value of $eig$ eigenfunction at point $x$
 //
-double EigProb::GetEigFun(size_t eig, double x) const
+double EigProb::GetEigFun(std::size_t eig, double x) const
 {
 // int m1;
 
 	assert(eig < m_w->size());
 	assert(IsInRange(x));
 
-	const size_t n = FindElt(x);
+	const std::size_t n = FindElt(x);
 	const Element& e = Elt(n);
 
 	// s - local variable for element "e"
@@ -262,12 +260,12 @@ double EigProb::GetEigFun(size_t eig, double x) const
 	// Sum over all basis function with support on the element $e$
 	double val = 0;
 
-	for(size_t i = 0; i < e.m_dof.size(); i++)
+	for(std::size_t i = 0; i < e.m_dof.size(); i++)
 	{
 		const int m = e.m_dof[i];
 		if(m < 0)
 			continue;
-		const size_t psiI = e.PsiId(i);
+		const std::size_t psiI = e.PsiId(i);
 
 		val += m_z->Get(m, eig) * Basis(psiI, s);
 	}
@@ -277,14 +275,14 @@ double EigProb::GetEigFun(size_t eig, double x) const
 //
 // Returns the value of $eig$ first derivative of eigenfunction at point $x$
 //
-double EigProb::GetEigFunD1(size_t eig, double x) const
+double EigProb::GetEigFunD1(std::size_t eig, double x) const
 {
 // int m1;
 
 	assert(eig < m_w->size());
 	assert(IsInRange(x));
 
-	const size_t n = FindElt(x);
+	const std::size_t n = FindElt(x);
 	const Element& e = Elt(n);
 
 	// s -  local variable for element "e"
@@ -293,12 +291,12 @@ double EigProb::GetEigFunD1(size_t eig, double x) const
 	// Sum over all basis function with support on the element $e$
 	double val = 0;
 
-	for(size_t i = 0; i < e.m_dof.size(); i++)
+	for(std::size_t i = 0; i < e.m_dof.size(); i++)
 	{
 		const int m = e.m_dof[i];
 		if(m < 0)
 			continue;
-		const size_t psiI = e.PsiId(i);
+		const std::size_t psiI = e.PsiId(i);
 
 		val += m_z->Get(m, eig) * BasisD1(psiI, s);
 	}
@@ -309,14 +307,14 @@ double EigProb::GetEigFunD1(size_t eig, double x) const
 //
 // Returns the value of $eig$ second derivative of eigenfunction at point $x$
 //
-double EigProb::GetEigFunD2(size_t eig, double x) const
+double EigProb::GetEigFunD2(std::size_t eig, double x) const
 {
 // int m1;
 
 	assert(eig < m_w->size());
 	assert(IsInRange(x));
 
-	const size_t n = FindElt(x);
+	const std::size_t n = FindElt(x);
 	const Element& e = Elt(n);
 
 	// s -  local variable for element "e"
@@ -325,12 +323,12 @@ double EigProb::GetEigFunD2(size_t eig, double x) const
 	// Sum over all basis function with support on the element $e$
 	double val = 0;
 
-	for(size_t i = 0; i < e.m_dof.size(); i++)
+	for(std::size_t i = 0; i < e.m_dof.size(); i++)
 	{
 		const int m = e.m_dof[i];
 		if(m < 0)
 			continue;
-		const size_t psiI = e.PsiId(i);
+		const std::size_t psiI = e.PsiId(i);
 
 		val += m_z->Get(m, eig) * BasisD2(psiI, s);
 	}
@@ -342,7 +340,7 @@ double EigProb::GetEigFunD2(size_t eig, double x) const
 //
 // Returns the value of the $eig$ eigenvalue
 //
-double EigProb::GetEigVal(size_t eig) const
+double EigProb::GetEigVal(std::size_t eig) const
 {
 	if(eig > m_w->size())
 		return 0;
@@ -358,7 +356,7 @@ double EigProb::GetEigVal(size_t eig) const
 // Argument "pointNo" determines number of addtional points netween mesh nodes
 // where the eigenfunction is stored.
 //
-void EigProb::WriteEigFun(const char* path, size_t eig, size_t pointNo) const
+void EigProb::WriteEigFun(const char* path, std::size_t eig, std::size_t pointNo) const
 {
     double x;
 
@@ -393,7 +391,7 @@ void EigProb::WriteEigFun(const char* path, size_t eig, size_t pointNo) const
 // where the eigenfunction is stored.
 // ll - angular quantum number, used for extralopation at r==0 only
 //
-void EigProb::WriteEigFunEx(const char* path, size_t ll,  size_t eig, size_t pointNo) const
+void EigProb::WriteEigFunEx(const char* path, std::size_t ll,  std::size_t eig, std::size_t pointNo) const
 {
 	auto out = std::unique_ptr<FILE, decltype(&std::fclose)>(std::fopen(path, "wt"), std::fclose);
 	if(!out)
@@ -441,7 +439,7 @@ void EigProb::WriteEigFunEx(const char* path, size_t ll,  size_t eig, size_t poi
 //
 // Writes memmbers of eginevectors into file
 //
-void EigProb::WriteEigCoef(const char* path, size_t eigNo) const
+void EigProb::WriteEigCoef(const char* path, std::size_t eigNo) const
 {
     auto out = std::unique_ptr<FILE, decltype(&std::fclose)>(std::fopen(path, "wt"), std::fclose);
 
@@ -475,7 +473,7 @@ void EigProb::WriteEigCoef(const char* path, size_t eigNo) const
 
 		std::fprintf(out.get(), "Elt:%06lu = [ %14.6E, %14.6E ]\n", static_cast<unsigned long>(n), e.X(-1), e.X(1));
 		
-		for(size_t j = 0; j < e.DofNo(); j++) // For each DOF in elemt
+		for(std::size_t j = 0; j < e.DofNo(); j++) // For each DOF in elemt
 		{
 			auto const dof = e.m_dof[j];
 			if(dof < 0)
@@ -502,7 +500,7 @@ void EigProb::WriteEigCoef(const char* path, size_t eigNo) const
 	}
 */
 	//////////////////////////////////////////////////////////////////////////////////////////
-	size_t coefNo = EltBack().P();
+	std::size_t coefNo = EltBack().P();
 	std::fprintf(out.get(), "\n\nABSOLUTE SUM OF LAST '%lu' COEFFICIENTS\n", static_cast<unsigned long>(coefNo));
 	
     for(std::size_t i = 0UL; i < eigNo; i++)
@@ -539,19 +537,19 @@ void EigProb::WriteEigCoef(const char* path, size_t eigNo) const
 //
 void EigProb::MaxMinCoef(std::vector<EltInfo>& eltInfo) const
 {
-const size_t eigNo = eltInfo.size();
+const std::size_t eigNo = eltInfo.size();
 double coef, minCoef;
 int dof;
 
-        for(size_t i = 0; i < eigNo; i++) // For each eigenfunction
+        for(std::size_t i = 0; i < eigNo; i++) // For each eigenfunction
 	{
 		eltInfo[i].m_maxMinCoef = 0; // Inicjalizacja
-		for(size_t n = 0; n < EltNo(); n++) // For each element
+		for(std::size_t n = 0; n < EltNo(); n++) // For each element
 		{
 			const Element& e = Elt(n);
 			minCoef = DBL_MAX;
 
-			for(size_t j = 1; j < e.DofNo() - 1; j++) // For each BUBBLE DOF at element
+			for(std::size_t j = 1; j < e.DofNo() - 1; j++) // For each BUBBLE DOF at element
 			{
 				dof = e.m_dof[j];
 				if(dof < 0) // Skip Dirichlet boundary conditions

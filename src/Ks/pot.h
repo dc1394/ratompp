@@ -13,7 +13,6 @@
 #include "../ExCorr/xc.h"
 #include <memory>               // for std::unique_ptr
 #include <utility>              // for std::pair
-#include <boost/mpl/int.hpp>    // for boost::mpl::int_
 
 namespace ks {
     template <util::Spin S>
@@ -42,20 +41,16 @@ namespace ks {
         };
 
     public:
-        Pot(std::shared_ptr<ParamDb> const & db);
+        Pot(std::shared_ptr<const ParamDb> const & db);
         ~Pot() override = default;
 
         // May 23rd, 2014 Modified by dc1394
         //void SetRho(util::Fun1D* rho);
         void SetRho(std::pair< std::shared_ptr<util::Fun1D>, std::shared_ptr<util::Fun1D> > const & rho);
-        void SetRho(std::pair< std::shared_ptr<util::Fun1D>, std::shared_ptr<util::Fun1D> > const & rho, boost::mpl::int_<static_cast<std::int32_t>(util::Spin::Alpha)>);
-        void SetRho(std::pair< std::shared_ptr<util::Fun1D>, std::shared_ptr<util::Fun1D> > const & rho, boost::mpl::int_<static_cast<std::int32_t>(util::Spin::Beta)>);
         void SolvePoisson();
 
         double Get(double r) const override;
         double GetRho(double r) const;
-        double GetRho(double r, boost::mpl::int_<static_cast<std::int32_t>(util::Spin::Alpha)>) const;
-        double GetRho(double r, boost::mpl::int_<static_cast<std::int32_t>(util::Spin::Beta)>) const;
 
         // March 31st, 2014 Added by @dc1394
         void Write() /*const*/;

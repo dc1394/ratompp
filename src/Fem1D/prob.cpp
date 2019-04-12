@@ -11,7 +11,7 @@ Prob::Prob() : m_gamma(0)
 //
 // Constructor
 //
-Prob::Prob(Bndr left, Bndr right, double gamma, std::shared_ptr<util::Fun1D> const & g, std::shared_ptr<util::Fun1D> const & f)
+Prob::Prob(Bndr left, Bndr right, double gamma, std::shared_ptr<const util::Fun1D> const & g, std::shared_ptr<const util::Fun1D> const & f)
 {
 	DefineProb(left, right, gamma, g, f);
 }
@@ -19,7 +19,7 @@ Prob::Prob(Bndr left, Bndr right, double gamma, std::shared_ptr<util::Fun1D> con
 //
 // Defines the problem
 //
-void Prob::DefineProb(Bndr left, Bndr right, double gamma, std::shared_ptr<util::Fun1D> const & g, std::shared_ptr<util::Fun1D> const & f)
+void Prob::DefineProb(Bndr left, Bndr right, double gamma, std::shared_ptr<const util::Fun1D> const & g, std::shared_ptr<const util::Fun1D> const & f)
 {
 	m_left = left;
 	assert(left.m_type != BndrType_Emp);
