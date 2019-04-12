@@ -6,14 +6,6 @@ namespace fem1d {
     //
     // Constructor
     //
-    Approx::Approx()
-    {
-        m_M = 0;
-    }
-
-    //
-    // Constructor
-    //
     Approx::Approx(size_t M, std::shared_ptr<const util::Fun1D> && f)
     {
         Define(M, std::move(f));
@@ -22,9 +14,9 @@ namespace fem1d {
     //
     // Defines approximation problem
     //
-    void Approx::Define(size_t M, std::shared_ptr<const util::Fun1D> && f)
+    void Approx::Define(std::size_t M, std::shared_ptr<const util::Fun1D> && f)
     {
-        const size_t DIAG = 2; // Number of super diagonals
+        const std::size_t DIAG = 2UL; // Number of super diagonals
 
         m_f = std::move(f);
 
@@ -44,15 +36,13 @@ namespace fem1d {
         m_K.reset();
         m_K = std::make_unique<ClpMtxBand>(M, DIAG, 0);
 
-        size_t i, j;
-        for (i = 0; i < M; i++)
+        for (std::size_t i = 0; i < M; i++)
         {
-            const size_t jMax = std::min(i + DIAG, M - 1);
-            for (j = i; j <= jMax; j++)
+            auto const jMax = std::min(i + DIAG, M - 1);
+            for (std::size_t j = i; j <= jMax; j++)
                 m_K->Set(i, j) = Memi(i + 2, j + 2); // In order to keep consistency "2" must be added
         }
     }
-
 
 
     //
@@ -62,15 +52,14 @@ namespace fem1d {
     double Approx::Solve(double a, double b)
     {
         assert(b > a);
-        size_t i;
         Element elt;
-        const double fa = m_f->Get(a);
-        const double fb = m_f->Get(b);
+        auto const fa = m_f->Get(a);
+        auto const fb = m_f->Get(b);
 
         // Define the element. Order "0" is not used!
         elt.Set(a, b, 0);
 
-        for (i = 0; i < m_M; i++)
+        for (std::size_t i = 0UL; i < m_M; i++)
             m_b->Set(i) = CalcB(elt, i + 2, fa, fb);
 
         m_K->SolveSymPos(m_b, m_c);
@@ -79,11 +68,12 @@ namespace fem1d {
         //	m_b->Write("b.vec");
         //	m_c->Write("c.vec");
 
-        double kij, sum = 0;
-        for (i = 0; i < m_M; i++)
+        auto sum = 0.0;
+        for (std::size_t i = 0UL; i < m_M; i++)
         {
-            for (size_t j = 0; j < m_M; j++)
+            for (std::size_t j = 0UL; j < m_M; j++)
             {
+                double kij;
                 // Upper triangular matrix is stored only
                 if (j >= i)
                     kij = m_K->Get(i, j);
@@ -93,7 +83,7 @@ namespace fem1d {
             }
         }
 
-        return ::sqrt(::fabs(IntegF2(elt, fa, fb) - elt.Jac() * sum));
+        return std::sqrt(std::fabs(IntegF2(elt, fa, fb) - elt.Jac() * sum));
     }
 
     //
@@ -137,17 +127,17 @@ namespace fem1d {
 
 
 
-        for (size_t i = 0; i < m_heap.Size(); i++)
+        for (std::size_t i = 0UL; i < m_heap.Size(); i++)
         {
-            const HeapElt& e = m_heap[i];
+            auto const & e = m_heap[i];
             if (e.m_left <= x && x <= e.m_right)
             {
-                double val = 0;
+                auto val = 0.0;
                 // s - local variable for element "e"
-                double s = e.Xinv(x);
+                auto s = e.Xinv(x);
                 s = std::min(std::max(s, -1.0), 1.0); // MIN, MAX - To avoid the rounding errors
 
-                for (size_t j = 0; j < m_M + 2; j++)
+                for (std::size_t j = 0UL; j < m_M + 2; j++)
                     val += e.m_coef[j] * Basis(j, s);
 
                 return val;
@@ -156,7 +146,6 @@ namespace fem1d {
 
         assert(0);
         return 0;
-
     }
 
     // March 16th, 2014 Added by dc1394
@@ -164,18 +153,18 @@ namespace fem1d {
     //
     double Approx::GetDeriv(double x) const
     {
-        for (size_t i = 0; i < m_heap.Size(); i++)
+        for (std::size_t i = 0UL; i < m_heap.Size(); i++)
         {
-            const HeapElt& e = m_heap[i];
+            auto const & e = m_heap[i];
 
             if (e.m_left <= x && x <= e.m_right)
             {
-                double val = 0;
+                auto val = 0.0;
                 // s - local variable for element "e"
-                double s = e.Xinv(x);
+                auto s = e.Xinv(x);
                 s = std::min(std::max(s, -1.0), 1.0); // MIN, MAX - To avoid the rounding errors
 
-                for (size_t j = 0; j < m_M + 2; j++)
+                for (std::size_t j = 0UL; j < m_M + 2; j++)
                     val += e.m_coef[j] * BasisD1(j, s);
 
                 return val / e.Getc2();
@@ -184,7 +173,6 @@ namespace fem1d {
 
         assert(0);
         return 0;
-
     }
 
     // March 16th, 2014 Added by dc1394
@@ -192,18 +180,18 @@ namespace fem1d {
     //
     double Approx::Get2ndDeriv(double x) const
     {
-        for (size_t i = 0; i < m_heap.Size(); i++)
+        for (std::size_t i = 0UL; i < m_heap.Size(); i++)
         {
-            const HeapElt& e = m_heap[i];
+            auto const & e = m_heap[i];
 
             if (e.m_left <= x && x <= e.m_right)
             {
-                double val = 0;
+                auto val = 0.0;
                 // s - local variable for element "e"
-                double s = e.Xinv(x);
+                auto s = e.Xinv(x);
                 s = std::min(std::max(s, -1.0), 1.0); // MIN, MAX - To avoid the rounding errors
 
-                for (size_t j = 0; j < m_M + 2; j++)
+                for (std::size_t j = 0UL; j < m_M + 2; j++)
                     val += e.m_coef[j] * BasisD2(j, s);
 
                 return val / (e.Getc2() * e.Getc2());
@@ -218,16 +206,16 @@ namespace fem1d {
     //
     // Returns value $b[i]$. Gauss quadratures are applied.
     // 
-    double Approx::CalcB(const Element& elt, size_t i, double fa, double fb) const
+    double Approx::CalcB(const Element& elt, std::size_t i, double fa, double fb) const
     {
-        double w, s, b = 0;
+        auto b = 0.0;
 
         assert(m_xGauss.size() == m_wGauss.size());
 
-        for (size_t n = 0; n < m_xGauss.size(); n++)
+        for (std::size_t n = 0UL; n < m_xGauss.size(); n++)
         {
-            s = m_xGauss[n];
-            w = m_wGauss[n];
+            auto const s = m_xGauss[n];
+            auto const w = m_wGauss[n];
             b += w * Basis(i, s) * Ftilde(elt.X(s), s, fa, fb);
         }
         return b;
@@ -251,15 +239,15 @@ namespace fem1d {
     double Approx::IntegF2(const Element& elt, double fa, double fb) const
     {
 
-        double v, w, s, res = 0;
+        auto res = 0.0;
 
         assert(m_xGauss.size() == m_wGauss.size());
 
-        for (size_t n = 0; n < m_xGauss.size(); n++)
+        for (std::size_t n = 0; n < m_xGauss.size(); n++)
         {
-            s = m_xGauss[n];
-            w = m_wGauss[n];
-            v = Ftilde(elt.X(s), s, fa, fb);
+            auto const s = m_xGauss[n];
+            auto const w = m_wGauss[n];
+            auto const v = Ftilde(elt.X(s), s, fa, fb);
             res += w * v * v;
         }
         return elt.Jac() * res;
@@ -281,16 +269,14 @@ namespace fem1d {
     //
     double Approx::FindB(double a, double b, double delta, double h)
     {
-        double ra, rb, eps = 0;
-
         assert(delta > 0);
 
-        ra = 0;
-        rb = 0;
+        auto ra = 0.0;
+        auto rb = 0.0;
         while (true)
         {
             rb += h;
-            eps = Solve(a, a + rb);
+            auto const eps = Solve(a, a + rb);
             if (eps > delta)
                 break;
 
@@ -309,7 +295,7 @@ namespace fem1d {
     double Approx::RunBisect(double a, double ra, double rb, double delta)
     {
         const double prec = 1E-4;
-        double x = 0.0, fa, fb, fx;
+        double x = 0.0, fa;
 
         assert(rb > ra);
 
@@ -318,14 +304,14 @@ namespace fem1d {
         else
             fa = -delta;
 
-        fb = Solve(a, a + rb) - delta;
+        auto fb = Solve(a, a + rb) - delta;
 
         assert(fa * fb < 0);
 
         while (rb - ra > prec)
         {
             x = 0.5 * (ra + rb);
-            fx = Solve(a, a + x) - delta;
+            auto const fx = Solve(a, a + x) - delta;
             if (fa * fx <= 0)
             {
                 rb = x;
@@ -346,21 +332,19 @@ namespace fem1d {
     //
     void Approx::SolveAdaptOld(double a, double b, double delta, double h)
     {
-        double r0;
-        size_t i;
         std::vector<double> r;
 
         m_cAll.resize(0);
         r.push_back(a);
         while (true)
         {
-            r0 = FindB(a, b, delta, h);
+            auto const r0 = FindB(a, b, delta, h);
 
             // Wspolczynniki dla \psi_0 i dla \psi_1
             m_cAll.push_back(m_f->Get(a));
             m_cAll.push_back(m_f->Get(r0));
 
-            for (i = 0; i < m_M; i++) // Pozostale wspolczynniki
+            for (std::size_t i = 0UL; i < m_M; i++) // Pozostale wspolczynniki
                 m_cAll.push_back(m_c->Get(i));
 
             if (r0 >= b)
@@ -381,7 +365,7 @@ namespace fem1d {
 
     void Approx::SetMesh(const std::vector<double>& x)
     {
-        std::vector<size_t> degree(x.size() - 1, m_M);
+        std::vector<std::size_t> degree(x.size() - 1, m_M);
 
         Mesh::Set(x, degree);
         Mesh::CreateCnnt(BndrType_Dir, BndrType_Dir);
@@ -395,7 +379,7 @@ namespace fem1d {
     void Approx::SolveAdapt(double a, double b, double maxDelta)
     {
         double x, delta;
-        // size_t i;
+        // std::size_t i;
         // std::vector<double> r, c(m_M + 2);
         std::vector<double> c(m_M + 2);
         HeapElt e;
@@ -411,7 +395,7 @@ namespace fem1d {
         SetCoef(a, b, c);
         m_heap.Push(HeapElt(a, b, delta, c));
 
-        size_t ii = 0;
+        std::size_t ii = 0;
         while (true)
         {
             if (m_heap.Top().m_delta < maxDelta && ii > 10)
@@ -448,7 +432,7 @@ namespace fem1d {
         // printf("   ii=%d\n", ii);
 
 
-        //	for(size_t i = 0; i < m_heap.Size(); i++)
+        //	for(std::size_t i = 0; i < m_heap.Size(); i++)
         //	{
         //		const HeapElt& e = m_heap[i];
         //		printf("i=%2d  Left=%6.3f  Right=%6.3f   Delta =%6.3E\n", i, e.m_left, e.m_right, e.m_delta);
@@ -468,7 +452,7 @@ namespace fem1d {
         c[0] = m_f->Get(a);
         c[1] = m_f->Get(b);
 
-        for (size_t i = 0; i < m_M; i++) // Pozostale wspolczynniki
+        for (std::size_t i = 0; i < m_M; i++) // Pozostale wspolczynniki
             c[i + 2] = m_c->Get(i);
     }
 
@@ -478,9 +462,9 @@ namespace fem1d {
         std::vector<double> node;
         node.reserve(m_heap.Size());
 
-        for (size_t i = 0; i < m_heap.Size(); i++)
+        for (std::size_t i = 0; i < m_heap.Size(); i++)
         {
-            const HeapElt& e = m_heap[i];
+            auto const & e = m_heap[i];
             node.push_back(e.m_left);
             node.push_back(e.m_right);
         }
@@ -496,19 +480,17 @@ namespace fem1d {
 
     void Approx::WriteCoef(FILE* out) const
     {
-        size_t k, i;
-
         fprintf(out, "%4s \t %16s \t %16s", "i", "r_i", "r_{i+1}");
-        for (k = 0; k <= m_M; ++k)
+        for (std::size_t k = 0UL; k <= m_M; ++k)
             fprintf(out, " \t              c_%lu", static_cast<unsigned long>(k));
         fprintf(out, "\n");
 
-        for (i = 0; i < m_heap.Size(); ++i)
+        for (std::size_t i = 0UL; i < m_heap.Size(); ++i)
         {
-            const HeapElt& e = m_heap[i];
+            auto const & e = m_heap[i];
 
             fprintf(out, "%4lu \t %16.6E \t %16.6E", static_cast<unsigned long>(i), e.m_left, e.m_right);
-            for (k = 0; k <= m_M; ++k)
+            for (std::size_t k = 0UL; k <= m_M; ++k)
                 fprintf(out, " \t %16.6E", e.m_coef[k]);
             fprintf(out, "\n");
         }

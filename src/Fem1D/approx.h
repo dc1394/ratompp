@@ -12,12 +12,11 @@
 #include "mesh.h"
 #include "heap.h"
 #include "heapelt.h"
-#include <memory>
+#include <memory>       // for std::shared_ptr, std::unique_ptr 
 
 namespace fem1d {
     class Approx final : public util::Fun1D, private Mesh, private Lobatto
     {
-    private:
         // Auxilary class
         class FunF2 final : public util::Fun1D
         {
@@ -26,9 +25,9 @@ namespace fem1d {
             ~FunF2() override = default;
             double Get(double r) const override
             {
-                double s = m_e.Xinv(r);
-                double b0 = 0.5 * (1 - s), b1 = 0.5 * (1 + s);
-                double fTilde = m_f->Get(r) - m_fa * b0 - m_fb * b1;
+                auto const s = m_e.Xinv(r);
+                auto const b0 = 0.5 * (1 - s), b1 = 0.5 * (1 + s);
+                auto const fTilde = m_f->Get(r) - m_fa * b0 - m_fb * b1;
                 return fTilde * fTilde;
             }
         public:
@@ -38,7 +37,7 @@ namespace fem1d {
         };
 
     public:
-        Approx();
+        Approx() = default;
         Approx(size_t M, std::shared_ptr<const util::Fun1D> && f);
         ~Approx() override = default;
 
@@ -84,7 +83,7 @@ namespace fem1d {
         std::unique_ptr<ClpMtxBand> m_K;
 
         // Approximation degree
-        size_t m_M;
+        std::size_t m_M = 0;
 
         // Aproksymowana funkcja
         std::shared_ptr<const util::Fun1D> m_f;
