@@ -6,24 +6,24 @@
 extern "C"
 {
     void dsbevx_(char *jobz, char *range, char *uplo, std::int32_t *n, 
-	    std::int32_t *kd, double *ab, int *ldab, double *q, int *
-	    ldq, double *vl, double *vu, std::int32_t *il, int *iu, 
+	    std::int32_t *kd, double *ab, std::int32_t *ldab, double *q, std::int32_t *
+	    ldq, double *vl, double *vu, std::int32_t *il, std::int32_t *iu, 
 	    double *abstol, std::int32_t *m, double *w, double *z__, 
-	    std::int32_t *ldz, double *work, int *iwork, int *ifail, 
+	    std::int32_t *ldz, double *work, std::int32_t *iwork, std::int32_t *ifail, 
 	    std::int32_t *info);
 	
     void dsbgvx_(char *jobz, char *range, char *uplo, std::int32_t *n, 
-	    std::int32_t *ka, int *kb, double *ab, int *ldab, double *
-	    bb, std::int32_t *ldbb, double *q, int *ldq, double *vl, 
-	    double *vu, std::int32_t *il, int *iu, double *abstol, int 
+	    std::int32_t *ka, std::int32_t *kb, double *ab, std::int32_t *ldab, double *
+	    bb, std::int32_t *ldbb, double *q, std::int32_t *ldq, double *vl, 
+	    double *vu, std::int32_t *il, std::int32_t *iu, double *abstol, std::int32_t 
 	    *m, double *w, double *z__, std::int32_t *ldz, double *work, 
-	    std::int32_t *iwork, int *ifail, int *info);	
+	    std::int32_t *iwork, std::int32_t *ifail, std::int32_t *info);	
 	
-    void dpbsvx_(char *fact, char *uplo, std::int32_t *n, int *kd, 
-	    std::int32_t *nrhs, double *ab, int *ldab, double *afb, 
-	    std::int32_t *ldafb, char *equed, double *s, double *b, int *
+    void dpbsvx_(char *fact, char *uplo, std::int32_t *n, std::int32_t *kd, 
+	    std::int32_t *nrhs, double *ab, std::int32_t *ldab, double *afb, 
+	    std::int32_t *ldafb, char *equed, double *s, double *b, std::int32_t *
 	    ldb, double *x, std::int32_t *ldx, double *rcond, double *ferr,
-	    double *berr, double *work, std::int32_t *iwork, int *info);	
+	    double *berr, double *work, std::int32_t *iwork, std::int32_t *info);	
 }
 #endif
 

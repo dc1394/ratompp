@@ -6,12 +6,12 @@
 #ifndef USE_MKL
 extern "C"
 {
-    std::int32_t dgesv_(int *n, int *nrhs, double *a, int *lda, 
-         std::int32_t *ipiv, double *b, int *ldb, int *info);
+    std::int32_t dgesv_(std::int32_t *n, std::int32_t *nrhs, double *a, std::int32_t *lda, 
+         std::int32_t *ipiv, double *b, std::int32_t *ldb, std::int32_t *info);
 	
-    std::int32_t dsysv_(char *uplo, int *n, int *nrhs, double *a, 
-	std::int32_t *lda, int *ipiv, double *b, int *ldb, 
-		double *work, std::int32_t *lwork, int *info);
+    std::int32_t dsysv_(char *uplo, std::int32_t *n, std::int32_t *nrhs, double *a, 
+	std::int32_t *lda, std::int32_t *ipiv, double *b, std::int32_t *ldb, 
+		double *work, std::int32_t *lwork, std::int32_t *info);
 }
 #endif
 
