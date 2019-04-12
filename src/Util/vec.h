@@ -8,9 +8,16 @@
 *
 */
 
-#include <vector>
+#ifdef USE_MKL
+    #include "mkl_allocator.h"
+#endif
+#include <vector>           // for std::vector
 
+#ifdef USE_MKL
+class Vec final : public std::vector<double, util::mkl_allocator<double> >
+#else
 class Vec final : public std::vector<double>
+#endif
 {
 public:
 	Vec() = default;

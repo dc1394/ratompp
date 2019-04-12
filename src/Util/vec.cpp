@@ -1,13 +1,17 @@
 #include "stdafx.h"
 #include "vec.h"
-#include <cstdio>   // for std::fopen
+#include <cstdint>  // for std::size_t
 #include <memory>   // for std::unique_ptr
 
 
 //
 // Constructor
 //
+#ifdef USE_MKL
+Vec::Vec(const Vec& v) : std::vector<double, util::mkl_allocator<double> >(v.size())
+#else
 Vec::Vec(const Vec& v) : std::vector<double>(v.size())
+#endif
 {
 	// resize(v.size());
 	for(size_t i = 0; i < v.size(); i++)
@@ -17,7 +21,12 @@ Vec::Vec(const Vec& v) : std::vector<double>(v.size())
 //
 // Constructor
 //
-Vec::Vec(size_t n) : std::vector<double>(n)
+
+#ifdef USE_MKL
+Vec::Vec(std::size_t n) : std::vector<double, util::mkl_allocator<double> >(n)
+#else
+Vec::Vec(std::size_t n) : std::vector<double>(n)
+#endif
 {
 }
 
@@ -49,6 +58,7 @@ void Vec::Write(const char* path) const
 	assert(out);
     for (size_t i = 0; i < size(); i++)
     {
-        fprintf(out.get(), "%4lu %lf\n", static_cast<unsigned long>(i), Get(i));
+        std::fprintf(out.get(), "%4lu %lf\n", static_cast<unsigned long>(i), Get(i));
     }
 }
+

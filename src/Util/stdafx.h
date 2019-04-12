@@ -5,13 +5,13 @@
 
 #pragma once
 
-#include <assert.h>
+#include <cassert>
 
 #include <vector>
-#include <math.h>
-#include <float.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cmath>
+#include <cfloat>
+#include <cstdlib>
+#include <cstdio>
 
 
 // TODO: reference additional headers your program requires here

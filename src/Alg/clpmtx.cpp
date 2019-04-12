@@ -3,15 +3,17 @@
 // #include "Except.h"
 #include <memory>       // for std::unique_ptr
 
+#ifndef USE_MKL
 extern "C"
 {
-    int dgesv_(int *n, int *nrhs, double *a, int *lda, 
-         int *ipiv, double *b, int *ldb, int *info);
+    std::int32_t dgesv_(int *n, int *nrhs, double *a, int *lda, 
+         std::int32_t *ipiv, double *b, int *ldb, int *info);
 	
-    int dsysv_(char *uplo, int *n, int *nrhs, double *a, 
-	int *lda, int *ipiv, double *b, int *ldb, 
-		double *work, int *lwork, int *info);
+    std::int32_t dsysv_(char *uplo, int *n, int *nrhs, double *a, 
+	std::int32_t *lda, int *ipiv, double *b, int *ldb, 
+		double *work, std::int32_t *lwork, int *info);
 }
+#endif
 
 //!
 //! Konstruktor 
@@ -97,25 +99,29 @@ size_t ClpMtx::Elt(size_t row, size_t col) const
 void ClpMtx::Dgesv(const Vec& b, Vec& x)
 {
     auto n = static_cast<std::int32_t>(m_colNo);
-    int nrhs = 1;
-    int lda = n;
-    int ldb = n;
-    int info;
+    std::int32_t nrhs = 1;
+    std::int32_t lda = n;
+    std::int32_t ldb = n;
+    std::int32_t info;
 
 	assert(m_colNo == m_rowNo);
 
 	// Kopiowanie. Rozwiazanie zwracane jest na wekotrze "x"
 	x = b;
 
+#ifdef USE_MKL
+    std::vector<std::int32_t, util::mkl_allocator<std::int32_t> > ipiv(n);
+#else
     std::vector<std::int32_t> ipiv(n);
-	auto const ret = dgesv_(&n, &nrhs, m_array.data(), &lda, ipiv.data(), x.data(), &ldb, &info);
+#endif
+    dgesv_(&n, &nrhs, m_array.data(), &lda, ipiv.data(), x.data(), &ldb, &info);
 
 	if (info != 0)
     {
 		throw std::invalid_argument("Error in 'ClpMtx::Solve'");
     }
 
-    assert(ret == 0);
+//  assert(ret == 0);
 //	assert(info == 0);
 }
 
@@ -129,13 +135,13 @@ void ClpMtx::Dsysv(const Vec& b, Vec& x)
     char uplo = 'U';  // Upper triangle of A is stored
 
     auto n = static_cast<std::int32_t>(m_colNo); // The number of linear equations, i.e., the order of the matrix A.
-    int nrhs = 1; 
-    int lda = n;
-    int * ipiv = nullptr;
-    int ldb = n;
+    std::int32_t nrhs = 1; 
+    std::int32_t lda = n;
+    std::int32_t * ipiv = nullptr;
+    std::int32_t ldb = n;
     double tmp[2];
-    int lwork;
-    int info;
+    std::int32_t lwork;
+    std::int32_t info;
 
 	// Kopiowanie. Rozwiazanie zwracane jest na wekotrze "x"
 	x = b;
@@ -145,9 +151,14 @@ void ClpMtx::Dsysv(const Vec& b, Vec& x)
 	dsysv_(&uplo, &n, &nrhs, m_array.data(), &lda, ipiv, x.data(), &ldb, tmp, &lwork, &info);
 	lwork = static_cast<std::int32_t>(tmp[0]);
 
+#ifdef USE_MKL
+    std::vector<double, util::mkl_allocator<double> > work(lwork);
+    std::vector<std::int32_t, util::mkl_allocator<std::int32_t> > ipiv2(n);
+#else
     std::vector<double> work(lwork);
     std::vector<std::int32_t> ipiv2(n);
-	
+#endif
+
     dsysv_(&uplo, &n, &nrhs, m_array.data(), &lda, ipiv2.data(), x.data(), &ldb, work.data(), &lwork, &info);
 
 	if (info != 0)
@@ -178,13 +189,11 @@ void ClpMtx::Write(const char* path, bool rowId) const
 	for (auto row = 0U; row < RowNo(); row++)
 	{
 		if(rowId)
-			fprintf(out.get(), "ROW=%2lu ", static_cast<unsigned long>(row));
+			std::fprintf(out.get(), "ROW=%2lu ", static_cast<unsigned long>(row));
 
 		for (auto col = 0U; col < ColNo(); col++)
-			fprintf(out.get(), "%15.6E", Get(row, col));
-		fprintf(out.get(), "\n");
+			std::fprintf(out.get(), "%15.6E", Get(row, col));
+        std::fprintf(out.get(), "\n");
 	}
 }
-
-
 

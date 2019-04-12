@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "approx.h"
-#include <utility>
+#include <utility>  // for std::move
 
 namespace fem1d {
     //

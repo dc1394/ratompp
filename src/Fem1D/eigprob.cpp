@@ -4,14 +4,6 @@
 #include <boost/format.hpp> // for boost::format
 
 //
-// Constructor
-//
-EigProb::EigProb(double gamma, std::shared_ptr<util::Fun1D> const & g) : Prob(Bndr(BndrType_Dir, 0), Bndr(BndrType_Dir, 0), gamma, g, nullptr)
-{
-	assert(g);
-}
-
-//
 // Defines the problem
 //
 void EigProb::Define(double gamma, std::shared_ptr<util::Fun1D> const & g)
@@ -581,3 +573,4 @@ int dof;
 		}
 	}
 }
+

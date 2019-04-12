@@ -96,7 +96,7 @@ namespace ks {
 
     private:
         // Database of parameters
-        std::shared_ptr<ParamDb> const m_db;
+        std::shared_ptr<const ParamDb> const m_db;
 
         // Electron density
         std::pair<util::Fun1D *, util::Fun1D *> m_rho;

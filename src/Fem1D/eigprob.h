@@ -19,7 +19,6 @@ class EigProb : public Prob
 {
 public:
 	EigProb() = default;
-	EigProb(double gamma, std::shared_ptr<util::Fun1D> const & g);
 	~EigProb() override = default;
 
 	void Define(double gamma, std::shared_ptr<util::Fun1D> const & g);
