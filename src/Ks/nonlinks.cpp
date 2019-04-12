@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "nonlinks.h"
+#include <iostream>         // for std::cout
+#include <boost/format.hpp> // for boost::format
 
 namespace ks {
     //
@@ -32,17 +34,17 @@ namespace ks {
             Scf();
             auto const end = high_resolution_clock::now();
 
-            printf("\n\n\n********** WRITING RESULTS TO OUTPUT FILES **********\n");
+            std::cout << "\n\n\n********** WRITING RESULTS TO OUTPUT FILES **********\n";
             fflush(stdout);
             WriteRes(duration_cast<duration<double>>(end - beg));
         }
         catch (std::exception const & e)
         {
-            printf("\n\nERROR! %s\n\n\n", e.what());
+            std::cout << boost::format("\n\nERROR! %s\n\n\n") % e.what();
             return 1;
         }
 
-        printf("\n\n********** CALCULATIONS FINISHED SUCCESSFULLY! **********\n\n\n");
+        std::cout << "\n\n********** CALCULATIONS FINISHED SUCCESSFULLY! **********\n\n\n";
         return 0;
     }
 
@@ -58,11 +60,11 @@ namespace ks {
         m_ks.first->Config(m_pot.first);
         m_ks.second->Config(m_pot.second);
 
-        printf("********************   S C F   L O O P   ********************\n");
+        std::cout << "********************   S C F   L O O P   ********************\n";
 
         while (true)
         {
-            printf("*  SCF=%3lu   ", static_cast<unsigned long>(iter));
+            std::cout << boost::format("*  SCF=%3lu   ") % static_cast<unsigned long>(iter);
 
             m_pot.first->SetRho(m_rho);
             m_pot.first->SolvePoisson();
@@ -96,8 +98,8 @@ namespace ks {
 		m_pot.second->Write();
 		m_pot.first->Write();
 
-        printf("*  SCF-ITERATIONS = %lu\n", static_cast<unsigned long>(iter));
-        printf("***********   S C F   L O O P   F I N I S H E D   ***********\n");
+        std::cout << boost::format("*  SCF-ITERATIONS = %lu\n") % static_cast<unsigned long>(iter);
+        std::cout << "***********   S C F   L O O P   F I N I S H E D   ***********\n";
     }
 
 
@@ -114,7 +116,7 @@ namespace ks {
         auto const diff = std::fabs(sumNew - sumOld);
         sumOld = sumNew;
 
-        printf("EigenSum = %18.10lf    Diff = %18.10E\n", sumNew, diff);
+        std::cout << boost::format("EigenSum = %18.10lf    Diff = %18.10E\n") % sumNew % diff;
         fflush(stdout);
 
         return (diff < scfEnerDiff);

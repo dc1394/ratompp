@@ -6,11 +6,11 @@
 #pragma once
 
 
-#include <assert.h>
-#include <stdio.h>
+#include <cassert>
+#include <cstdio>
 #include <malloc.h>
-#include <math.h>
-#include <time.h>
+#include <cmath>
+#include <ctime>
 
 #include <vector>
 #include <list>
@@ -19,7 +19,7 @@
 #include <map>
 #include <string>
 
-#include <string.h>
+#include <cstring>
 
 
 

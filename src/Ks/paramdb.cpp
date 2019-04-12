@@ -27,7 +27,7 @@ std::string ParamDb::Get(std::string const & param) const
         return iter->second;
     }
     else {
-        throw std::invalid_argument((boost::format("Parametr '%s' could not be found.") % param).str());
+        throw std::invalid_argument((boost::format("Parameter '%s' could not be found.") % param).str());
 	}
 }
 
@@ -161,9 +161,9 @@ void ParamDb::WriteParams(void) const
     auto const now = second_clock::local_time();
     auto const nowdate = now.date();
     auto s = boost::format("%s %s %s %s %s") % nowdate.day_of_week() % nowdate.month() % nowdate.day() % now.time_of_day() % nowdate.year();
-    fprintf(out.get(), "  C A L C U L A T I O N   D A T E   %s\n", s.str().c_str());
+    std::fprintf(out.get(), "  C A L C U L A T I O N   D A T E   %s\n", s.str().c_str());
 
-	fprintf(out.get(), "\n\n"
+	std::fprintf(out.get(), "\n\n"
 		"*************************************\n"
 		"*                                   *\n"
 		"*      I N P U T   P A R A M S      *\n"
@@ -171,6 +171,6 @@ void ParamDb::WriteParams(void) const
 		"*************************************\n");
 
     for (auto && i = begin(); i != end(); ++i) {
-        fprintf(out.get(), "%-30s   %s\n\n", i->first.c_str(), i->second.c_str());
+        std::fprintf(out.get(), "%-30s   %s\n\n", i->first.c_str(), i->second.c_str());
     }
 }
