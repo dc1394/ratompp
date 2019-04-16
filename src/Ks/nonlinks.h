@@ -139,13 +139,13 @@ namespace ks {
         class RhoMix final : public util::Fun1D
         {
         public:
-            RhoMix(std::shared_ptr<ParamDb> const & db)
+            RhoMix(std::shared_ptr<ParamDb const> const & db)
             {
                 m_scfMix = std::stof(db->Get("Scf_Mix"));
             }
             ~RhoMix() override = default;
             
-            void SetRho(std::shared_ptr<util::Fun1D> const & rhoCur, std::shared_ptr<util::Fun1D> const & rhoOld)
+            void SetRho(std::shared_ptr<util::Fun1D const> const & rhoCur, std::shared_ptr<util::Fun1D const> const & rhoOld)
             {
                 m_rhoCur = rhoCur;
                 m_rhoOld = rhoOld;
@@ -157,9 +157,9 @@ namespace ks {
             }
 
         private:
-            std::shared_ptr<util::Fun1D> m_rhoCur;
+            std::shared_ptr<util::Fun1D const> m_rhoCur;
             
-            std::shared_ptr<util::Fun1D> m_rhoOld;
+            std::shared_ptr<util::Fun1D const> m_rhoOld;
             
             double m_scfMix;
         };

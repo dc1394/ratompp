@@ -25,7 +25,7 @@ namespace ks {
         class RhoHelp final : public util::Fun1D
         {
         public:
-            RhoHelp() = default;/*: m_rho(NULL)*/
+            RhoHelp() : m_rho(std::make_pair(nullptr, nullptr)) {}
             ~RhoHelp() override = default;
             double Get(double r) const override
             {
@@ -37,16 +37,16 @@ namespace ks {
             }
         public:
             //util::Fun1D* m_rho;
-            std::pair<util::Fun1D *, util::Fun1D * > m_rho;
+            std::pair<util::Fun1D const *, util::Fun1D const *> m_rho;
         };
 
     public:
-        Pot(std::shared_ptr<const ParamDb> const & db);
+        Pot(std::shared_ptr<ParamDb const> const & db);
         ~Pot() override = default;
 
         // May 23rd, 2014 Modified by dc1394
         //void SetRho(util::Fun1D* rho);
-        void SetRho(std::pair< std::shared_ptr<util::Fun1D>, std::shared_ptr<util::Fun1D> > const & rho);
+        void SetRho(std::pair< std::shared_ptr<util::Fun1D const> const, std::shared_ptr<util::Fun1D const> const> const & rho);
         void SolvePoisson();
 
         double Get(double r) const override;
@@ -75,13 +75,13 @@ namespace ks {
         /*!
             相関ポテンシャルへのプロパティ
         */
-        util::Property< std::unique_ptr< typename excorr::Xc<S> > &> Corr;
+        util::Property< std::unique_ptr< typename excorr::Xc<S> const> const &> Corr;
 
         //! A property.
         /*!
             交換ポテンシャルへのプロパティ
         */
-        util::Property< std::unique_ptr< typename excorr::Xc<S> > &> Exch;
+        util::Property< std::unique_ptr< typename excorr::Xc<S> const> const &> Exch;
 
         //! A property.
         /*!
@@ -91,18 +91,18 @@ namespace ks {
 
     private:
         // Database of parameters
-        std::shared_ptr<const ParamDb> const m_db;
+        std::shared_ptr<ParamDb const> const m_db;
 
         // Electron density
-        std::pair<util::Fun1D *, util::Fun1D *> m_rho;
+        std::pair<util::Fun1D const *, util::Fun1D const *> m_rho;
 
         // March 7th, 2014	Modified by dc1394 
         // Exchenge potential
         //Xc* m_exch;
-        std::unique_ptr< excorr::Xc<S> > m_exch;
+        std::unique_ptr< excorr::Xc<S> const> m_exch;
         // Correlation potential
         //Xc* m_corr;
-        std::unique_ptr< excorr::Xc<S> > m_corr;
+        std::unique_ptr< excorr::Xc<S> const> m_corr;
 
         // Number of protons in atom
         double m_z;
@@ -114,7 +114,7 @@ namespace ks {
         std::shared_ptr<OdeProb> m_hart;
 
         // Helper funtion required to solve Poisson equation
-        std::shared_ptr<RhoHelp> m_rhoHelp;
+        std::shared_ptr<RhoHelp> const m_rhoHelp;
 
         static auto constexpr MAX = 10.0;
         static auto constexpr DR = 1.0E-3;

@@ -6,7 +6,7 @@ namespace fem1d {
     //
     // Constructor
     //
-    Approx::Approx(size_t M, std::shared_ptr<const util::Fun1D> && f)
+    Approx::Approx(size_t M, std::shared_ptr<util::Fun1D const> && f)
     {
         Define(M, std::move(f));
     }
@@ -14,9 +14,9 @@ namespace fem1d {
     //
     // Defines approximation problem
     //
-    void Approx::Define(std::size_t M, std::shared_ptr<const util::Fun1D> && f)
+    void Approx::Define(std::size_t M, std::shared_ptr<util::Fun1D const> && f)
     {
-        const std::size_t DIAG = 2UL; // Number of super diagonals
+        std::size_t const DIAG = 2UL; // Number of super diagonals
 
         m_f = std::move(f);
 

@@ -17,7 +17,7 @@ namespace ks {
     class Rho final : public util::Fun1D
     {
     public:
-        Rho(std::shared_ptr<const ParamDb> && db);
+        Rho(std::shared_ptr<ParamDb const> && db);
         ~Rho() override = default;
 
         double Get(double r) const override;
@@ -25,7 +25,7 @@ namespace ks {
         double GetDeriv(double r) const override;
         double Get2ndDeriv(double r) const override;
 
-        void Calc(std::shared_ptr<const util::Fun1D> && f);
+        void Calc(std::shared_ptr<util::Fun1D const> && f);
 
         template <util::Spin S>
         void Init();
@@ -47,16 +47,16 @@ namespace ks {
         /*!
             Database of parameters
         */
-        std::shared_ptr<const ParamDb> const m_db;
+        std::shared_ptr<ParamDb const> const m_db;
 
         //! A private member variable.
         /*!
             Number of calculated eigenvalues for each angular quantum number L
         */
-        std::vector<size_t> m_eigNo;
+        std::vector<std::size_t> m_eigNo;
 
         // Gauss quadratures
-        std::unique_ptr<const Int1DGauss> m_gauss;
+        std::unique_ptr<Int1DGauss const> m_gauss;
 
     private:
         class RhoInit final : public util::Fun1D

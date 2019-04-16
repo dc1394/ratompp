@@ -130,7 +130,7 @@ namespace ks {
     //
     // Constructor
     //
-    StateSet::StateSet(std::shared_ptr<ParamDb> const & db) : m_db(db)
+    StateSet::StateSet(std::shared_ptr<ParamDb const> && db) : m_db(std::move(db))
     {
         auto const proton = m_db->GetSize_t("Atom_Proton");
         auto const delim = " ";
@@ -146,32 +146,25 @@ namespace ks {
     }
 
     //
-    // Destructor
-    //
-    StateSet::~StateSet(void)
-    {
-    }
-
-    //
     // Returns referenc for eigenstated defined by pair of quantum numbers(l, n)
     //
-    const State& StateSet::Find(size_t l, size_t n) const
+    const State& StateSet::Find(std::size_t l, std::size_t n) const
     {
-        for (size_t i = 0; i < size(); ++i)
+        for (std::size_t i = 0UL; i < size(); ++i)
         {
             const State& s = (*this)[i];
             if ((s.L() == l) && (s.N() == n))
                 return s;
         }
 
-        assert(0); // Ther is no state (n, l)
+        assert(0UL); // Ther is no state (n, l)
         return front();
     }
 
     //
     // Returns occupation factor for state (l, n)
     //
-    double StateSet::Occ(size_t l, size_t n) const
+    double StateSet::Occ(std::size_t l, std::size_t n) const
     {
         return Find(l, n).Occ();
     }
@@ -179,7 +172,7 @@ namespace ks {
     //
     // Returns name of state (l, n)
     //
-    std::string StateSet::Name(size_t l, size_t n) const
+    std::string StateSet::Name(std::size_t l, std::size_t n) const
     {
         return Find(l, n).Name();
     }
@@ -188,11 +181,11 @@ namespace ks {
     //
     // Returns maximal angular quantum number
     //
-    size_t StateSet::GetLmax(void) const
+    std::size_t StateSet::GetLmax(void) const
     {
-        size_t lMax = 0;
+        std::size_t lMax = 0UL;
 
-        for (size_t i = 0; i < size(); ++i)
+        for (std::size_t i = 0UL; i < size(); ++i)
         {
             const State& s = (*this)[i];
             if (s.L() > lMax)
@@ -206,11 +199,11 @@ namespace ks {
     // Returns maximum main quantum number of considered states
     // for given angular momentum number "l".
     //
-    size_t StateSet::GetNmax(size_t l) const
+    std::size_t StateSet::GetNmax(std::size_t l) const
     {
-        size_t nMax = 0;
+        std::size_t nMax = 0UL;
 
-        for (size_t i = 0; i < size(); ++i)
+        for (std::size_t i = 0UL; i < size(); ++i)
         {
             const State& s = (*this)[i];
             if (s.L() != l)
@@ -226,9 +219,9 @@ namespace ks {
     //
     double StateSet::EigenEnerg(void) const
     {
-        double ret = 0;
+        double ret = 0UL;
 
-        for (size_t i = 0; i < size(); ++i)
+        for (std::size_t i = 0UL; i < size(); ++i)
         {
             const State& s = (*this)[i];
             ret += s.EigVal() * s.Occ();
@@ -243,9 +236,9 @@ namespace ks {
     //
     double StateSet::EigenSum(void) const
     {
-        double ret = 0;
+        double ret = 0UL;
 
-        for (size_t i = 0; i < size(); ++i)
+        for (std::size_t i = 0UL; i < size(); ++i)
         {
             const State& s = (*this)[i];
             ret += s.EigVal();
@@ -258,9 +251,9 @@ namespace ks {
     //
     // Insters particular state (l, n, eigVal, occ) into set of states.
     //
-    void StateSet::SetEigVal(size_t l, size_t n, double eigVal)
+    void StateSet::SetEigVal(std::size_t l, std::size_t n, double eigVal)
     {
-        for (size_t i = 0; i < size(); ++i)
+        for (std::size_t i = 0UL; i < size(); ++i)
         {
             State& s = (*this)[i];
             if ((s.L() == l) && (s.N() == n))
@@ -271,7 +264,7 @@ namespace ks {
         }
 
         // The state must be!
-        assert(0);
+        assert(0UL);
     }
 
     //
@@ -279,24 +272,24 @@ namespace ks {
     //
     void StateSet::WriteSates(FILE* out) const
     {
-        fprintf(out, "\n\n");
-        fprintf(out, "===================================================================\n");
-        fprintf(out, "     E I G E N V A L U E S\n");
-        // fprintf(out, "+ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +\n");
-        fprintf(out, "-------------------------------------------------------------------\n");
-        fprintf(out, "%16s %19s %20s\n", "State", "Value [Ha]", "Value [eV]");
-        fprintf(out, "-------------------------------------------------------------------\n");
-        for (size_t i = 0; i < size(); ++i)
+        std::fprintf(out, "\n\n");
+        std::fprintf(out, "===================================================================\n");
+        std::fprintf(out, "     E I G E N V A L U E S\n");
+        // std::fprintf(out, "+ + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +\n");
+        std::fprintf(out, "-------------------------------------------------------------------\n");
+        std::fprintf(out, "%16s %19s %20s\n", "State", "Value [Ha]", "Value [eV]");
+        std::fprintf(out, "-------------------------------------------------------------------\n");
+        for (std::size_t i = 0UL; i < size(); ++i)
         {
             const State& s = (*this)[i];
 
-            fprintf(out, "   (n=%lu, L=%lu) %-5s %15.7lf Ha = %15.7lf eV\n",
+            std::fprintf(out, "   (n=%lu, L=%lu) %-5s %15.7lf Ha = %15.7lf eV\n",
                 static_cast<unsigned long>(s.N()),
                 static_cast<unsigned long>(s.L()),
                 s.Name().c_str(),
                 s.EigVal(),
                 s.EigVal() * M_EV);
         }
-        fprintf(out, "===================================================================\n");
+        std::fprintf(out, "===================================================================\n");
     }
 }

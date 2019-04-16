@@ -21,7 +21,7 @@ namespace fem1d {
         class FunF2 final : public util::Fun1D
         {
         public:
-            FunF2(std::shared_ptr<const util::Fun1D> const & f, const Element& e, double fa, double fb) : m_f(f), m_e(e), m_fa(fa), m_fb(fb) { }
+            FunF2(std::shared_ptr<util::Fun1D const> const & f, const Element& e, double fa, double fb) : m_f(f), m_e(e), m_fa(fa), m_fb(fb) { }
             ~FunF2() override = default;
             double Get(double r) const override
             {
@@ -31,17 +31,17 @@ namespace fem1d {
                 return fTilde * fTilde;
             }
         public:
-            std::shared_ptr<const util::Fun1D> const m_f;
+            std::shared_ptr<util::Fun1D const> const m_f;
             Element const & m_e;
             double m_fa, m_fb;
         };
 
     public:
         Approx() = default;
-        Approx(size_t M, std::shared_ptr<const util::Fun1D> && f);
+        Approx(size_t M, std::shared_ptr<util::Fun1D const> && f);
         ~Approx() override = default;
 
-        void Define(size_t M, std::shared_ptr<const util::Fun1D> && f);
+        void Define(size_t M, std::shared_ptr<util::Fun1D const> && f);
         double Get(double x) const override;
 
         double GetDeriv(double r) const override;
@@ -86,7 +86,7 @@ namespace fem1d {
         std::size_t m_M = 0;
 
         // Aproksymowana funkcja
-        std::shared_ptr<const util::Fun1D> m_f;
+        std::shared_ptr<util::Fun1D const> m_f;
 
         // Heap
         Heap<HeapElt> m_heap;

@@ -49,7 +49,7 @@ Int1DTrap::~Int1DTrap()
 //! Oblicza wartosc funkcji "f" na przdziale [a, b].
 //! Zwraca wartosc calki obliczona metoda trapezow z wykorzystaniem ektrapolacji Romberga.
 //! Dane do ekrapolacji gromadzone sa w macierzy.
-double Int1DTrap::Calc(const util::Fun1D& f, double a, double b) const
+double Int1DTrap::Calc(util::Fun1D const& f, double a, double b) const
 {
 unsigned long int i, k, divNo;
 // double v1, v2;
@@ -97,7 +97,7 @@ unsigned long int i, k, divNo;
 //!
 //! Oblicza wartosc calki z funkcji "f" metoda trapezow z zadana liczba podzialow odcinka [a, b]. 
 //!
-double Int1DTrap::Val(const util::Fun1D& f, double a, double b, long int divNo) const
+double Int1DTrap::Val(util::Fun1D const& f, double a, double b, long int divNo) const
 {
 long int i;
 double res, h, x;
@@ -121,7 +121,7 @@ double res, h, x;
 //! Aby przyspieszyc obliczenia wykorzystywana jest wartosc calki obliczona na mniejszej liczbie
 //! podzialow odcinka [a, b]. Wartosc ta przekazywana jest na zmiennej "resOld".
 //!
-double Int1DTrap::Fast(const util::Fun1D & f, double a, double b, long int divNo, double resOld) const
+double Int1DTrap::Fast(util::Fun1D const & f, double a, double b, long int divNo, double resOld) const
 {
 long int i;
 double res, h, x;

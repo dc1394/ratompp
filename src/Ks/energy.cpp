@@ -1,20 +1,20 @@
 #include "stdafx.h"
 #include "energy.h"
 #include "funener.h"
-#include <utility>
+#include <utility>  // for std:;move
 
 namespace ks {
     //
     // Construktor
     //
-    Energy::Energy(std::pair<std::shared_ptr<const Pot<util::Spin::Alpha>>,
-                   std::shared_ptr<const Pot<util::Spin::Beta>>> const & pot,
-                   std::shared_ptr<const StateSet> const & ss,
-                   std::shared_ptr<const ParamDb> const & db)
+    Energy::Energy(std::pair< std::shared_ptr< Pot<util::Spin::Alpha> const> const,
+                   std::shared_ptr<Pot<util::Spin::Beta> const> const> && pot,
+                   std::shared_ptr<StateSet const> && ss,
+                   std::shared_ptr<ParamDb const> const & db)
         :   m_gauss(std::make_shared<Int1DGauss>(3 * db->GetLong("Rho_Deg"))),
-            m_pot(pot),
+            m_pot(std::move(pot)),
             m_rc(std::stof(db->Get("Atom_Rc"))),
-            m_ss(ss)
+            m_ss(std::move(ss))
     {
     }
 
@@ -89,9 +89,9 @@ namespace ks {
     {
         // const double absTol = 1E-14;
         FunEner ener(m_pot, type);
-        double val = 0;
+        auto val = 0.0;
 
-        for (size_t i = 0; i < m_node.size() - 1; ++i)
+        for (std::size_t i = 0UL; i < m_node.size() - 1; ++i)
         {
             val += m_gauss->Calc(ener, m_node[i], m_node[i + 1]);
             // val += m_gauss->Adapt(ener, m_node[i], m_node[i + 1], absTol);

@@ -10,6 +10,7 @@
 #include "paramdb.h"
 #include "stateset.h"
 #include "../Util/spin.h"
+#include <utility>          // for std::move
 
 namespace ks {
     //! A template class.
@@ -24,19 +25,19 @@ namespace ks {
     public:
         //! A constructor.
         /*!
-            唯一のコンストラクタ
+            コンストラクタ
             \param db パラメータへのスマートポインタ
             \param stateSet StateSetオブジェクトへのスマートポインタ
         */
-        KohnSham(std::shared_ptr<const ParamDb> && db, std::shared_ptr<StateSet> const & stateSet);
+        KohnSham(std::shared_ptr<ParamDb const> && db, std::shared_ptr<StateSet> const & stateSet);
 
         //! A constructor.
         /*!
-            唯一のコンストラクタ
+            コンストラクタ
             \param db パラメータへのスマートポインタ
             \param stateSet StateSetオブジェクトへのスマートポインタ
         */
-        KohnSham(std::shared_ptr<const ParamDb> && db, std::shared_ptr<StateSet> && stateSet);
+        KohnSham(std::shared_ptr<ParamDb const> && db, std::shared_ptr<StateSet> && stateSet);
 
         //! A destructor.
         /*!
@@ -54,7 +55,7 @@ namespace ks {
             Required parameters are properly set
             \param pot ポテンシャルへのスマートポインタ
         */
-        void Config(std::shared_ptr<util::Fun1D> const & pot);
+        void Config(std::shared_ptr<util::Fun1D const> const & pot);
         
         //! A public member function (const).
         /*!
@@ -87,11 +88,11 @@ namespace ks {
         */
         class PotRad final : public util::Fun1D
         {
-            std::shared_ptr<util::Fun1D> m_pot;
+            std::shared_ptr<util::Fun1D const> m_pot;
 
         public:
             PotRad() : m_l(0) {}
-            PotRad(std::shared_ptr<util::Fun1D> const & pot) : m_pot(pot), m_l(0) {}
+            PotRad(std::shared_ptr<util::Fun1D const> && pot) : m_pot(std::move(pot)), m_l(0) {}
             ~PotRad() override = default;
 
             double Get(double r) const override
@@ -100,7 +101,7 @@ namespace ks {
                 return m_pot->Get(r) + m_l * (m_l + 1) / (2 * r * r);
             }
 
-            std::shared_ptr<util::Fun1D> & getPot()
+            std::shared_ptr<util::Fun1D const> & getPot()
             {
                 return m_pot;
             }
@@ -118,7 +119,7 @@ namespace ks {
         /*!
             database of parameters
         */
-        std::shared_ptr<const ParamDb> const m_db;
+        std::shared_ptr<ParamDb const> const m_db;
 
         //! A private member variable.
         /*!
@@ -130,19 +131,19 @@ namespace ks {
         /*!
             Effective interaction potential used in radial Kohn-Sham equation
         */
-        std::shared_ptr<PotRad> m_radPot;
+        std::shared_ptr<PotRad> const m_radPot;
 
         //! A private member variable.
         /*!
             Number of calculated eigenvalues for each angular quantum number L
         */
-        std::vector<size_t> m_eigNo;
+        std::vector<std::size_t> m_eigNo;
 
         //! A private member variable.
         /*!
             Set of eigenstates
         */
-        std::shared_ptr<StateSet> m_stateSet;
+        std::shared_ptr<StateSet> const m_stateSet;
 
         // #endregion メンバ変数
 

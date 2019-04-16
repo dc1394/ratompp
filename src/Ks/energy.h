@@ -17,10 +17,10 @@ namespace ks {
     class Energy final
     {
     public:
-        Energy(std::pair<std::shared_ptr<const Pot<util::Spin::Alpha>>,
-               std::shared_ptr<const Pot<util::Spin::Beta>>> const & pot,
-               std::shared_ptr<const StateSet> const & ss,
-               std::shared_ptr<const ParamDb> const & db);
+        Energy(std::pair< std::shared_ptr<Pot<util::Spin::Alpha> const> const,
+               std::shared_ptr<Pot<util::Spin::Beta> const> const> && pot,
+               std::shared_ptr<StateSet const> && ss,
+               std::shared_ptr<ParamDb const> const & db);
         ~Energy() = default;
 
         void SetNode(std::vector<double> const & node);
@@ -38,20 +38,20 @@ namespace ks {
 
     private:
         // Gaussa quadratures
-        std::shared_ptr<const Int1DGauss> const m_gauss;
+        std::shared_ptr<Int1DGauss const> const m_gauss;
 
         // Coordinaes of nodes for approximation of electron density
         std::vector<double> m_node;
 
         // DFT potencial
-        std::pair<std::shared_ptr<const Pot<util::Spin::Alpha>>,
-                  std::shared_ptr<const Pot<util::Spin::Beta>>> const m_pot;
+        std::pair<std::shared_ptr<Pot<util::Spin::Alpha> const> const,
+                  std::shared_ptr<Pot<util::Spin::Beta> const> const> const m_pot;
 
         // Integration is on the interval [0, rc]
         double const m_rc;
 
         // Atomic eigenstates
-        std::shared_ptr<const StateSet> const m_ss;
+        std::shared_ptr<StateSet const> const m_ss;
     };
 }
 

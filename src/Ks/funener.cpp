@@ -1,14 +1,14 @@
 #include "stdafx.h"
 #include "funener.h"
-#include <utility>
+#include <utility>  // for std::move
 
 namespace ks {
     //
     // Constructor
     //
-    FunEner::FunEner(std::pair<std::shared_ptr<const Pot<util::Spin::Alpha>>,
-        std::shared_ptr<const Pot<util::Spin::Beta>>> const & pot, size_t type)
-        : m_pot(pot), m_type(type)
+    FunEner::FunEner(std::pair< std::shared_ptr< Pot<util::Spin::Alpha> const> const,
+        std::shared_ptr< Pot<util::Spin::Beta> const> const> const & pot, std::size_t type)
+        : m_pot(std::move(pot)), m_type(type)
     {
     }
 

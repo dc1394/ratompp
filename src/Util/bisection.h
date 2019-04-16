@@ -20,11 +20,11 @@ public:
 	Bisection() = default;
 	~Bisection() = default;
 
-	static double Zero(const util::Fun1D* f, double a, double b, double eps);
+	static double Zero(util::Fun1D const* f, double a, double b, double eps);
 
-	static void ZeroSeq(const util::Fun1D* f, Vec& zero, double xMin, double, double delta, double eps);
+	static void ZeroSeq(util::Fun1D const* f, Vec& zero, double xMin, double, double delta, double eps);
 
-	static void Braket(const util::Fun1D* f, double xi, double del, double delMax, double alpha, double* a, double* b);
+	static void Braket(util::Fun1D const* f, double xi, double del, double delMax, double alpha, double* a, double* b);
 };
 
 #endif

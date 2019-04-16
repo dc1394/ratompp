@@ -17,7 +17,7 @@ Int1DGauss::Int1DGauss(size_t deg) : m_deg(deg)
 //! Calka obliczana jest adaptacyjnie z wykorzystaniem kwadratur Gaussa.
 //! Precyzja obliczen wynosi $absTol$
 //!
-double Int1DGauss::Adapt(const util::Fun1D& f, double a, double b, double errAbs) const
+double Int1DGauss::Adapt(util::Fun1D const& f, double a, double b, double errAbs) const
 
 {
 static const double ZERO = 1e-16;
@@ -43,7 +43,7 @@ double vl, vr, v;
 //!
 //! Oblicza wartosc funkcji "f" na przdziale [a, b].
 //!
-double Int1DGauss::Calc(const util::Fun1D& f, double a, double b) const
+double Int1DGauss::Calc(util::Fun1D const& f, double a, double b) const
 {
 double p, q, sum;
 

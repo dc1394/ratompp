@@ -21,7 +21,7 @@ public:
 	EigProb() = default;
 	~EigProb() override = default;
 
-	void Define(double gamma, std::shared_ptr<const util::Fun1D> const & g);
+	void Define(double gamma, std::shared_ptr<util::Fun1D const> const & g);
 
 	void Solve(size_t eigNo, double abstol);
 	void SolveAdapt(size_t eigNo, double abstol, double absMaxCoef);

@@ -18,9 +18,9 @@ namespace ks {
     // Constructor
     //
     template <util::Spin S>
-    Pot<S>::Pot(std::shared_ptr<const ParamDb> const & db)
-        :   Corr([this] { return std::ref(m_corr); }, nullptr),
-            Exch([this] { return std::ref(m_exch); }, nullptr),
+    Pot<S>::Pot(std::shared_ptr<ParamDb const> const & db)
+        :   Corr([this] { return std::cref(m_corr); }, nullptr),
+            Exch([this] { return std::cref(m_exch); }, nullptr),
             Hart([this] { return std::ref(m_hart); }, [this](std::shared_ptr<OdeProb> const & hart) { m_hart = hart; return std::ref(m_hart); }),
             m_db(db),
             m_hart(std::make_shared<OdeProb>()),
@@ -91,7 +91,7 @@ namespace ks {
     @exception      none
     */
     template <>
-    void Pot<util::Spin::Alpha>::SetRho(std::pair< std::shared_ptr<util::Fun1D>, std::shared_ptr<util::Fun1D> > const & rho)
+    void Pot<util::Spin::Alpha>::SetRho(std::pair< std::shared_ptr<util::Fun1D const> const, std::shared_ptr<util::Fun1D const> const > const & rho)
     {
         const double rc = m_db->GetDouble("Atom_Rc");
         const size_t psnNode = m_db->GetSize_t("Solver_PsnNode");
@@ -112,7 +112,7 @@ namespace ks {
     }
 
     template <>
-    void Pot<util::Spin::Beta>::SetRho(std::pair< std::shared_ptr<util::Fun1D>, std::shared_ptr<util::Fun1D> > const & rho)
+    void Pot<util::Spin::Beta>::SetRho(std::pair< std::shared_ptr<util::Fun1D const> const, std::shared_ptr<util::Fun1D const> const> const & rho)
     {
         m_rho = std::make_pair(rho.first.get(), rho.second.get());
         m_rhoHelp->m_rho = std::make_pair(rho.first.get(), rho.second.get());
@@ -122,10 +122,10 @@ namespace ks {
     @exception      none
     */
     template <util::Spin S>
-    void Pot<S>::SolvePoisson(void)
+    void Pot<S>::SolvePoisson()
     {
-        const double absMaxCoef = m_db->GetDouble("Solver_PsnAbsMaxCoef");
-        const bool adapt = m_db->GetBool("Solver_PsnAdapt");
+        auto const absMaxCoef = m_db->GetDouble("Solver_PsnAbsMaxCoef");
+        auto const adapt = m_db->GetBool("Solver_PsnAdapt");
 
         if (adapt)
             m_hart->SolveAdapt(absMaxCoef);

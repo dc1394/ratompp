@@ -27,11 +27,11 @@ public:
 	Int1DTrap(double eps, size_t ext = 20);
 	virtual ~Int1DTrap();
 
-	virtual double Calc(const util::Fun1D &f, double a, double b) const;
+	virtual double Calc(util::Fun1D const &f, double a, double b) const;
 
 private:
-	double Val(const util::Fun1D& f, double a, double b, long int divNo) const;
-	double Fast(const util::Fun1D& f, double a, double b, long int divNo, double resOld) const;
+	double Val(util::Fun1D const& f, double a, double b, long int divNo) const;
+	double Fast(util::Fun1D const& f, double a, double b, long int divNo, double resOld) const;
 
 private:
 	// Maksymalna liczba ektrapolacji

@@ -7,7 +7,7 @@ namespace ks {
     //
     // Constructor
     //
-    Rho::Rho(std::shared_ptr<const ParamDb> && db) : m_db(std::move(db))
+    Rho::Rho(std::shared_ptr<ParamDb const> && db) : m_db(std::move(db))
     {
         auto const rhoDeg = m_db->GetSize_t("Rho_Deg");
 
@@ -83,7 +83,7 @@ namespace ks {
     //
     // Calculates approximation of electron density based on function "f"
     //
-    void Rho::Calc(std::shared_ptr<const util::Fun1D> && f)
+    void Rho::Calc(std::shared_ptr<util::Fun1D const> && f)
     {
         auto const rc = m_db->GetDouble("Atom_Rc");
         auto const rhoDeg = m_db->GetSize_t("Rho_Deg");

@@ -15,8 +15,8 @@
 class Mesh
 {
 public:
-	Mesh(void);
-	~Mesh(void);
+	Mesh();
+	~Mesh();
 
 	void GenLin(double a, double b, size_t nodeNo, size_t degree);
 	void GenLinExp(double a, double b, int m, size_t degree);

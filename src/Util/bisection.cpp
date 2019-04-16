@@ -5,7 +5,7 @@
 //! Zwraca miejsce zerowe funkcji "f" na przedziale [a, b].
 //! Obliczenia wykonane z dokladnoscia "eps".
 //!
-double Bisection::Zero(const util::Fun1D* f, double a, double b, double eps)
+double Bisection::Zero(util::Fun1D const* f, double a, double b, double eps)
 {
 double va, vb, vc, c;
 
@@ -56,7 +56,7 @@ double va, vb, vc, c;
 //! delta - ograniczenie dolne odleglosci miedzy miejscami zerowymi
 //! xMax - maksymalny argument. Poszukiwania sa przerywane, jezeli argument jest wiekszy niz "xMax".
 //!
-void Bisection::ZeroSeq(const util::Fun1D* f, Vec& zero, double xMin, double, double delta, double eps)
+void Bisection::ZeroSeq(util::Fun1D const* f, Vec& zero, double xMin, double, double delta, double eps)
 {
 double a, va, vb;
 size_t i = 0;
@@ -97,7 +97,7 @@ size_t i = 0;
 //! delMax - najwiekszy krok poszukiwan
 //! alpha - wspolczynnik zwiekszania kroku poszukiwan
 //!
-void Bisection::Braket(const util::Fun1D* f, double xi, double del, double delMax, double alpha, double* a, double* b)
+void Bisection::Braket(util::Fun1D const* f, double xi, double del, double delMax, double alpha, double* a, double* b)
 {
 	assert(del > 0);
 	assert(alpha > 1);

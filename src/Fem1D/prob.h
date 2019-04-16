@@ -20,11 +20,11 @@
 class Prob : protected Mesh, protected Lobatto
 {
 public:
-	Prob();
-	Prob(Bndr left, Bndr right, double gamma, std::shared_ptr<const util::Fun1D> const & g, std::shared_ptr<const util::Fun1D> const & f);
+	Prob() = default;
+	Prob(Bndr left, Bndr right, double gamma, std::shared_ptr<util::Fun1D const> const & g, std::shared_ptr<util::Fun1D const> const & f);
 	virtual ~Prob() = default;
 
-	void DefineProb(Bndr left, Bndr right, double gamma, std::shared_ptr<const util::Fun1D> const & g, std::shared_ptr<const util::Fun1D> const & f);
+	void DefineProb(Bndr left, Bndr right, double gamma, std::shared_ptr<util::Fun1D const> const & g, std::shared_ptr<util::Fun1D const> const & f);
 
 	void GenMeshLin(double a, double b, std::size_t nodeNo, std::size_t degree);
 	void GenLinExp(double a, double b, int m, std::size_t degree);
@@ -49,13 +49,13 @@ protected:
 
 private:
 	// Right hand side, function f(x). USED only for ODE
-	std::shared_ptr<const util::Fun1D> m_f;
+	std::shared_ptr<util::Fun1D const> m_f;
 
 	// Function $g(x)$
-	std::shared_ptr<const util::Fun1D> m_g;
+	std::shared_ptr<util::Fun1D const> m_g;
 
 	// Constant \gamma 
-	double m_gamma;
+	double m_gamma = 0.0;
 };
 
 #endif

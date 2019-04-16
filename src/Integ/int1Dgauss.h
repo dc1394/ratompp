@@ -50,13 +50,13 @@ public:
 	Int1DGauss(size_t deg);
 	~Int1DGauss() override = default;
 
-	double Calc(const util::Fun1D& f, double a, double b) const override;
-	double Adapt(const util::Fun1D& f, double a, double b, double errAbs) const;
+	double Calc(util::Fun1D const& f, double a, double b) const override;
+	double Adapt(util::Fun1D const& f, double a, double b, double errAbs) const;
 
 	// static void gauleg(double x1, double x2, Vec& x, Vec& w, size_t n);
 	
 private:
-	double Run(const util::Fun1D& f, double p, double q) const;
+	double Run(util::Fun1D const& f, double p, double q) const;
 
 private:
 	// Stopien kwadratury

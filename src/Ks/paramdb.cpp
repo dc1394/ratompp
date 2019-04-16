@@ -121,7 +121,7 @@ std::unique_ptr<FILE, decltype(&std::fclose)> ParamDb::OpenFile(const char* ext,
 		tmp += std::string(ext);
 	}
 
-	auto file = std::unique_ptr<FILE, decltype(&std::fclose)>(fopen(tmp.c_str(), mode), std::fclose);
+	auto file = std::unique_ptr<FILE, decltype(&std::fclose)>(std::fopen(tmp.c_str(), mode), std::fclose);
 
 	if (!file)
 	{

@@ -4,56 +4,56 @@
 
 namespace ks {
     template <util::Spin S>
-    KohnSham<S>::KohnSham(std::shared_ptr<const ParamDb> && db, std::shared_ptr<StateSet> const & stateSet)
-        :   m_db(std::move(db)),
-            m_radPot(std::make_shared<PotRad>()),
-            m_stateSet(stateSet)
-    {}
-
-    template <util::Spin S>
-    KohnSham<S>::KohnSham(std::shared_ptr<const ParamDb> && db, std::shared_ptr<StateSet> && stateSet)
+    KohnSham<S>::KohnSham(std::shared_ptr<ParamDb const> && db, std::shared_ptr<StateSet> const & stateSet)
         : m_db(std::move(db)),
         m_radPot(std::make_shared<PotRad>()),
-        m_stateSet(std::move(stateSet))
+        m_stateSet(stateSet)
     {}
 
     template <util::Spin S>
-    void KohnSham<S>::Config(std::shared_ptr<util::Fun1D> const & pot)
-    {
-        const auto rc = m_db->GetDouble("Atom_Rc");
-        const auto eigNode = m_db->GetSize_t("Solver_EigNode");
-        const auto eigDeg = m_db->GetSize_t("Solver_EigDeg");
+    KohnSham<S>::KohnSham(std::shared_ptr<ParamDb const> && db, std::shared_ptr<StateSet> && stateSet)
+        :   m_db(std::move(db)),
+            m_radPot(std::make_shared<PotRad>()),
+            m_stateSet(std::move(stateSet))
+    {}
 
-        const auto gamma = 0.5; // Paramter for radial Kohn-Sham equation
-        const auto Lmax = m_stateSet->GetLmax();
+    template <util::Spin S>
+    void KohnSham<S>::Config(std::shared_ptr<util::Fun1D const> const & pot)
+    {
+        auto const rc = m_db->GetDouble("Atom_Rc");
+        auto const eigNode = m_db->GetSize_t("Solver_EigNode");
+        auto const eigDeg = m_db->GetSize_t("Solver_EigDeg");
+
+        auto const gamma = 0.5; // Paramter for radial Kohn-Sham equation
+        auto const Lmax = m_stateSet->GetLmax();
 
         // May 25th, 2014 Modified by dc1394
         //m_radPot.m_pot = pot;
         m_radPot->getPot() = pot;
 
         m_eigProb.resize(Lmax);
-        for (auto l = 0U; l < Lmax; l++)
+        for (std::size_t l = 0UL; l < Lmax; l++)
         {
             m_eigProb[l].Define(gamma, m_radPot);
             m_eigProb[l].GenMeshLin(0, rc, eigNode, eigDeg);
         }
 
         m_eigNo.resize(Lmax);
-        for (auto l = 0U; l < Lmax; l++)
+        for (std::size_t l = 0UL; l < Lmax; l++)
             m_eigNo[l] = m_stateSet->GetNmax(l);
     }
 
     template <util::Spin S>
     void KohnSham<S>::Solve(void)
     {
-        const auto abstol = m_db->GetDouble("Solver_EigAbsTol");
-        const auto absMaxCoef = m_db->GetDouble("Solver_EigAbsMaxCoef");
-        const auto adapt = m_db->GetBool("Solver_EigAdapt");
+        auto const abstol = m_db->GetDouble("Solver_EigAbsTol");
+        auto const absMaxCoef = m_db->GetDouble("Solver_EigAbsMaxCoef");
+        auto const adapt = m_db->GetBool("Solver_EigAdapt");
 
         double eigVal;
 
         auto const size = m_eigProb.size();
-        for (auto l = 0U; l < size; l++)
+        for (std::size_t l = 0UL; l < size; l++)
         {
             m_radPot->m_l = l;
 
@@ -83,12 +83,12 @@ namespace ks {
 
         auto rho = 0.0;
         // For all quantum angular menetum numbers
-        for (auto l = 0U; l < Lmax; l++)
+        for (std::size_t l = 0UL; l < Lmax; l++)
         {
             auto rhoL = 0.0;
 
             // For all states for fixed "L"
-            for (auto n = 0U; n < m_eigNo[l]; n++)
+            for (std::size_t n = 0UL; n < m_eigNo[l]; n++)
             {
                 auto const occ = m_stateSet->Occ(l, n);
                 //if (occ > 0)
@@ -125,12 +125,12 @@ namespace ks {
 
         auto rho = 0.0;
         // For all quantum angular menetum numbers
-        for (auto l = 0U; l < Lmax; l++)
+        for (std::size_t l = 0UL; l < Lmax; l++)
         {
             auto rhoL = 0.0;
 
             // For all states for fixed "L"
-            for (auto n = 0U; n < m_eigNo[l]; n++)
+            for (std::size_t n = 0UL; n < m_eigNo[l]; n++)
             {
                 auto const occ = m_stateSet->Occ(l, n);
                 //if (occ > 0)
@@ -152,28 +152,26 @@ namespace ks {
     template <util::Spin S>
     void KohnSham<S>::WriteEigen(void) const
     {
-        const size_t eigNode = m_db->GetSize_t("Out_EigNode");
-        const size_t Lmax = m_stateSet->GetLmax();
-        size_t l, n;
+        auto const eigNode = m_db->GetSize_t("Out_EigNode");
+        auto const Lmax = m_stateSet->GetLmax();
         std::string path;
 
 
         // For each angular quantum number
-        for (l = 0; l < Lmax; l++)
+        for (std::size_t l = 0UL; l < Lmax; l++)
         {
             m_db->GetPath(path);
             path += (boost::format(".L=%lu") % static_cast<unsigned long>(l)).str();
             m_eigProb[l].WriteEigCoef(path.c_str(), m_eigNo[l]);
 
             // For each state for fixed "L"
-            for (n = 0; n < m_eigNo[l]; n++)
+            for (std::size_t n = 0; n < m_eigNo[l]; n++)
             {
                 m_db->GetPath(path);
                 path += m_stateSet->Name(l, n);
                 path += ".nto";
 
                 m_eigProb[l].WriteEigFun(path.c_str(), n, eigNode);
-
             }
         }
     }

@@ -7,10 +7,9 @@
 
 
 #include <cassert>
+#include <cstdint>
 #include <cstdio>
-#include <malloc.h>
 #include <cmath>
-#include <ctime>
 
 #include <vector>
 #include <list>
@@ -28,4 +27,4 @@
 #include "../Fem1D/fem1D.h"
 
 
-const double M_EV = 27.21165;		// From hartree to eV
+static auto constexpr M_EV = 27.21165;		// From hartree to eV

@@ -6,7 +6,7 @@
 //
 // Defines the problem
 //
-void EigProb::Define(double gamma, std::shared_ptr<const util::Fun1D> const & g)
+void EigProb::Define(double gamma, std::shared_ptr<util::Fun1D const> const & g)
 {
 	DefineProb(Bndr(BndrType_Dir, 0), Bndr(BndrType_Dir, 0), gamma, g, nullptr);
 }

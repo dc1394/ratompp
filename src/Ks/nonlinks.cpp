@@ -50,7 +50,7 @@ namespace ks {
 
     void NonLinKs::Scf(void)
     {
-        const auto scfMaxIter = m_db->GetSize_t("Scf_MaxIter");
+        auto const scfMaxIter = m_db->GetSize_t("Scf_MaxIter");
         auto pmix = std::make_pair(std::make_shared<RhoMix>(m_db), std::make_shared<RhoMix>(m_db));
         auto rhoOld = std::make_pair(std::make_shared<Rho>(m_db), std::make_shared<Rho>(m_db));
         auto iter = 1UL;
