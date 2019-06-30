@@ -12,8 +12,7 @@ namespace excorr {
     // #region コンストラクタ
 
     ExchHf::ExchHf(std::function<double(double)> const & Vh, double Z)
-        :   ExCorr(),
-            Vh_(Vh),
+        :   Vh_(Vh),
             Z_(Z)
     {
     }
@@ -44,12 +43,12 @@ namespace excorr {
         if (std::fabs(Z_ - 1.0) < ZERO) {
             return std::make_pair(- Vh_(r), 0.0);
         }
-        else if (std::fabs(Z_ - 2.0) < ZERO) {
+        
+        if (std::fabs(Z_ - 2.0) < ZERO) {
             return std::make_pair(-0.5 * Vh_(r), -0.5 * Vh_(r));
         }
-        else {
-            return std::make_pair(NAN, NAN);
-        }
+        
+        return std::make_pair(NAN, NAN);
     }
 
     // #endregion privateメンバ関数
