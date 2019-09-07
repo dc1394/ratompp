@@ -6,7 +6,11 @@
 ★これは何？
   原子について、Kohn-Sham方程式を有限要素で離散化して数値的に解くプログラムです。
   ratom ( https://code.google.com/p/ratom/ ) のコードを改良して、ratomの後継ソフ
-　トウェアとなることを目指して開発を続けています。
+　トウェアとなることを目指して開発を続けています。ビルドには以下のライブラリが必
+　要です。
+　・Boost C++ Libraries
+　・Libxc
+　・OpenBLAS
 
 ★ライセンス
   ratom++には Zbigniew Romanowski 氏による「ratom」のコードを用いています。こち
@@ -133,3 +137,9 @@
 * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 * DEALINGS IN THE SOFTWARE.
 */
+
+　ratom++にはMiguel A. L. MarquesらによるLibxcを使用しています。こちらのライセン
+　スはMozilla Public License 2.0になります。
+
+　ratom++にはMiguel A. L. MarquesらによるOpenBLASを使用しています。こちらのライ
+　センスはBSDライセンスになります。
