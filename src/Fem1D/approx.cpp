@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "approx.h"
+#include <cmath>	// for std::fabs, std::sqrt
 #include <utility>  // for std::move
 
 namespace fem1d {
