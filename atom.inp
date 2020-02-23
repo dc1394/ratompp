@@ -1,13 +1,13 @@
 
 
 
-Atom_Proton 2
+Atom_Proton 1
 Atom_Rc 30
-XC_Exch pbe
-XC_Corr pbe
-Rho0_Default Yes
-Rho0_c 0.0
-Rho0_Alpha 0.0
+XC_Exch slater
+XC_Corr vwn
+Rho0_Default No
+Rho0_c 0.31830988618
+Rho0_Alpha 2.0
 
 
 Solver_EigAdapt Yes

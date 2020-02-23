@@ -339,8 +339,10 @@ namespace ks {
     {
         auto out = m_db->OpenFile("pot", "wt");
 
-        //m_exch.reset(new excorr::Xc<S>(excorr::ExCorrLDA([this](double r) { return GetRhoTilde(r); }, XC_LDA_X)));
-        //m_corr.reset(new excorr::Xc<S>(excorr::ExCorrLDA([this](double r) { return GetRhoTilde(r); }, XC_LDA_C_VWN)));
+        //m_exch.reset();
+        //m_exch = std::make_unique< typename excorr::Xc<S> >(std::make_shared<excorr::ExCorrLDA>([this](double r) { return GetRhoTilde(r); }, XC_LDA_X));
+        //m_corr.reset();
+        //m_corr = std::make_unique< typename excorr::Xc<S> >(std::make_shared<excorr::ExCorrLDA>([this](double r) { return GetRhoTilde(r); }, XC_LDA_C_VWN));
         //m_exch.reset(
         //    new excorr::Xc<S>(
         //        excorr::ExCorrGGA(

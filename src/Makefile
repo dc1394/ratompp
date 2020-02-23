@@ -36,7 +36,7 @@ DEPS = $(OBJS:.o=.d)
 #
 # C++コンパイラの指定
 #
-CXX = clang++
+CXX = g++
 
 #
 # C++コンパイラに与える、（最適化等の）オプション
@@ -61,7 +61,7 @@ all: $(PROG) ;
 # プログラムのリンク
 #
 $(PROG): $(OBJS)
-		$(CXX) $(LDFLAGS) $(CXXFLAGS) -o $@ $^
+		$(CXX) $^ $(LDFLAGS) $(CXXFLAGS) -o $@
 
 #
 # プログラムのコンパイル
