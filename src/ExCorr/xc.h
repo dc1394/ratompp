@@ -10,7 +10,6 @@
 
 #include "excorr.h"
 #include "../Util/spin.h"
-#include <functional>   // for std::function
 #include <memory>       // for std::shared_ptr    
 #include <string>       // for std::string
 
@@ -30,10 +29,7 @@ namespace excorr {
             \param obj Excorrオブジェクトへのスマートポインタ
         */
         Xc(std::shared_ptr<ExCorr> const & obj)
-            :   E_([this](double r) { return obj_->xc_exc(r); }),
-                Name_([this]() { return obj_->name(); }),
-                obj_(obj),
-                V_([this](double r) { return obj_->template xc_vxc<S>(r); })
+            :   obj_(obj)
         {}
 
         //! A destructor.
@@ -54,7 +50,7 @@ namespace excorr {
         */
         double E(double r) const
         {
-            return E_(r);
+            return obj_->xc_exc(r);
         }
 
         //! A public member function (const).
@@ -66,7 +62,7 @@ namespace excorr {
         */
         double EdiffV(double r) const
         {
-            return E_(r) - V_(r);
+            return obj_->xc_exc(r) - obj_->template xc_vxc<S>(r);
         }
 
         //! A public member function (const).
@@ -76,7 +72,7 @@ namespace excorr {
         */
         std::string Name() const
         {
-            return Name_();
+            return obj_->name();
         }
 
         //! A public member function (const).
@@ -87,7 +83,7 @@ namespace excorr {
         */
         double V(double r) const
         {
-            return V_(r);
+            return obj_->template xc_vxc<S>(r);
         }
 
         // #endregion publicメンバ関数
@@ -97,27 +93,9 @@ namespace excorr {
     private:
         //! A private member variable (const).
         /*!
-            交換相関エネルギーの値を返す関数オブジェクト
-        */
-        std::function<double(double)> const E_;
-
-        //! A private member variable (const).
-        /*!
-            交換相関汎関数の名前を返す関数オブジェクト
-        */
-        std::function<std::string()> const Name_;
-                
-        //! A private member variable (const).
-        /*!
             ExCorrオブジェクトへのスマートポインタ
         */
         std::shared_ptr<ExCorr> const obj_;
-        
-        //! A private member variable (const).
-        /*!
-            交換相関ポテンシャルの値を返す関数オブジェクト
-        */
-        std::function<double(double)> const V_;
         
         // #endregion メンバ変数
 
@@ -140,10 +118,10 @@ namespace excorr {
         //! A public member function (deleted).
         /*!
             operator=()の宣言（禁止）
-            \param コピー元のオブジェクト（未使用）
+            \param dummy コピー元のオブジェクト（未使用）
             \return コピー元のオブジェクト
         */
-        Xc & operator=(const Xc &) = delete;
+        Xc & operator=(Xc const & dummy) = delete;
 
         // #endregion 禁止されたコンストラクタ・メンバ関数
     };

@@ -116,34 +116,31 @@ void EigProb::Malloc(void)
 //
 void EigProb::Assemble()
 {
-std::size_t i, j;
-int ni; // row position in matrix S and O
-int nj; // column position in matrix S and O
 // const std::size_t M = Dim();
-const std::size_t N = EltNo(); // Number of elements
+    auto const N = EltNo(); // Number of elements
 
 	// Element loop
-	for(std::size_t n = 0; n < N; n++)
+	for (std::size_t n = 0; n < N; n++)
 	{
-		const Element& e = Elt(n);
-		const std::size_t DofNo = e.DofNo();
+		auto const & e = Elt(n);
+		auto const DofNo = e.DofNo();
 
 		// Loop over basis functions
-		for(i = 0; i < DofNo; i++)
+		for (std::size_t i = 0UL; i < DofNo; i++)
 		{
-			ni = e.m_dof[i];
-			if(ni < 0)
+			auto ni = e.m_dof[i]; // row position in matrix S and O
+			if (ni < 0)
 				continue;
 
 			const std::size_t psiI = e.PsiId(i);
 
 			// Loop over basis functions
-			for(j = i; j < DofNo; j++)
+			for (std::size_t j = i; j < DofNo; j++)
 			{
-				const std::size_t psiJ = e.PsiId(j);
+				auto const psiJ = e.PsiId(j);
 
-				nj = e.m_dof[j];
-				if(nj > -1)
+				auto nj = e.m_dof[j];   // column position in matrix S and O
+				if (nj > -1)
 				{
 					m_s->Set(ni, nj) += CalcS(e, psiI, psiJ);
 					m_o->Set(ni, nj) += CalcO(e, psiI, psiJ);

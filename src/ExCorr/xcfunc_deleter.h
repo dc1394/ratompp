@@ -1,7 +1,7 @@
 ﻿/*! \file xcfunc_deleter.h
     \brief xcfuncを解放する
 
-    Copyright ©  2016 @dc1394 All Rights Reserved.
+    Copyright © 2016-2019 @dc1394 All Rights Reserved.
     This software is released under the GNU GPL v3.
 */
 
@@ -9,7 +9,6 @@
 #define __RATOM_XCFUNC_DELETER_H__
 
 #include <xc.h>                         // for xc_func_end
-#include <boost/checked_delete.hpp>     // for boost::checked_delete
 
 namespace excorr {
     //! A lambda expression.
@@ -19,7 +18,7 @@ namespace excorr {
     */
     static auto const xcfunc_deleter = [](xc_func_type * xcfunc) {
         xc_func_end(xcfunc);
-        boost::checked_delete(xcfunc);
+        delete xcfunc;
     };
 }
 
